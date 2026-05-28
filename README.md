@@ -27,6 +27,8 @@
 
 移植到不同 AI coding agent 時，將需要的 `skills/<skill-name>/` 複製到該 agent 的父目錄即可，例如 `.claude/skills/<skill-name>/` 或 `.opencode/skills/<skill-name>/`。
 
+新增重點：`skills/typescript-code-reviewer/` 是本專案整理的 TypeScript / TSX 專用 code reviewer skill，用於 review `any`/`unknown`、unsafe assertions、strict tsconfig、async/error handling、React hooks、XSS 與測試覆蓋。
+
 ## 文件
 
 - [Skill 來源清單](./SKILL_SOURCES.md)：紀錄常見可下載 skill 的網站、GitHub repositories、安裝指令與後續搜尋關鍵字。

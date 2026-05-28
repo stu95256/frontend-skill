@@ -72,6 +72,7 @@ git sparse-checkout set skills
 | https://github.com/bmad-labs/skills | TypeScript clean code、unit testing、E2E testing、UI/UX skill | `npx skills add bmad-labs/skills --list` |
 | https://github.com/wshobson/agents | 多 agent/plugin marketplace；skill 分散在 `plugins/*/skills`，含 React state management、Tailwind design system、UI design、accessibility | 先用 GitHub 搜尋 repo 內 `SKILL.md`，再挑選下載 |
 | https://github.com/awesome-skills/code-review-skill | Code review skill；含 React、TypeScript、CSS、architecture、performance guide | `git clone https://github.com/awesome-skills/code-review-skill ~/.claude/skills/code-review-skill` |
+| https://github.com/Exploration-labs/typescript-code-review | 專門 TypeScript code review skill；`name: typescript-code-review`，但未找到 LICENSE | 只記錄/參考，不直接複製到本專案；本專案改建立 MIT 的 `skills/typescript-code-reviewer` |
 | https://github.com/millionco/react-doctor | React codebase 檢查工具與 skill；偏向品質、效能、安全、架構診斷 | `npx skills add millionco/react-doctor --skill react-doctor` |
 | https://github.com/NousResearch/hermes-agent | Hermes Agent 內建 skills；可參考 `skills/software-development`、`skills/creative`、`skills/dogfood` 等 | 直接讀 `skills/` 目錄，挑選可移植內容 |
 | https://github.com/0xNyk/awesome-hermes-agent | Hermes Agent 生態的 curated list | 作為 Hermes 相關 skill / tool 索引 |
@@ -135,6 +136,13 @@ git sparse-checkout set skills
 
 詳細表格、安裝提示與優先級請看 `FRONTEND_SPECIALIZED_SKILLS_RESEARCH.md`。
 
+
+## 2026-05-28 TypeScript code reviewer 補充調查
+
+本次確認本專案原本沒有 top-level `skills/<name>/SKILL.md` 形式的 TypeScript 專用 reviewer；只有通用 review skills 與 TypeScript advanced types。網路上找到 `Exploration-labs/typescript-code-review` / `jdevera/agent-skills` 的 dedicated `typescript-code-review` SKILL.md，但沒有明確 LICENSE，因此未直接複製。
+
+已建立本專案自有 `skills/typescript-code-reviewer/`，內容依官方 TypeScript / typescript-eslint / ESLint / React / OWASP 文件，以及 MIT/Apache-2.0 的 code review skills 整理。詳細來源、commit 與 caveat 見 `skills/typescript-code-reviewer/references/research-sources.md`。
+
 ## 後續搜尋關鍵字
 
 可定期用下列關鍵字搜尋 GitHub 或搜尋引擎：
@@ -151,6 +159,8 @@ git sparse-checkout set skills
 "react-i18next" "SKILL.md"
 "ag-grid" "SKILL.md"
 "Ant Design" "SKILL.md"
+"typescript-code-review" "SKILL.md"
+"TypeScript" "code review" "SKILL.md"
 ```
 
 GitHub 搜尋也可用：
@@ -162,6 +172,8 @@ filename:SKILL.md react-router
 filename:SKILL.md react-hook-form
 filename:SKILL.md ag-grid
 filename:SKILL.md antd
+filename:SKILL.md "typescript-code-review"
+filename:SKILL.md "TypeScript" "code review"
 ```
 
 注意：GitHub code search API 通常需要登入或 token；若 CLI 搜尋失敗，可改用 GitHub 網頁搜尋。

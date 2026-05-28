@@ -10,7 +10,7 @@ Notes:
 - React Router skills are mode-specific; copy only the mode your project actually uses unless you intentionally want all modes available.
 - Third-party skills were copied as-is from upstream sources; review licenses and content before publishing or vendoring into another repository.
 
-Total installed skill directories: 59
+Total installed skill directories: 60
 
 | Category | Skill dir | Source | Commit | Source path | Why included |
 |---|---|---|---|---|---|
@@ -73,3 +73,4 @@ Total installed skill directories: 59
 | testing | `playwright-best-practices` | https://github.com/currents-dev/playwright-best-practices-skill | `ef329e7` | `.` | Playwright E2E / component / visual / CI best practices |
 | code-review | `code-review-excellence` | https://github.com/awesome-skills/code-review-skill | `aca7203` | `.` | React / TypeScript / CSS / architecture / performance code review |
 | ag-grid | `ag-grid` | https://github.com/majiayu000/claude-skill-registry | `261ec24cb3` | `skills/development/ag-grid` | AG Grid + React + TypeScript patterns；後續可再改寫為本專案自有 skill |
+| code-review | `typescript-code-reviewer` | project-curated from TypeScript official docs, typescript-eslint, OWASP, React docs, and license-clear review skills | `local-2026-05-28` | `skills/typescript-code-reviewer` | TypeScript / TSX 專用 code reviewer；未直接複製無授權的 Exploration-labs/typescript-code-review，而是整理官方與 MIT/Apache 來源 |

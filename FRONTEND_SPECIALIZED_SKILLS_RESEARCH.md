@@ -33,6 +33,7 @@
 | TypeScript | `typescript-pro` | https://github.com/Jeffallan/claude-skills | Advanced TypeScript type systems、custom type guards、utility types、branded types、discriminated unions、monorepo / tRPC 類型安全。 | `npx skills add Jeffallan/claude-skills --skill typescript-pro` |
 | TypeScript | `typescript-unit-testing` | https://github.com/bmad-labs/skills | TypeScript unit testing；原 skill 偏 NestJS/Jest，但 AAA、mocking、coverage、flaky/open handles debugging 仍可參考。 | `npx skills add bmad-labs/skills --skill typescript-unit-testing` |
 | TypeScript | `typescript-e2e-testing` | https://github.com/bmad-labs/skills | TypeScript E2E / integration testing；原 skill 偏 backend infra，但 Given-When-Then、test isolation、flaky debugging 可參考。 | `npx skills add bmad-labs/skills --skill typescript-e2e-testing` |
+| TypeScript / Code review | `typescript-code-reviewer` | 本專案 `skills/typescript-code-reviewer`，研究來源見 `skills/typescript-code-reviewer/references/research-sources.md` | TypeScript / TSX 專用 reviewer workflow；檢查 strict tsconfig、`any`/`unknown`、unsafe assertions、async/error、React hooks/props、XSS、runtime validation、tests。 | 已下載/建立於 `skills/typescript-code-reviewer/`；可複製到 `.claude/skills/`、`.opencode/skills/`、`.agents/skills/`。 |
 | Tailwind / shadcn | `tailwind-design-system` | https://github.com/wshobson/agents | Tailwind CSS v4、design tokens、component libraries、responsive patterns；適合建立設計系統。 | `npx skills add wshobson/agents --skill tailwind-design-system` |
 | Tailwind / shadcn | `tailwind-v4-shadcn` | https://github.com/secondsky/claude-skills | Tailwind v4 + shadcn/ui + Vite + React production setup；含 `@theme inline`、CSS variables、dark mode、v3→v4 migration gotchas。 | `/plugin install tailwind-v4-shadcn@claude-skills` 或 `npx skills add secondsky/claude-skills --skill tailwind-v4-shadcn` |
 | Tailwind / shadcn | `shadcn` official skill | https://ui.shadcn.com/docs/skills | shadcn/ui 官方 skills；提供 components、patterns、best practices、CLI workflow、component composition rules。 | `npx shadcn@latest add skills` |
@@ -63,7 +64,7 @@
 ### A. 最高優先：直接對應目前技術棧
 
 1. React：`vercel-react-best-practices`、`react-dev`、`react-useeffect`、`react-expert`
-2. TypeScript：`typescript-clean-code`、`typescript-advanced-types`、`typescript-pro`
+2. TypeScript：`typescript-clean-code`、`typescript-advanced-types`、`typescript-pro`、`typescript-code-reviewer`
 3. Tailwind / UI：`tailwind-design-system`、`tailwind-v4-shadcn`、shadcn 官方 skill、`frontend-design`
 4. React Router：依專案實際模式選 `react-router-declarative-mode` 或 `react-router-data-mode`；若走 full-stack framework mode 才用 `react-router-framework-mode`
 5. Ant Design：官方 `ant-design` + `antd`
@@ -99,10 +100,10 @@ AG Grid 因為目前找到的來源較少，建議獨立整理成專案自有 sk
 
 ## 已下載到 `skills/` staging 的前端核心集合
 
-2026-05-28 已下載 59 個可移植 skill 目錄，其中前端與品質保證重點包含：
+2026-05-28 已下載/建立 60 個可移植 skill 目錄，其中前端與品質保證重點包含：
 
 - React：`vercel-react-best-practices`、`react-dev`、`react-useeffect`、`react-state-management`
-- TypeScript：`typescript-advanced-types`、`openapi-to-typescript`
+- TypeScript：`typescript-advanced-types`、`openapi-to-typescript`、`typescript-code-reviewer`
 - Tailwind / UI：`tailwind-design-system`、`tailwind-v4-shadcn`、`frontend-design`、`web-design-guidelines`、`design-system-patterns`、`responsive-design`
 - React Router：`react-router-declarative-mode`、`react-router-data-mode`、`react-router-framework-mode`（移植時依專案模式選用）
 - Ant Design：`ant-design`、`antd`
@@ -110,7 +111,7 @@ AG Grid 因為目前找到的來源較少，建議獨立整理成專案自有 sk
 - i18n：`internationalization-i18n`
 - AG Grid：`ag-grid`
 - Testing / Quality：`webapp-testing`、`playwright-best-practices`、`vitest-testing`、`browser-testing-with-devtools`、`frontend-ui-engineering`、`accessibility-compliance`
-- Code review：`code-review-and-quality`、`code-review-excellence`
+- Code review：`code-review-and-quality`、`code-review-excellence`、`typescript-code-reviewer`
 
 完整來源、commit 與原始路徑請看 `skills/SKILLS_MANIFEST.md`；驗證結果請看 `skills/VALIDATION_REPORT.md`。
 
