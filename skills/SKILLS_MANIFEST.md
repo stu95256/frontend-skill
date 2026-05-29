@@ -1,6 +1,6 @@
 # Skills Manifest
 
-Generated/updated: 2026-05-28
+Generated/updated: 2026-05-29
 
 This directory is a project-level staging area for portable AI coding agent skills. Copy selected subdirectories from `skills/<skill-name>/` into the target agent runtime, for example `.claude/skills/<skill-name>/`, `.opencode/skills/<skill-name>/`, or another agent-specific parent directory.
 
@@ -10,7 +10,7 @@ Notes:
 - React Router skills are mode-specific; copy only the mode your project actually uses unless you intentionally want all modes available.
 - Third-party skills were copied as-is from upstream sources; review licenses and content before publishing or vendoring into another repository.
 
-Total installed skill directories: 60
+Total installed skill directories: 61
 
 | Category | Skill dir | Source | Commit | Source path | Why included |
 |---|---|---|---|---|---|
@@ -74,3 +74,4 @@ Total installed skill directories: 60
 | code-review | `code-review-excellence` | https://github.com/awesome-skills/code-review-skill | `aca7203` | `.` | React / TypeScript / CSS / architecture / performance code review |
 | ag-grid | `ag-grid` | https://github.com/majiayu000/claude-skill-registry | `261ec24cb3` | `skills/development/ag-grid` | AG Grid + React + TypeScript patterns；後續可再改寫為本專案自有 skill |
 | code-review | `typescript-code-reviewer` | project-curated from TypeScript official docs, typescript-eslint, OWASP, React docs, and license-clear review skills | `local-2026-05-28` | `skills/typescript-code-reviewer` | TypeScript / TSX 專用 code reviewer；未直接複製無授權的 Exploration-labs/typescript-code-review，而是整理官方與 MIT/Apache 來源 |
+| web-research | `playwright-mcp-usage` | user-provided attached file | `local-2026-05-29` | `Z:/新.txt` | 一般網路搜尋被阻擋時，使用 Playwright MCP 透過真實瀏覽器做 DOM 讀取、截圖檢查與受控互動 |

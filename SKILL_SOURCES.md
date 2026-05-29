@@ -52,6 +52,8 @@ git sparse-checkout set skills
 | MCPMarket Skills | https://mcpmarket.com/tools/skills | Skill directory，搜尋前端、TypeScript、React 相關 skill |
 | shadcn/ui Skills 文件 | https://ui.shadcn.com/docs/skills | shadcn 官方 skill / workflow，對 Tailwind + component composition 很有幫助 |
 
+> 2026-05-29 補充：任務前期 workflow（目標 + 程式碼 + Figma 落差 + sub-agent + research + planning + plan review）已整理到 `FRONTEND_TASK_PREFLIGHT_WORKFLOW.md`，之後可轉成 `frontend-task-preflight` 類型 skill。
+>
 > 2026-05-28 補充：前端專用詳細調查已拆到 `FRONTEND_SPECIALIZED_SKILLS_RESEARCH.md`，包含 React、TypeScript、Tailwind、AG Grid、Ant Design、i18n、React Router、React Hook Form 等對應 skill。
 >
 > 2026-05-28 下載紀錄：已將推薦 skills 下載到專案 `skills/` staging 目錄。完整清單、來源 commit 與移植說明請看 `skills/SKILLS_MANIFEST.md`；驗證結果請看 `skills/VALIDATION_REPORT.md`。

@@ -1,12 +1,12 @@
 # Skills Validation Report
 
-日期：2026-05-28
+日期：2026-05-29
 
 ## 結果摘要
 
 - 安裝位置：`skills/`
-- skill 目錄數：60
-- 檔案數：411
+- skill 目錄數：61
+- 檔案數：412
 - `SKILL.md` frontmatter 檢查：通過
 - `name` 與目錄名稱一致性：通過
 - 高風險 shell 命令掃描：未發現真實高風險命令；掃描規則本身不列入命中
@@ -19,6 +19,10 @@
   - 研究紀錄：`skills/typescript-code-reviewer/references/research-sources.md`
   - 簡版 checklist：`skills/typescript-code-reviewer/references/checklist.md`
   - 授權策略：未直接複製沒有明確授權的遠端 TypeScript code review skill；內容依官方文件與 MIT/Apache-2.0 來源整理。
+
+- `playwright-mcp-usage`：使用者提供的 Playwright MCP 使用流程；在一般網路搜尋被阻擋時，透過真實瀏覽器做 DOM 讀取、截圖檢查與受控互動。
+  - 位置：`skills/playwright-mcp-usage/SKILL.md`
+  - 來源：user-provided attached file `Z:/新.txt`
 
 ## Secret 掃描 false positives
 

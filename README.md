@@ -29,9 +29,12 @@
 
 新增重點：`skills/typescript-code-reviewer/` 是本專案整理的 TypeScript / TSX 專用 code reviewer skill，用於 review `any`/`unknown`、unsafe assertions、strict tsconfig、async/error handling、React hooks、XSS 與測試覆蓋。
 
+新增重點：`skills/playwright-mcp-usage/` 是使用者提供的 Playwright MCP 使用流程；當一般網路搜尋被阻擋時，用真實瀏覽器 session 進行 DOM 讀取、截圖檢查與受控互動。
+
 ## 文件
 
 - [Skill 來源清單](./SKILL_SOURCES.md)：紀錄常見可下載 skill 的網站、GitHub repositories、安裝指令與後續搜尋關鍵字。
 - [通用 Skill 調查紀錄](./UNIVERSAL_SKILLS_RESEARCH.md)：紀錄推薦、大量使用或值得優先研究的通用 skills，例如 Superpowers、Anthropic 官方 skills、Addy Osmani engineering skills、Vercel skills 等。
 - [前端專用 Skill 調查紀錄](./FRONTEND_SPECIALIZED_SKILLS_RESEARCH.md)：紀錄 React、TypeScript、Tailwind、AG Grid、Ant Design、i18n、React Router、React Hook Form 等專用 skills。
 - [AI Coding Agent Skill 放置方式調查](./AGENT_SKILL_LAYOUTS_RESEARCH.md)：紀錄 Claude Code、OpenCode、Kilo Code、Codex、Cline、Cursor 等工具的 skills / rules / commands / agents 目錄放置方式，並規劃之後的 `skills/` staging 結構。
+- [前端任務前期 Workflow 調查與草案](./FRONTEND_TASK_PREFLIGHT_WORKFLOW.md)：整理使用者目標、相關程式碼、Figma/設計稿落差、sub-agent 分工、網路 research、implementation plan 與 plan review 的前期工作流，之後可轉成 skill。
