@@ -1,0 +1,15 @@
+{
+  // Copy this file to your Kilo global config location, usually:
+  // ~/.kilo/kilo.jsonc
+  //
+  // These paths assume you manually move this repository's `.kilo` folder to:
+  // ~/.kilo
+  "skills": {
+    "paths": [
+      "~/.kilo/skills"
+    ]
+  },
+  "instructions": [
+    "~/.kilo/rules/*.md"
+  ]
+}
