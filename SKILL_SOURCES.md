@@ -1,6 +1,6 @@
 # Skill 來源清單
 
-最後搜尋日期：2026-05-28
+最後搜尋日期：2026-05-29
 
 本檔案用來紀錄之後可下載、研究或轉換成前端 AI coding skill 的常見來源。
 專案目標偏向提升 AI 撰寫前端的能力，優先關注 React、TypeScript、Tailwind、AG Grid React、Ant Design、react-i18next、react-router-dom、react-hook-form。
@@ -54,6 +54,10 @@ git sparse-checkout set skills
 
 > 2026-05-29 補充：任務前期 workflow（目標 + 程式碼 + Figma 落差 + sub-agent + research + planning + plan review）已整理到 `FRONTEND_TASK_PREFLIGHT_WORKFLOW.md`，之後可轉成 `frontend-task-preflight` 類型 skill。
 >
+> 2026-05-29 補充：code review / sub-agent review 專項調查已整理到 `CODE_REVIEW_SKILLS_RESEARCH.md`；本次新增 `skills/audit-code-reviewer/` 與 `skills/secpriv-code-review/`。
+>
+> 2026-05-29 補充：前端 staged review workflow 已整理成 `skills/frontend-staged-review-workflow/`；此 workflow 只 review `git diff --cached`，每個選用 review skill 至少派 2 個 sub-agent，最終輸出 path / severity / recommended fix，並排除 unit test 建議。
+>
 > 2026-05-28 補充：前端專用詳細調查已拆到 `FRONTEND_SPECIALIZED_SKILLS_RESEARCH.md`，包含 React、TypeScript、Tailwind、AG Grid、Ant Design、i18n、React Router、React Hook Form 等對應 skill。
 >
 > 2026-05-28 下載紀錄：已將推薦 skills 下載到專案 `skills/` staging 目錄。完整清單、來源 commit 與移植說明請看 `skills/SKILLS_MANIFEST.md`；驗證結果請看 `skills/VALIDATION_REPORT.md`。
@@ -74,6 +78,11 @@ git sparse-checkout set skills
 | https://github.com/bmad-labs/skills | TypeScript clean code、unit testing、E2E testing、UI/UX skill | `npx skills add bmad-labs/skills --list` |
 | https://github.com/wshobson/agents | 多 agent/plugin marketplace；skill 分散在 `plugins/*/skills`，含 React state management、Tailwind design system、UI design、accessibility | 先用 GitHub 搜尋 repo 內 `SKILL.md`，再挑選下載 |
 | https://github.com/awesome-skills/code-review-skill | Code review skill；含 React、TypeScript、CSS、architecture、performance guide | `git clone https://github.com/awesome-skills/code-review-skill ~/.claude/skills/code-review-skill` |
+| https://github.com/vosslab/vosslab-skills | MIT；含 `audit-code-reviewer`，以多個獨立 sub-agent pass 做 merge/release 前 audit | 已安裝 `skills/audit-code-reviewer/` |
+| https://github.com/facebookresearch/secpriv-skill | MIT；Meta/Facebook Research SecPriv security + privacy code review skill，含 CWE/GDPR、detector-validator 與 benchmark 說明 | 已安裝 `skills/secpriv-code-review/`；本專案加上 frontmatter |
+| https://docs.anthropic.com/en/docs/claude-code/sub-agents | Claude Code subagents 官方文件；說明 specialist sub-agent、獨立 context 與 code-reviewer use case | 已用於 `skills/frontend-staged-review-workflow/references/research-notes.md` |
+| https://google.github.io/eng-practices/review/reviewer/ | Google Engineering Practices code review 指南；review standard、what to look for、comments | 已用於 `frontend-staged-review-workflow` 的 findings / severity / constructive feedback 規則 |
+| https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/reviewing-proposed-changes-in-a-pull-request | GitHub PR review workflow；理解目的、review changed files、完成 summary / verdict | 已用於 `frontend-staged-review-workflow` 的 reviewer ledger 與 final report |
 | https://github.com/Exploration-labs/typescript-code-review | 專門 TypeScript code review skill；`name: typescript-code-review`，但未找到 LICENSE | 只記錄/參考，不直接複製到本專案；本專案改建立 MIT 的 `skills/typescript-code-reviewer` |
 | https://github.com/millionco/react-doctor | React codebase 檢查工具與 skill；偏向品質、效能、安全、架構診斷 | `npx skills add millionco/react-doctor --skill react-doctor` |
 | https://github.com/NousResearch/hermes-agent | Hermes Agent 內建 skills；可參考 `skills/software-development`、`skills/creative`、`skills/dogfood` 等 | 直接讀 `skills/` 目錄，挑選可移植內容 |
@@ -145,6 +154,30 @@ git sparse-checkout set skills
 
 已建立本專案自有 `skills/typescript-code-reviewer/`，內容依官方 TypeScript / typescript-eslint / ESLint / React / OWASP 文件，以及 MIT/Apache-2.0 的 code review skills 整理。詳細來源、commit 與 caveat 見 `skills/typescript-code-reviewer/references/research-sources.md`。
 
+## 2026-05-29 Code review / sub-agent review 補充調查
+
+本次用 GitHub Search API 搜尋 `"code review" "SKILL.md"`、`"security" "code review" "SKILL.md"`、`"review" "Claude Code" "SKILL.md"`、`"code-review" "SKILL.md" "Claude"`，並檢查候選 repo 的 license、`SKILL.md` frontmatter 與是否補足現有缺口。
+
+已新增兩個 MIT 授權 skill：
+
+- `skills/audit-code-reviewer/`：來自 `vosslab/vosslab-skills`，用於 merge/release 前平行多 reviewer sub-agent audit。
+- `skills/secpriv-code-review/`：來自 `facebookresearch/secpriv-skill`，用於 security + privacy review；原始 upstream root `SKILL.md` 沒有 YAML frontmatter，本專案加上 staging frontmatter 以通過 validation。
+
+詳細候選清單、未安裝原因與後續建議請看 `CODE_REVIEW_SKILLS_RESEARCH.md`。
+
+## 2026-05-29 Frontend staged review workflow
+
+已新增 `skills/frontend-staged-review-workflow/`，用於 review 已 `git add` 的前端修改。設計重點：
+
+- review target 固定為 `git diff --cached`。
+- 先依 staged paths 選出 exact local review skills。
+- 每個被選中的 review skill 至少派 2 個獨立 sub-agent。
+- 每個 sub-agent 都要回傳 reviewer id、skill、verdict、findings。
+- 主 agent 彙整 reviewer ledger，去重、正規化重要度，最後列出 path、severity、recommended fix。
+- user 明確要求不需要 unit test，因此 workflow 會移除 unit test 建議。
+
+研究紀錄與 prompt template 見 `skills/frontend-staged-review-workflow/references/research-notes.md` 與 `skills/frontend-staged-review-workflow/templates/`。
+
 ## 後續搜尋關鍵字
 
 可定期用下列關鍵字搜尋 GitHub 或搜尋引擎：
@@ -163,6 +196,9 @@ git sparse-checkout set skills
 "Ant Design" "SKILL.md"
 "typescript-code-review" "SKILL.md"
 "TypeScript" "code review" "SKILL.md"
+"security" "code review" "SKILL.md"
+"code-review" "SKILL.md" "Claude"
+"privacy" "security" "SKILL.md"
 ```
 
 GitHub 搜尋也可用：
@@ -176,6 +212,8 @@ filename:SKILL.md ag-grid
 filename:SKILL.md antd
 filename:SKILL.md "typescript-code-review"
 filename:SKILL.md "TypeScript" "code review"
+filename:SKILL.md "security" "code review"
+filename:SKILL.md "privacy" "GDPR"
 ```
 
 注意：GitHub code search API 通常需要登入或 token；若 CLI 搜尋失敗，可改用 GitHub 網頁搜尋。

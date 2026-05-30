@@ -10,7 +10,7 @@ Notes:
 - React Router skills are mode-specific; copy only the mode your project actually uses unless you intentionally want all modes available.
 - Third-party skills were copied as-is from upstream sources; review licenses and content before publishing or vendoring into another repository.
 
-Total installed skill directories: 61
+Total installed skill directories: 64
 
 | Category | Skill dir | Source | Commit | Source path | Why included |
 |---|---|---|---|---|---|
@@ -75,3 +75,6 @@ Total installed skill directories: 61
 | ag-grid | `ag-grid` | https://github.com/majiayu000/claude-skill-registry | `261ec24cb3` | `skills/development/ag-grid` | AG Grid + React + TypeScript patterns；後續可再改寫為本專案自有 skill |
 | code-review | `typescript-code-reviewer` | project-curated from TypeScript official docs, typescript-eslint, OWASP, React docs, and license-clear review skills | `local-2026-05-28` | `skills/typescript-code-reviewer` | TypeScript / TSX 專用 code reviewer；未直接複製無授權的 Exploration-labs/typescript-code-review，而是整理官方與 MIT/Apache 來源 |
 | web-research | `playwright-mcp-usage` | user-provided attached file | `local-2026-05-29` | `Z:/新.txt` | 一般網路搜尋被阻擋時，使用 Playwright MCP 透過真實瀏覽器做 DOM 讀取、截圖檢查與受控互動 |
+| code-review | `audit-code-reviewer` | https://github.com/vosslab/vosslab-skills | `8382b5e` | `skills/audit-code-reviewer` | 平行多 reviewer audit；適合 merge/release 前讓多個 sub-agent 獨立檢查並由 coordinator 彙整 |
+| security-review | `secpriv-code-review` | https://github.com/facebookresearch/secpriv-skill | `5e5c2ca` | `SKILL.md` | Meta/Facebook Research SecPriv security + privacy code review；CWE/GDPR mapping、detector-validator、confidence threshold；staged copy 加上相容 frontmatter |
+| frontend-review-workflow | `frontend-staged-review-workflow` | project-curated from Anthropic Claude Code subagents docs, GitHub PR review docs, Google Engineering Practices, SmartBear review practices, and local review skills | `local-2026-05-29` | `skills/frontend-staged-review-workflow` | 前端 staged diff review workflow；只 review `git diff --cached`，每個選用 review skill 至少 2 個 sub-agent，輸出 path/severity/recommended fix，排除 unit test 建議 |

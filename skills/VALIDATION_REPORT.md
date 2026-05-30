@@ -5,8 +5,8 @@
 ## 結果摘要
 
 - 安裝位置：`skills/`
-- skill 目錄數：61
-- 檔案數：412
+- skill 目錄數：64
+- 檔案數：422
 - `SKILL.md` frontmatter 檢查：通過
 - `name` 與目錄名稱一致性：通過
 - 高風險 shell 命令掃描：未發現真實高風險命令；掃描規則本身不列入命中
@@ -23,6 +23,21 @@
 - `playwright-mcp-usage`：使用者提供的 Playwright MCP 使用流程；在一般網路搜尋被阻擋時，透過真實瀏覽器做 DOM 讀取、截圖檢查與受控互動。
   - 位置：`skills/playwright-mcp-usage/SKILL.md`
   - 來源：user-provided attached file `Z:/新.txt`
+
+- `audit-code-reviewer`：MIT 授權的平行多 reviewer audit skill，適合 merge/release 前由 coordinator 派多個 sub-agent 獨立 review。
+  - 位置：`skills/audit-code-reviewer/SKILL.md`
+  - 來源：`vosslab/vosslab-skills` commit `8382b5e830530db393b8a1fe2891a12cd41dd1e8`
+
+- `secpriv-code-review`：Meta / Facebook Research 的 SecPriv security + privacy review skill；本專案加上相容 frontmatter 後 staging。
+  - 位置：`skills/secpriv-code-review/SKILL.md`
+  - 來源：`facebookresearch/secpriv-skill` commit `5e5c2cac9c95143faee7560d6719209c8c2d8900`
+  - 授權策略：upstream MIT；root `SKILL.md` 原本無 YAML frontmatter，因此本專案僅新增 frontmatter 與 staging note，保留原 methodology。
+
+- `frontend-staged-review-workflow`：本專案整理的前端 staged diff review workflow；只 review `git diff --cached`，每個選用 review skill 至少 2 個 sub-agent，並排除 unit test 建議。
+  - 位置：`skills/frontend-staged-review-workflow/SKILL.md`
+  - 研究紀錄：`skills/frontend-staged-review-workflow/references/research-notes.md`
+  - 模板：`skills/frontend-staged-review-workflow/templates/subagent-prompt.md`、`skills/frontend-staged-review-workflow/templates/final-report.md`
+  - 授權策略：project-curated MIT；引用外部 workflow 文件與本專案既有 local review skills，不直接 vendoring 第三方內容。
 
 ## Secret 掃描 false positives
 
@@ -41,6 +56,7 @@
 | `react-hook-form-zod/templates/server-validation.ts` | sample validation error payload |
 | `security-and-hardening/SKILL.md` | intentionally demonstrates secret-scanning patterns |
 | `typescript-code-reviewer/*` | references discuss secret handling and token scanning, no real credentials |
+| `secpriv-code-review/SKILL.md` | security taxonomy documents `eval()` / `exec()` as vulnerabilities to detect; not an instruction to execute |
 
 ## 注意事項
 

@@ -11,7 +11,7 @@ Planned global target:
 Kilo global config target:
 `~/.kilo/kilo.jsonc`
 
-Skill directories included: 62
+Skill directories included: 65
 
 ## Required Kilo config
 
@@ -36,12 +36,28 @@ Skill directories included: 62
 - `docs/`
 - `manifests/`
 
+## Included workflow documents
+
+- `workflows/FRONTEND_TASK_PREFLIGHT_WORKFLOW.md`
+- `workflows/FRONTEND_STAGED_REVIEW_WORKFLOW.md`
+
+## Included rules
+
+- `rules/frontend-preflight.md`
+- `rules/frontend-staged-review.md`
+
+## Included user guides
+
+- `docs/FRONTEND_TASK_PREFLIGHT_USAGE.zh-TW.md`
+- `docs/FRONTEND_STAGED_REVIEW_WORKFLOW_USAGE.zh-TW.md`
+
 ## Included skills
 
 - `accessibility-compliance`
 - `ag-grid`
 - `ant-design`
 - `antd`
+- `audit-code-reviewer`
 - `brainstorming`
 - `browser-testing-with-devtools`
 - `code-review-and-quality`
@@ -55,6 +71,7 @@ Skill directories included: 62
 - `executing-plans`
 - `finishing-a-development-branch`
 - `frontend-design`
+- `frontend-staged-review-workflow`
 - `frontend-task-preflight`
 - `frontend-ui-engineering`
 - `incremental-implementation`
@@ -76,6 +93,7 @@ Skill directories included: 62
 - `receiving-code-review`
 - `requesting-code-review`
 - `responsive-design`
+- `secpriv-code-review`
 - `security-and-hardening`
 - `skill-creator`
 - `source-driven-development`
