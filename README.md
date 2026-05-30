@@ -35,6 +35,8 @@
 
 新增重點：`skills/frontend-staged-review-workflow/` 是本專案整理的前端 staged diff review workflow；只 review `git add` 後的 `git diff --cached`，每個選用 review skill 至少派 2 個 sub-agent，並明確排除 unit test 建議。
 
+新增重點：`skills/frontend-debug-workflow/` 是本專案整理的前端 debug workflow；使用者提供程式碼位置與問題後，先讀指定檔案與附近使用、建立 evidence / root cause，再選 exact local frontend skills 修正並驗證。
+
 新增重點：`skills/playwright-mcp-usage/` 是使用者提供的 Playwright MCP 使用流程；當一般網路搜尋被阻擋時，用真實瀏覽器 session 進行 DOM 讀取、截圖檢查與受控互動。
 
 ## 文件
@@ -46,3 +48,5 @@
 - [前端任務前期 Workflow 調查與草案](./FRONTEND_TASK_PREFLIGHT_WORKFLOW.md)：整理使用者目標、相關程式碼、Figma/設計稿落差、sub-agent 分工、網路 research、implementation plan 與 plan review 的前期工作流，之後可轉成 skill。
 - [Code Review Skills 調查與安裝紀錄](./CODE_REVIEW_SKILLS_RESEARCH.md)：盤點現有 review/quality skills，並記錄本次新增的 `audit-code-reviewer` 與 `secpriv-code-review`。
 - [`frontend-staged-review-workflow` research notes](./skills/frontend-staged-review-workflow/references/research-notes.md)：記錄前端 staged review workflow 的外部來源與設計決策。
+- [前端 Debug Workflow](./FRONTEND_DEBUG_WORKFLOW.md)：整理「使用者給程式碼位置 + 問題 → 查附近使用 → root cause → 選 skill → 修正 → 驗證 → 紀錄」的 debug 工作流。
+- [`frontend-debug-workflow` research notes](./skills/frontend-debug-workflow/references/research-notes.md)：記錄前端 debug workflow 的外部來源與設計決策。

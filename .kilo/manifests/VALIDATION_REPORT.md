@@ -1,12 +1,12 @@
 # Skills Validation Report
 
-日期：2026-05-29
+日期：2026-05-30
 
 ## 結果摘要
 
 - 安裝位置：`skills/`
-- skill 目錄數：64
-- 檔案數：422
+- skill 目錄數：65
+- 檔案數：425
 - `SKILL.md` frontmatter 檢查：通過
 - `name` 與目錄名稱一致性：通過
 - 高風險 shell 命令掃描：未發現真實高風險命令；掃描規則本身不列入命中
@@ -38,6 +38,12 @@
   - 研究紀錄：`skills/frontend-staged-review-workflow/references/research-notes.md`
   - 模板：`skills/frontend-staged-review-workflow/templates/subagent-prompt.md`、`skills/frontend-staged-review-workflow/templates/final-report.md`
   - 授權策略：project-curated MIT；引用外部 workflow 文件與本專案既有 local review skills，不直接 vendoring 第三方內容。
+
+- `frontend-debug-workflow`：本專案整理的前端 debug workflow；使用者提供程式碼位置與問題後，先讀指定檔案與附近使用、收集 evidence、形成 root cause hypothesis，再選 exact local frontend skills 做最小修正與驗證。
+  - 位置：`skills/frontend-debug-workflow/SKILL.md`
+  - 完整 workflow：`FRONTEND_DEBUG_WORKFLOW.md`、`skills/frontend-debug-workflow/references/FRONTEND_DEBUG_WORKFLOW.md`
+  - 研究紀錄：`skills/frontend-debug-workflow/references/research-notes.md`
+  - 授權策略：project-curated MIT；引用外部 workflow / debugging 文件與本專案既有 local frontend skills，不直接 vendoring 第三方內容。
 
 ## Secret 掃描 false positives
 

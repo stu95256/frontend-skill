@@ -58,6 +58,8 @@ git sparse-checkout set skills
 >
 > 2026-05-29 補充：前端 staged review workflow 已整理成 `skills/frontend-staged-review-workflow/`；此 workflow 只 review `git diff --cached`，每個選用 review skill 至少派 2 個 sub-agent，最終輸出 path / severity / recommended fix，並排除 unit test 建議。
 >
+> 2026-05-30 補充：前端 debug workflow 已整理成 `FRONTEND_DEBUG_WORKFLOW.md` 與 `skills/frontend-debug-workflow/`；此 workflow 用於使用者提供程式碼位置與問題後，查相關檔案/附近使用、建立 root cause hypothesis、選擇 exact local frontend skills、最小修正並驗證與紀錄。
+>
 > 2026-05-28 補充：前端專用詳細調查已拆到 `FRONTEND_SPECIALIZED_SKILLS_RESEARCH.md`，包含 React、TypeScript、Tailwind、AG Grid、Ant Design、i18n、React Router、React Hook Form 等對應 skill。
 >
 > 2026-05-28 下載紀錄：已將推薦 skills 下載到專案 `skills/` staging 目錄。完整清單、來源 commit 與移植說明請看 `skills/SKILLS_MANIFEST.md`；驗證結果請看 `skills/VALIDATION_REPORT.md`。
