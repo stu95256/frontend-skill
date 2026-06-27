@@ -54,6 +54,7 @@
 3. 先查可查資料，再問使用者。
    - 能從指定檔案、附近用法、官方文件查到的資訊先查。
    - 只問會影響方向、架構、範圍、資料流、UX、a11y、驗證方式的問題。
+   - 需要詢問使用者時，問題必須使用中文（預設繁體中文）；程式識別字、路徑、命令、enum value、API 欄位與引用原文可保留英文。
 
 4. Brainstorming 是前期 workflow 的核心，不是 optional。
    - 在寫 implementation plan 前，必須先完成「理解目標 → 找未知 → 提出 2-3 個方案 → 討論取捨 → 收斂設計」這段思考。
@@ -447,6 +448,7 @@ Gap 分類：
 - 優先問 blocking questions。
 - 一次問少量、有分組的問題。
 - 若非 blocking，用 assumption 記錄並在 plan 中標明。
+- 對使用者提出的 Clarifying Questions 必須使用中文（預設繁體中文）；程式識別字、路徑、命令、enum value、API 欄位與引用原文可保留英文，避免翻譯造成歧義。
 
 常見問題類型：
 - Figma 是否最新？哪些差異必須修？
@@ -463,6 +465,8 @@ Gap 分類：
 
 ```markdown
 ## Clarifying Questions
+
+> All user-facing questions in this section must be written in Chinese; keep code identifiers, paths, commands, enum values, API fields, and quoted source text unchanged when needed.
 
 **Blocking before plan:**
 1. ...
@@ -600,6 +604,11 @@ Plan 應該是實作交接包，不只是方向摘要。
 
 ## Architecture / Approach
 
+## Naming Plan
+- Generated code variable and function names must be descriptive and domain-specific; avoid abbreviations and over-generic names.
+- Preserve important domain qualifiers from existing code or business concepts. Example: keep `SpcTable` in `isSpcTableEmptyVal` instead of shortening it to `isEmptyVal`.
+- If implementation requires renaming existing symbols, list `old name -> new name` and the rationale.
+
 ## File Map
 
 ### Modify
@@ -682,6 +691,7 @@ Checklist：
 - [ ] A11y 檢查已納入。
 - [ ] i18n / 長字串影響已納入。
 - [ ] TypeScript types / runtime data assumptions 已列明。
+- [ ] 生成 code 的 variable / function 名稱保持描述性與 domain-specific，沒有用簡寫或過度泛化名稱，也沒有移除重要 domain qualifier（例如不要把 `isSpcTableEmptyVal` 縮成 `isEmptyVal`）。
 - [ ] Risks 與 rollback / stop conditions 已列明。
 - [ ] 已列出 implementation phase 建議使用的 skills。
 ```
@@ -800,9 +810,11 @@ Gate：若 reviewer 是 `REQUEST_CHANGES`，先修 plan，再交給使用者。
 
 ## 11. Draft Plan
 
-## 12. Plan Review Notes
+## 12. Naming Plan
 
-## 13. Final Handoff
+## 13. Plan Review Notes
+
+## 14. Final Handoff
 ```
 
 最重要的是 `Gap Matrix`、`Decisions`、`Remaining Assumptions`，因為 Figma 與現有產品有落差時，這些內容能避免後續實作 agent 照錯真相來源。
@@ -818,11 +830,11 @@ Gate：若 reviewer 是 `REQUEST_CHANGES`，先修 plan，再交給使用者。
 - [ ] 已完成 brainstorming：使用者意圖、已知事實、假設、未知、2-3 個方案與推薦方向。
 - [ ] 已整理 Figma 或設計輸入，並標記與現有 code 的落差。
 - [ ] 已列出會影響 plan 的 unknowns。
-- [ ] 已和使用者討論 blocking details 或明確列出 assumptions。
+- [ ] 已和使用者討論 blocking details 或明確列出 assumptions；如需提問，問題已用中文表達，且必要的 code identifiers / paths / commands 保持原文。
 - [ ] 已判斷應使用哪些 skills，以及哪些留到 implementation phase。
 - [ ] 已查必要的官方 / 網路文件，並記錄 URL、access method，以及 `playwright-mcp-usage` 如何用於 Playwright MCP / DOM / screenshot 查證。
 - [ ] 已提出方案與 tradeoffs，並取得使用者方向確認。
-- [ ] 已寫出 implementation plan，含 exact paths、task breakdown、verification。
+- [ ] 已寫出 implementation plan，含 exact paths、task breakdown、verification，以及生成 code 的命名規則 / naming plan。
 - [ ] 已完成 plan self-review。
 - [ ] 複雜任務已用 plan-review subagent 檢查。
 - [ ] 使用者已收到 final plan，並知道下一步需批准後才實作。

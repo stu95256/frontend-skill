@@ -14,8 +14,10 @@
 4. 如果有 Figma / 截圖 / 設計稿，整理設計意圖。
 5. 比對 Figma 與現有產品程式碼的落差。
 6. 先提出問題、方案與取捨。
-7. 最後產出 implementation plan。
-8. 等你批准後，才開始實作。
+7. 如果有需要你回答的問題，用中文提出；程式識別字、路徑、命令、enum value、API 欄位可保留英文。
+8. 最後產出 implementation plan。
+9. 在 plan 裡明確要求後續生成 code 的 variable / function 名稱不要用簡寫，並保留重要 domain qualifier，例如不要把 `isSpcTableEmptyVal` 縮成 `isEmptyVal`。
+10. 等你批准後，才開始實作。
 
 簡單說：
 
@@ -117,10 +119,11 @@ Figma / 設計 / 截圖：
 2. Code Reconnaissance
 3. Design / Figma Reconnaissance，如果適用
 4. Gap Matrix，如果 Figma 和現有 code 不一致
-5. Clarifying Questions
+5. Clarifying Questions：如需詢問使用者，問題請使用中文；必要的 code identifiers / paths / commands 可保留原文
 6. Approach Options
 7. Implementation Plan
-8. Plan Self-review
+8. Naming Plan：生成 code 的變數與 function 命名規則，避免簡寫或過度泛化
+9. Plan Self-review
 
 等我批准 implementation plan 後，再開始實作。
 ```
@@ -171,6 +174,7 @@ Figma：
 請只做 preflight，不要修改程式碼。
 請比對 Figma 與現有 code，產出 gap matrix。
 請提出 2-3 個實作方案與推薦方案。
+請在 implementation plan 裡加入 Naming Plan：後續生成 code 的變數與 function 名稱要保留 domain 語意，不要用簡寫或過度泛化名稱，例如不要把 isSpcTableEmptyVal 縮成 isEmptyVal。
 最後產出 implementation plan，等我批准後再實作。
 ```
 
@@ -369,7 +373,7 @@ Bug 類任務也可以用 preflight，但要要求 agent 先找 root cause，不
 如果你只想記一句話，記這句：
 
 ```text
-請使用 frontend-task-preflight skill，只做 preflight，不要改 code；先讀相關程式碼並產出 gap matrix、方案選項與 implementation plan，等我批准後再實作。
+請使用 frontend-task-preflight skill，只做 preflight，不要改 code；先讀相關程式碼並產出 gap matrix、方案選項與 implementation plan，且在 plan 中要求後續生成 code 的變數/function 名稱不要用簡寫、不要移除重要 domain qualifier，等我批准後再實作。
 ```
 
 ## 13. 完成 preflight 的判斷標準
@@ -383,6 +387,7 @@ Bug 類任務也可以用 preflight，但要要求 agent 先找 root cause，不
 - 有 gap matrix，尤其是 Figma 和現有產品不同時。
 - 有 2-3 個方案或至少一個推薦方案與理由。
 - implementation plan 有 exact file paths。
+- implementation plan 有 Naming Plan，要求生成 code 的 variable / function 名稱保持描述性與 domain-specific，不使用簡寫，也不移除重要 domain qualifier。
 - 每個 task 有驗證方式。
 - Agent 明確說：等你批准後才實作。
 

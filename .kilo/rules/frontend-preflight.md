@@ -22,10 +22,11 @@ Rules:
 5. If Figma and current code differ, create a gap matrix.
 6. Identify applicable skills before planning.
 7. Check official docs when library behavior matters.
-8. Ask only blocking questions after checking what can be checked from code or docs.
+8. Ask only blocking questions after checking what can be checked from code or docs; user-facing questions must be written in Chinese, while code identifiers, paths, commands, enum values, API fields, and quoted source text may remain unchanged.
 9. Present approach options and tradeoffs when there is more than one reasonable path.
 10. Write an implementation plan with exact files, task order, verification commands, expected results, risks, and assumptions.
-11. Do not start implementation until the user explicitly approves.
+11. Include a naming plan for generated code: variable and function names should be descriptive and domain-specific, avoid abbreviations, and preserve important qualifiers from existing code or business concepts. For example, do not shorten `isSpcTableEmptyVal` to `isEmptyVal`.
+12. Do not start implementation until the user explicitly approves.
 
 Full workflow after global move:
 `~/.kilo/workflows/FRONTEND_TASK_PREFLIGHT_WORKFLOW.md`

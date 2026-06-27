@@ -22,9 +22,10 @@ Use this skill before writing code for frontend implementation tasks.
 - Read relevant code and nearby patterns before asking the user questions.
 - Treat Figma as input, not the only truth.
 - If Figma/design and current code differ, produce a gap matrix instead of assuming either side is correct.
-- Ask only blocking questions that affect scope, UX, architecture, data flow, validation, accessibility, or verification.
+- Ask only blocking questions that affect scope, UX, architecture, data flow, validation, accessibility, or verification; user-facing questions must be written in Chinese, while code identifiers, paths, commands, enum values, API fields, and quoted source text may remain unchanged.
 - Present approach options and tradeoffs before implementation.
 - Write an implementation plan with exact files, steps, verification commands, expected results, risks, and assumptions.
+- Include a naming plan for generated code: variable and function names must be descriptive and domain-specific, avoid abbreviations, and preserve important qualifiers from existing code or business concepts. For example, do not shorten `isSpcTableEmptyVal` to `isEmptyVal`.
 - Start implementation only after the user explicitly approves the plan.
 
 ## Workflow
@@ -58,6 +59,7 @@ Return these sections when applicable:
 - External Research
 - Approach Options
 - Implementation Plan
+- Naming Plan
 - Plan Self-review
 - Final Handoff
 
