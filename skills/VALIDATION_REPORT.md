@@ -5,8 +5,8 @@
 ## 結果摘要
 
 - 安裝位置：`skills/`
-- skill 目錄數：65
-- 檔案數：425
+- skill 目錄數：66
+- 檔案數：426
 - `SKILL.md` frontmatter 檢查：通過
 - `name` 與目錄名稱一致性：通過
 - 高風險 shell 命令掃描：未發現真實高風險命令；掃描規則本身不列入命中
@@ -38,6 +38,11 @@
   - 研究紀錄：`skills/frontend-staged-review-workflow/references/research-notes.md`
   - 模板：`skills/frontend-staged-review-workflow/templates/subagent-prompt.md`、`skills/frontend-staged-review-workflow/templates/final-report.md`
   - 授權策略：project-curated MIT；引用外部 workflow 文件與本專案既有 local review skills，不直接 vendoring 第三方內容。
+
+- `frontend-staged-commit-message`：本專案整理的前端 staged commit message skill；只讀 `git diff --cached`，不 stage、不 commit、不改檔，輸出 `feat: ...` / `fix: ...` / `style: ...` 這類不含 scope 括號的單行英文 commit message。
+  - 位置：`skills/frontend-staged-commit-message/SKILL.md`
+  - Kilo staging：`.kilo/skills/frontend-staged-commit-message/SKILL.md`、`.kilo/docs/FRONTEND_STAGED_COMMIT_MESSAGE_USAGE.zh-TW.md`
+  - 授權策略：project-curated MIT；參考 Conventional Commits、Chris Beams commit message guidance、MIT commit-message skills、clean-commit rules 與本專案 staged frontend workflow，不直接 vendoring 無授權內容。
 
 - `frontend-debug-workflow`：本專案整理的前端 debug workflow；使用者提供程式碼位置與問題後，先讀指定檔案與附近使用、收集 evidence、形成 root cause hypothesis，再選 exact local frontend skills 做最小修正與驗證。
   - 位置：`skills/frontend-debug-workflow/SKILL.md`

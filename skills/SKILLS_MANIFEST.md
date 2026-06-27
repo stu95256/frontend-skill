@@ -10,7 +10,7 @@ Notes:
 - React Router skills are mode-specific; copy only the mode your project actually uses unless you intentionally want all modes available.
 - Third-party skills were copied as-is from upstream sources; review licenses and content before publishing or vendoring into another repository.
 
-Total installed skill directories: 65
+Total installed skill directories: 66
 
 | Category | Skill dir | Source | Commit | Source path | Why included |
 |---|---|---|---|---|---|
@@ -78,4 +78,5 @@ Total installed skill directories: 65
 | code-review | `audit-code-reviewer` | https://github.com/vosslab/vosslab-skills | `8382b5e` | `skills/audit-code-reviewer` | 平行多 reviewer audit；適合 merge/release 前讓多個 sub-agent 獨立檢查並由 coordinator 彙整 |
 | security-review | `secpriv-code-review` | https://github.com/facebookresearch/secpriv-skill | `5e5c2ca` | `SKILL.md` | Meta/Facebook Research SecPriv security + privacy code review；CWE/GDPR mapping、detector-validator、confidence threshold；staged copy 加上相容 frontmatter |
 | frontend-review-workflow | `frontend-staged-review-workflow` | project-curated from Anthropic Claude Code subagents docs, GitHub PR review docs, Google Engineering Practices, SmartBear review practices, and local review skills | `local-2026-05-29` | `skills/frontend-staged-review-workflow` | 前端 staged diff review workflow；只 review `git diff --cached`，每個選用 review skill 至少 2 個 sub-agent，輸出 path/severity/recommended fix，排除 unit test 建議 |
+| frontend-commit-message | `frontend-staged-commit-message` | project-curated from Conventional Commits, Chris Beams commit message guidance, MIT commit-message skills, clean-commit rules, and local staged frontend workflow patterns | `local-2026-06-27` | `skills/frontend-staged-commit-message` | 前端 staged commit message skill；只讀 `git diff --cached`，不 stage、不 commit、不改檔，輸出不含 scope 括號的單行英文 commit message |
 | frontend-debug-workflow | `frontend-debug-workflow` | project-curated from Claude Code common workflows/subagents docs, Anthropic Building Effective Agents, Superpowers systematic-debugging, Chrome DevTools, Playwright Trace Viewer, React DevTools, and local frontend skills | `local-2026-05-30` | `skills/frontend-debug-workflow` | 前端 debug workflow；使用者提供 code paths + problem 後，讀指定檔案與附近使用、收集 evidence、形成 root cause hypothesis、選 exact local skills、最小修正並驗證紀錄 |

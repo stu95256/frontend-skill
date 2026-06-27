@@ -35,6 +35,8 @@
 
 新增重點：`skills/frontend-staged-review-workflow/` 是本專案整理的前端 staged diff review workflow；只 review `git add` 後的 `git diff --cached`，每個選用 review skill 至少派 2 個 sub-agent，並明確排除 unit test 建議。
 
+新增重點：`skills/frontend-staged-commit-message/` 是本專案整理的前端 staged commit message skill；只讀 `git diff --cached`，不 stage、不 commit、不改檔，輸出 `feat: ...` / `fix: ...` / `style: ...` 這類不含 scope 括號的單行英文 commit message。
+
 新增重點：`skills/frontend-debug-workflow/` 是本專案整理的前端 debug workflow；使用者提供程式碼位置與問題後，先讀指定檔案與附近使用、建立 evidence / root cause，再選 exact local frontend skills 修正並驗證。
 
 新增重點：`skills/playwright-mcp-usage/` 是使用者提供的 Playwright MCP 使用流程；當一般網路搜尋被阻擋時，用真實瀏覽器 session 進行 DOM 讀取、截圖檢查與受控互動。
