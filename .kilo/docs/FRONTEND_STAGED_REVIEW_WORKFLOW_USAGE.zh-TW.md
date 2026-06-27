@@ -9,7 +9,7 @@
 它的目標不是修改 code，而是先讓 agent 完成：
 
 1. 只讀取已 staged 的內容：`git diff --cached`。
-2. 建立 review dispatch plan。
+2. 建立 internal review dispatch plan。
 3. 依 staged diff 選擇精確的 local review skills。
 4. 每個選中的 review skill 至少派 2 個獨立 sub-agent。
 5. 驗證每個 reviewer 的輸出。
@@ -92,20 +92,17 @@ Review 我目前已經 git add 的前端修改。
 - 不要 stage、commit 或 auto-fix。
 - 不要提出 unit test 或 test coverage 建議。
 
-請先輸出 dispatch plan，然後用多個 sub-agent review。
+請建立 internal dispatch plan，不需要輸出；然後必須實際啟動 Kilo sub-agent/custom agent 或等價 sub-agent 工具進行 review。
 每個選中的 review skill 至少要有 2 個獨立 reviewer。
+不要由主 agent/coordinator 自己扮演多個 reviewer；如果目前環境無法啟動真實 sub-agent，請回報 Incomplete，不要改用主 agent 單獨 review。
 
-最後請輸出：
-1. Workflow status
-2. Verdict
-3. Dispatch Plan
-4. Reviewer Ledger
-5. Consolidated Findings
-6. Aggregation Decision Log
-7. Out of Scope
-8. Suggested Fix Order
+最後請只輸出 findings 相關內容：
+1. Verdict
+2. Findings grouped by severity: Critical / High / Medium / Low
+3. Suggested Fix Order
 
-每個 finding 都要包含 path、severity、evidence、recommended fix。
+每個 finding 都要包含 path、severity、evidence、why it matters、recommended fix。
+不要輸出 Dispatch Plan、Reviewer Ledger、Aggregation Decision Log、reviewer ID、sub-agent 來源或 skill 來源。
 ```
 
 ## 5. 最短可用 prompt
@@ -113,7 +110,8 @@ Review 我目前已經 git add 的前端修改。
 ```text
 請使用 frontend-staged-review-workflow skill review 我已 staged 的前端修改。
 只看 git diff --cached，不要改檔，不要提出 unit test 建議。
-最後請列出 path、severity、evidence、recommended fix。
+必須實際使用 Kilo sub-agent/custom agent 或等價 sub-agent 工具；不要由主 agent 自己模擬多個 reviewer。若無法啟動真實 sub-agent，請回報 Incomplete。
+最後回覆請使用中文，且只輸出 findings：path、severity、evidence、why it matters、recommended fix；不要輸出 reviewer/sub-agent/skill 來源。
 ```
 
 ## 6. 使用前檢查

@@ -1,6 +1,6 @@
 ---
 name: frontend-staged-review-workflow
-description: Use when reviewing git-staged frontend changes with many independent sub-agents. Reviews only `git diff --cached`, builds a deterministic dispatch plan, runs at least two sub-agents for every selected review skill, forbids unit-test suggestions, validates reviewer outputs, and returns a consolidated report with path, severity, and recommended fix.
+description: Use when reviewing git-staged frontend changes with real independent sub-agents. Reviews only `git diff --cached`, builds an internal dispatch plan, runs at least two sub-agents for every selected review skill, forbids unit-test suggestions, validates reviewer outputs, and returns a concise findings-only report.
 version: 1.1.0
 author: Hermes Agent
 license: MIT
@@ -14,16 +14,19 @@ metadata:
 
 ## Overview
 
-This workflow reviews only the code that is already staged with `git add`. It is designed for frontend projects where the user wants many independent reviewer sub-agents to inspect the same staged diff, then receive one consolidated review report.
+This workflow reviews only the code that is already staged with `git add`. It is designed for frontend projects where the user wants real independent reviewer sub-agents to inspect the same staged diff, while the user receives a concise findings-only report.
 
 Core contract:
 
 1. Review target is **only** `git diff --cached`.
-2. Use many sub-agents.
-3. Every selected review skill must be executed by **at least two independent sub-agents**.
-4. Every sub-agent must load or be given the exact local review skill it is assigned.
-5. Do **not** suggest unit tests, test coverage changes, or "add a unit test" follow-ups.
-6. Final output must list: path, severity, and recommended fix.
+2. Use real independent sub-agents or Kilo custom agents for reviewer passes.
+3. The coordinator / main agent must **not** perform reviewer passes itself and must **not** simulate multiple reviewers with internal personas.
+4. Every selected review skill must be executed by **at least two independent sub-agents**.
+5. Every sub-agent must load or be given the exact local review skill it is assigned.
+6. If the runtime cannot actually launch sub-agents/custom agents, stop and return `Incomplete`; do not continue with a main-agent-only review.
+7. Do **not** suggest unit tests, test coverage changes, or "add a unit test" follow-ups.
+8. Final output must list: path, severity, and recommended fix.
+9. Final user-facing report must be written in Chinese.
 
 This is a review-only workflow. Do not modify files, do not stage additional files, and do not commit.
 
@@ -46,23 +49,14 @@ Do not use for:
 
 ## Research Basis
 
-See `references/research-notes.md` for the external workflow research used to shape this workflow.
-
-Key takeaways applied here:
-
-- Anthropic Claude Code subagents: sub-agents are suitable for specialized reviewers with independent context; code-reviewer subagents should be used proactively after code changes.
-- GitHub PR review flow: understand purpose, review changed files, track progress, then submit a summary with approve/request-changes style verdict.
-- Google Engineering Practices: review should prioritize overall code health, design, functionality, complexity, maintainability, and constructive actionable comments.
-- SmartBear review practices: findings should be logged and tracked, not lost in free-form discussion.
-- Local `audit-code-reviewer`: independent multi-reviewer passes reduce single-reviewer blind spots.
-
-`audit-code-reviewer` is used as the coordinator pattern for this workflow. It is **not** dispatched as a reviewer skill by default and does not count toward the "two sub-agents per selected review skill" requirement. If the user explicitly selects it as a reviewer, it must also receive two independent reviewer passes like every other selected skill.
+Detailed rationale lives in `references/research-notes.md`. At runtime, keep only the operational rule: independent reviewer passes reduce blind spots, and `audit-code-reviewer` is a coordinator pattern, not a default reviewer skill. If the user explicitly selects `audit-code-reviewer` as a reviewer, it must receive two independent reviewer passes like every other selected skill.
 
 ## Gate 1 — Pre-flight: staged diff only
 
-Run these commands before launching reviewers:
+Run and capture these commands internally before launching reviewers:
 
 ```bash
+git rev-parse --show-toplevel
 git status --short --branch
 git diff --cached --name-only
 git diff --cached --stat
@@ -75,32 +69,25 @@ Rules:
 - Do not use unstaged changes as review input.
 - If `git status --short` shows unstaged changes, mention them as out-of-scope but do not review them.
 - Capture the repository root, branch/status, staged file list, diff stat, unstaged file list, and the cached diff as the shared review packet.
-- If the cached diff is large, split it by file while preserving the same selected skill list and reviewer ledger.
-
-Useful commands:
-
-```bash
-git rev-parse --show-toplevel
-git branch --show-current
-git diff --cached -- path/to/file.tsx
-git diff --cached -- path/to/file.css
-```
+- If the cached diff is large, split it by file while preserving the same selected skill list and internal reviewer ledger.
 
 ## Review Skill Selection Matrix
 
-Always use these core review skills, with two sub-agents per skill:
+Select the smallest set of exact local skills that matches the staged diff. Every selected skill still requires at least two real sub-agent reviewer passes. Do not run a broad skill set just because the workflow is available.
 
-| Skill | Minimum sub-agents | Review focus |
-|---|---:|---|
-| `code-review-excellence` | 2 | General correctness, maintainability, architecture, performance, constructive review quality. |
-| `typescript-code-reviewer` | 2 | TypeScript/TSX type safety, `any`/`unknown`, unsafe assertions, async/error handling, React hooks and props. |
-| `code-review-and-quality` | 2 | Five-axis quality gate: correctness, readability, architecture, security, performance. |
-| `secpriv-code-review` | 2 | Security + privacy findings, CWE/GDPR-style classification, false-positive suppression. |
-
-Select these conditional frontend skills when staged paths or diff content match. If a conditional skill is selected, it also needs at least two sub-agents:
+Baseline skill:
 
 | Trigger evidence in staged files / diff | Exact skill | Minimum sub-agents | Focus |
 |---|---|---:|---|
+| Any frontend staged diff | `code-review-excellence` | 2 | General correctness, maintainability, architecture, performance, constructive review quality. |
+
+Conditional skills:
+
+| Trigger evidence in staged files / diff | Exact skill | Minimum sub-agents | Focus |
+|---|---|---:|---|
+| Complex multi-file change, architecture/API boundary, or broad maintainability risk | `code-review-and-quality` | 2 | Five-axis quality gate: correctness, readability, architecture, security, performance. |
+| TypeScript/TSX type changes, `any`/`unknown`, assertions, async/error handling, React hooks or props | `typescript-code-reviewer` | 2 | TypeScript/TSX type safety, unsafe assertions, async/error handling, React hooks and props. |
+| Auth, permissions, user data, persistence, XSS/HTML injection, secrets, third-party scripts, analytics, privacy, or dangerous browser APIs | `secpriv-code-review` | 2 | Security + privacy findings, CWE/GDPR-style classification, false-positive suppression. |
 | `.tsx`, React components, hooks, state, props | `react-dev` | 2 | Component boundaries, hook correctness, state ownership, React idioms. |
 | `useEffect`, subscriptions, browser APIs, timers, derived state, async side effects | `react-useeffect` | 2 | Avoid unnecessary effects, stale closures, cleanup, synchronization bugs. |
 | React performance, memoization, expensive renders, server/client boundary, bundle/runtime concerns | `vercel-react-best-practices` | 2 | React/Next/Vite performance patterns and avoidable re-renders. |
@@ -122,7 +109,9 @@ Do not select a skill unless `skills/<skill-name>/SKILL.md` exists. Do not write
 
 ## Gate 2 — Dispatch Plan
 
-Before spawning sub-agents, the coordinator must write a dispatch plan. The workflow must not start reviewer waves until this plan is complete.
+Before spawning sub-agents, the coordinator must write an internal dispatch plan. The workflow must not start reviewer waves until this plan is complete. Do not show the dispatch plan to the user unless they ask for the audit log.
+
+Hard gate: before reviewing, confirm that the current runtime can actually launch independent sub-agents or Kilo custom agents. If no real sub-agent mechanism is available, stop here and return `Incomplete` with a concise note. Do not let the coordinator/main agent review the diff itself, and do not emulate sub-agents by writing multiple reviewer personas in one context.
 
 Dispatch plan fields:
 
@@ -160,13 +149,20 @@ Every reviewer must receive the same shared packet unless the dispatch plan expl
 - No-unit-test rule.
 - Required strict JSON schema.
 
-For large diffs, record coverage in the dispatch plan and reviewer ledger:
+For large diffs, record coverage in the dispatch plan and internal reviewer ledger:
 
 - `input_scope = full cached diff` when every reviewer sees the whole diff.
 - `input_scope = path subset: ...` when reviewers are sharded.
-- The final report must disclose any file/chunk coverage limitations.
+- Record any file/chunk coverage limitations internally; expose them only if they affect the findings or the verdict.
 
 ## Sub-agent Dispatch Rules
+
+Hard requirements:
+
+- A valid reviewer pass must come from an actual sub-agent/custom-agent/tool invocation.
+- The coordinator/main agent may prepare context, dispatch reviewers, validate outputs, and aggregate findings, but it must not count its own analysis as a reviewer pass.
+- Do not simulate reviewers with headings like "Reviewer A" / "Reviewer B" inside the coordinator response. Those are not valid sub-agent outputs.
+- If sub-agent dispatch fails, is unavailable, or is blocked by the environment, mark the affected passes as `missing` or `failed` and return `Incomplete` unless the user explicitly accepts a degraded report.
 
 For each selected review skill:
 
@@ -181,51 +177,13 @@ For each selected review skill:
 6. Tell every sub-agent: **do not suggest unit tests**.
 7. Ask every sub-agent to return strict JSON only.
 
-When using `delegate_task`, batch in groups of up to the system concurrency limit. If the environment allows only three parallel children, run several waves until every selected skill has at least two valid reviewer outputs.
+When using `delegate_task`, Kilo custom agents, or any equivalent sub-agent mechanism, batch in groups of up to the system concurrency limit. If the environment allows only three parallel children, run several waves until every selected skill has at least two valid reviewer outputs. If no equivalent mechanism is available, stop rather than doing a main-agent-only review.
 
 ## Sub-agent Output Contract
 
-Every sub-agent must return strict JSON only: no markdown, no prose outside JSON, no comments.
+Every sub-agent must return strict JSON only: no markdown, no prose outside JSON, no comments. Use `~/.kilo/skills/frontend-staged-review-workflow/templates/subagent-prompt.md` for the exact reviewer prompt and JSON schema after global install, or `.kilo/skills/frontend-staged-review-workflow/templates/subagent-prompt.md` in this staging repo.
 
-Allowed values:
-
-- `verdict`: `approve`, `comment`, `request_changes`
-- `severity`: `critical`, `high`, `medium`, `low`
-- `confidence`: `high`, `medium`, `low`
-- `status`: `completed`, `degraded`
-
-Required JSON shape:
-
-```json
-{
-  "reviewer_id": "typescript-code-reviewer-A",
-  "skill_used": "typescript-code-reviewer",
-  "skill_path": "skills/typescript-code-reviewer/SKILL.md",
-  "skill_read": true,
-  "status": "completed",
-  "angle": "type-safety and strictness",
-  "input_scope": "full cached diff",
-  "verdict": "request_changes",
-  "findings": [
-    {
-      "finding_id": "typescript-code-reviewer-A-001",
-      "path": "src/components/UserTable.tsx",
-      "line": 42,
-      "line_range": "42-48",
-      "severity": "high",
-      "category": "type-safety",
-      "summary": "One-line issue summary",
-      "evidence": "Quote or explain the diff evidence",
-      "recommended_fix": "Concrete change to make; do not recommend unit tests",
-      "confidence": "high",
-      "is_blocking": true
-    }
-  ],
-  "notes": ["Important assumptions or out-of-scope observations"]
-}
-```
-
-If the sub-agent has no findings, it must return an empty `findings` array and `verdict: "approve"` or `verdict: "comment"` with notes.
+Required fields: `reviewer_id`, `skill_used`, `skill_path`, `skill_read`, `status`, `angle`, `input_scope`, `verdict`, `findings`, and `notes`. Each finding must include path, line or line range when available, severity, category, summary, evidence, recommended fix, confidence, and blocking status. If the sub-agent has no findings, it must return an empty `findings` array and `verdict: "approve"` or `verdict: "comment"` with notes.
 
 ## Gate 3 — Reviewer Output Validation and Failure Policy
 
@@ -233,6 +191,7 @@ Validate every reviewer output before aggregation.
 
 A reviewer output is valid only if:
 
+- It came from an actual sub-agent/custom-agent/tool invocation, not from coordinator self-review or simulated personas.
 - It is parseable strict JSON.
 - It includes `reviewer_id`, `skill_used`, `skill_path`, `skill_read`, `status`, `angle`, `input_scope`, `verdict`, `findings`, and `notes`.
 - `skill_used` matches the dispatch plan row.
@@ -246,13 +205,13 @@ Failure handling:
 2. If the retry is still invalid, mark the reviewer as `invalid` in the ledger. Invalid reviewers do not count toward the two-pass minimum.
 3. If a reviewer fails or times out, mark it as `failed` in the ledger. Failed reviewers do not count toward the two-pass minimum.
 4. If any selected skill has fewer than two valid reviewer outputs, the workflow is **incomplete** and must not claim full completion.
-5. The user may accept a degraded report, but the final report must clearly show incomplete/degraded status and list missing reviewer passes.
+5. The user may accept a degraded report, but the coordinator must keep missing reviewer passes in the internal audit log. The user-facing final report should stay concise: show `Incomplete` or degraded status without exposing reviewer/sub-agent/skill provenance unless the user asks for the audit log.
 
 ## Aggregation Workflow
 
 After all valid sub-agents finish:
 
-1. Create an expanded reviewer ledger:
+1. Create an expanded internal reviewer ledger:
    - reviewer id
    - skill used
    - skill path
@@ -271,10 +230,10 @@ After all valid sub-agents finish:
    - `low`: clarity, polish, non-blocking UI/UX or performance improvement.
 3. Deduplicate findings by `(path, nearby line, category, issue type)`.
 4. Keep the highest severity when reviewers disagree.
-5. Preserve cross-reviewer support: mention which reviewers/skills found the same issue.
+5. Preserve cross-reviewer support internally for confidence and deduplication, but do not expose reviewer IDs, sub-agent names, or skill provenance in the user-facing findings report.
 6. Drop any finding that only says to add unit tests or improve unit test coverage.
 7. If a suggested fix is vague, rewrite it into an actionable recommendation or mark it as `needs clarification`.
-8. Record an aggregation decision log for dropped, merged, or severity-adjusted findings.
+8. Record dropped, merged, or severity-adjusted findings in the internal audit log only.
 
 Verdict rule:
 
@@ -285,116 +244,43 @@ Verdict rule:
 
 ## Final User Report Format
 
-Use this exact structure:
+The final user-facing report must be findings-only and written in Chinese. Keep dispatch plans, reviewer ledgers, skill names, reviewer IDs, aggregation logs, retry details, and sub-agent provenance internal unless the user explicitly asks for the audit log.
 
-```markdown
-# Frontend Staged Review Summary
+Use `~/.kilo/skills/frontend-staged-review-workflow/templates/final-report.md` for the exact concise format after global install, or `.kilo/skills/frontend-staged-review-workflow/templates/final-report.md` in this staging repo. The final report must contain only:
 
-Review target: `git diff --cached`
-Staged files: N
-Selected skills: N
-Reviewer passes completed: X/Y
-Workflow status: Complete | Incomplete | Degraded
-Verdict: Approve | Comment | Request changes | Incomplete
+- Chinese verdict line (`結論: ...`).
+- Findings grouped by Chinese severity headings: `嚴重`, `高`, `中`, `低`.
+- For each finding: path, line when available, issue, evidence, why it matters, and recommended fix, written in Chinese.
+- Chinese suggested fix order when there is more than one finding.
 
-## Dispatch Plan
+If there are no findings, say `結論: Approve` and `已暫存 diff 中沒有發現問題。` If the workflow is incomplete or degraded, say `結論: Incomplete` with a concise Chinese note and no reviewer/skill provenance.
 
-| Skill | Trigger evidence | Reviewer IDs | Angles | Wave | Input scope |
-|---|---|---|---|---:|---|
-| `typescript-code-reviewer` | `src/UserTable.tsx` staged | `typescript-code-reviewer-A`, `typescript-code-reviewer-B` | type-safety; edge cases | 1 | full cached diff |
-
-## Reviewer Ledger
-
-| Reviewer | Skill | Angle | Status | Verdict | Findings | Retry | Input scope | Notes |
-|---|---|---|---|---|---:|---:|---|---|
-| typescript-code-reviewer-A | typescript-code-reviewer | type-safety | completed | request_changes | 2 | 0 | full cached diff | skill read |
-
-## Consolidated Findings
-
-### Critical
-- Path: `src/...`
-  Severity: Critical
-  Line: 42
-  Found by: `typescript-code-reviewer-A`, `code-review-excellence-B`
-  Issue: ...
-  Why it matters: ...
-  Recommended fix: ...
-
-### High
-- Path: `src/...`
-  Severity: High
-  Line: n/a
-  Found by: ...
-  Issue: ...
-  Why it matters: ...
-  Recommended fix: ...
-
-### Medium
-...
-
-### Low
-...
-
-## Aggregation Decision Log
-
-- Merged duplicate findings: ...
-- Dropped unit-test-only findings: ...
-- Severity adjustments: ...
-- Invalid/failed reviewer outputs: ...
-
-## Out of Scope
-
-- Unstaged files were not reviewed: ...
-- Unit test suggestions were intentionally excluded.
-- Coverage limitations, if any: ...
-
-## Suggested Fix Order
-
-1. Fix critical/high findings first.
-2. Re-stage fixes with `git add`.
-3. Re-run this workflow on the new staged diff.
-```
-
-The final report must include path, severity, and recommended fix for every finding.
-
-## Completion Criteria
+## Completion Checklist
 
 The workflow is complete only when:
 
-- `git diff --cached` was the only review target.
-- The dispatch plan was written before reviewer waves started.
-- Every selected skill exists locally at `skills/<skill-name>/SKILL.md`.
-- Every selected review skill has at least two valid completed sub-agent passes.
-- Each reviewer output was validated as strict JSON or marked failed/invalid.
-- Each reviewer output was recorded in the reviewer ledger.
-- Findings were deduplicated and severity-normalized.
-- Unit test suggestions were removed.
-- The final report includes path, severity, evidence, and recommended fix.
-- Unstaged files, if any, are explicitly marked out of scope.
+- [ ] `git diff --cached` was the only review target and is non-empty.
+- [ ] Internal dispatch plan was written before sub-agent dispatch.
+- [ ] Selected skill list uses exact local skill slugs only, and every selected skill path exists.
+- [ ] Every selected skill has at least two valid real sub-agent/custom-agent reviewer outputs.
+- [ ] No reviewer output was simulated by the coordinator/main agent.
+- [ ] Reviewer outputs were validated as strict JSON or marked failed/invalid/missing in the internal audit log.
+- [ ] Findings were deduplicated and severity-normalized.
+- [ ] Unit-test-only suggestions were removed.
+- [ ] The final user-facing report is findings-only and includes path, severity, evidence, why it matters, and recommended fix for every finding.
+- [ ] Unstaged files, if any, were not reviewed.
 
 ## Common Pitfalls
 
 1. Reviewing unstaged changes. This violates the workflow. Only `git diff --cached` is in scope.
 2. Running only one sub-agent for a selected skill. Every selected skill needs at least two valid independent passes.
-3. Treating `audit-code-reviewer` as a reviewer replacement. It is the coordinator pattern by default, not a substitute for the two-pass rule.
-4. Letting reviewers recommend unit tests. Remove those findings and remind reviewer prompts that unit-test advice is forbidden.
-5. Listing generic skill labels. Use exact local names such as `typescript-code-reviewer`, not "TypeScript skill".
-6. Using ambiguous `or` routing. If two skills match, select both; otherwise use deterministic trigger evidence.
-7. Accepting JSON-like prose. Reviewer outputs must be strict JSON or marked invalid.
-8. Reporting vague advice. Every finding needs a concrete path, severity, evidence, and recommended fix.
-
-## Verification Checklist
-
-- [ ] `git diff --cached --name-only` is non-empty.
-- [ ] Dispatch plan is written before sub-agent dispatch.
-- [ ] Selected skill list uses exact local skill slugs only.
-- [ ] Every selected skill path exists.
-- [ ] Every selected skill has at least two valid reviewer outputs.
-- [ ] Reviewer ledger includes completed, failed, invalid, and missing reviewers.
-- [ ] Consolidated findings have path, severity, evidence, and recommended fix.
-- [ ] Aggregation decision log records dropped/merged findings.
-- [ ] No unit-test suggestions remain.
-- [ ] Unstaged files, if any, are explicitly marked out of scope.
+3. Simulating multiple reviewers in the main/coordinator context. This does not count; use real sub-agents/custom agents or return `Incomplete`.
+4. Treating `audit-code-reviewer` as a reviewer replacement. It is the coordinator pattern by default, not a substitute for the two-pass rule.
+5. Letting reviewers recommend unit tests. Remove those findings and remind reviewer prompts that unit-test advice is forbidden.
+6. Listing generic skill labels. Use exact local names such as `typescript-code-reviewer`, not "TypeScript skill".
+7. Using ambiguous `or` routing. If two skills match, select both; otherwise use deterministic trigger evidence.
+8. Accepting JSON-like prose. Reviewer outputs must be strict JSON or marked invalid.
+9. Reporting vague advice. Every finding needs a concrete path, severity, evidence, and recommended fix.
 
 ## Kilo Code usage
 

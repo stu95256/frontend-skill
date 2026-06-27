@@ -9,14 +9,15 @@
 它的目標不是修改 code，而是讓 Kilo 完成：
 
 1. 只讀取已 staged 的內容：`git diff --cached`。
-2. 建立 runtime config 與 dispatch plan。
+2. 建立 internal runtime config 與 internal dispatch plan。
 3. 依 staged diff 選擇精確的 local review skills。
-4. 每個選中的 review skill 預設派 5 個獨立 sub-agent。
+4. 每個選中的 review skill 預設派 5 個真實、獨立 sub-agent。
 5. 如果 reviewer 掛掉、逾時、輸出格式錯誤或沒有真正用到 skill，就用 replacement reviewer 補位。
 6. 驗證每個 reviewer 的 strict JSON output。
-7. 用 reviewer health ledger 與 skill quorum status 防止 overclaim。
-8. 彙整 findings 後，再派 aggregation validator sub-agents 檢查最終報告。
+7. 用 internal reviewer health ledger 與 skill quorum status 防止 overclaim。
+8. 彙整 findings 後，再派 aggregation validator sub-agents 檢查 findings。
 9. 明確排除 unit test / test coverage 建議。
+10. 最後只輸出 findings，不輸出 dispatch plan、ledger、reviewer 來源或 skill 來源。
 
 簡單說：
 
@@ -25,6 +26,7 @@
 再叫 Kilo 使用 frontend-heavy-staged-review-workflow。
 Kilo 只 review staged diff，不改檔、不 commit。
 每個 selected review skill 預設要有 5 個有效 reviewer。
+最後只回 findings。
 ```
 
 ## 2. 什麼時候應該使用？
@@ -35,7 +37,7 @@ Kilo 只 review staged diff，不改檔、不 commit。
 - 修改風險高、範圍大、牽涉多個前端技術面。
 - 你想讓多個 sub-agent 從不同角度獨立 review。
 - 你希望 sub-agent 掛掉或輸出無效時，有 replacement reviewer 補位。
-- 你希望 final report 有 quorum / degraded / incomplete 狀態，不會假裝完成。
+- 你希望 workflow 不會在 quorum 失敗時假裝完成。
 
 不適合以下情境：
 
@@ -79,7 +81,9 @@ Kilo 只 review staged diff，不改檔、不 commit。
 ```text
 請使用 frontend-heavy-staged-review-workflow skill，並遵守 Frontend Heavy Staged Review Rule。
 只 review git diff --cached，不要 review unstaged changes，不要修改檔案，不要提出 unit test 建議。
+必須實際啟動 Kilo sub-agent/custom agent 或等價 sub-agent 工具；不要由主 agent 自己模擬多個 reviewer。
 每個 selected review skill 預設需要 5 個有效 reviewer；sub-agent 掛掉或輸出無效時請使用 replacement reviewer 補位。
+最後回覆請使用中文；只輸出 findings，不要輸出 reviewer/sub-agent/skill 來源。
 ```
 
 ## 4. 最推薦的 prompt 模板
@@ -92,7 +96,7 @@ Review 我目前已經 git add 的前端修改，使用重型多 sub-agent revie
 
 限制：
 - 只 review `git diff --cached`。
-- 不要 review unstaged changes；如果有，請列為 out of scope。
+- 不要 review unstaged changes；如果有，請列為 internal out of scope，不要拿來 review。
 - 不要修改檔案。
 - 不要 stage、commit 或 auto-fix。
 - 不要提出 unit test 或 test coverage 建議。
@@ -102,26 +106,21 @@ Runtime config：
 - replacement_budget_per_skill: 3
 - aggregation_validator_count: 2
 - primary_reviewer_isolation: true
+- final_report: findings_only
 
-請先輸出 runtime config 和 dispatch plan，然後分 wave 使用 sub-agent review。
+請建立 internal runtime config 和 internal dispatch plan，不需要輸出。
+必須實際啟動 Kilo sub-agent/custom agent 或等價 sub-agent 工具進行 review。
 每個 selected review skill 預設要有 5 個 valid reviewer outputs。
 如果 reviewer failed / timed_out / invalid / missing，請用 replacement reviewer 補位。
+不要由主 agent/coordinator 自己扮演多個 reviewer；如果目前環境無法啟動真實 sub-agent，請回報 Incomplete，不要改用主 agent 單獨 review。
 
-最後請輸出：
-1. Workflow status
-2. Verdict
-3. Runtime config
-4. Dispatch Plan
-5. Deferred / Dropped Skill Decisions
-6. Reviewer Health Ledger
-7. Skill Quorum Status
-8. Aggregation Validation
-9. Consolidated Findings
-10. Aggregation Decision Log
-11. Out of Scope
-12. Suggested Fix Order
+最後回覆請使用中文，且只輸出 findings 相關內容：
+1. Verdict
+2. Findings grouped by severity: Critical / High / Medium / Low
+3. Suggested Fix Order
 
 每個 finding 都要包含 path、severity、evidence、why it matters、recommended fix。
+不要輸出 Runtime config、Dispatch Plan、Reviewer Health Ledger、Skill Quorum Status、Aggregation Decision Log、reviewer ID、sub-agent 來源或 skill 來源。
 ```
 
 ## 5. 自訂 reviewer 數量
@@ -143,8 +142,9 @@ Runtime config：
 ```text
 請使用 frontend-heavy-staged-review-workflow skill review 我已 staged 的前端修改。
 只看 git diff --cached，不要改檔，不要提出 unit test 建議。
+必須實際使用 Kilo sub-agent/custom agent 或等價 sub-agent 工具；不要由主 agent 自己模擬多個 reviewer。若無法啟動真實 sub-agent，請回報 Incomplete。
 每個 selected review skill 預設跑 5 個有效 reviewer，失敗請補 replacement reviewer。
-最後請列出 quorum 狀態、path、severity、evidence、recommended fix。
+最後回覆請使用中文，且只輸出 findings：path、severity、evidence、why it matters、recommended fix；不要輸出 reviewer/sub-agent/skill 來源。
 ```
 
 ## 7. 使用前檢查
@@ -163,8 +163,8 @@ git diff --cached --name-only
 | Workflow | 使用時機 | sub-agent 強度 | 是否修改 code | 主要輸出 |
 |---|---|---:|---|---|
 | `frontend-task-preflight` | 開始實作前，需求/設計/方案還需要釐清 | 視情況 | 不修改 | implementation plan |
-| `frontend-staged-review-workflow` | 一般 commit 前 staged diff review | 每個 selected skill 至少 2 個 reviewer | 不修改 | staged diff review report |
-| `frontend-heavy-staged-review-workflow` | 高風險或需要更保險的 staged diff review | 每個 selected skill 預設 5 個 reviewer + replacement + aggregation validators | 不修改 | quorum-aware heavy review report |
+| `frontend-staged-review-workflow` | 一般 commit 前 staged diff review | 每個 selected skill 至少 2 個 reviewer | 不修改 | findings-only staged review report |
+| `frontend-heavy-staged-review-workflow` | 高風險或需要更保險的 staged diff review | 每個 selected skill 預設 5 個 reviewer + replacement + aggregation validators | 不修改 | findings-only quorum-aware heavy review report |
 
 ## 9. Review 後怎麼接？
 
@@ -180,13 +180,13 @@ git diff --cached --name-only
 2. 如果修了，重新 stage 並 rerun workflow。
 3. 如果不修，在 commit message 或 PR note 裡記錄取捨。
 
-如果 verdict 是 `Approve` 且 workflow status 是 `Complete` 或 `Complete with replacements`：
+如果 verdict 是 `Approve`：
 
 1. 可以進入 commit / PR 流程。
 2. 若工作區還有 unstaged changes，記得那些沒有被本 workflow review。
 
-如果 workflow status 是 `Incomplete` 或 `Degraded`：
+如果 verdict 是 `Incomplete` 或 `Degraded`：
 
-1. 先看 Skill Quorum Status 和 Reviewer Health Ledger。
-2. 確認是哪個 skill 沒達到 reviewer quorum。
+1. 可重跑 workflow。
+2. 或要求 Kilo 輸出 audit log，確認哪個 skill / reviewer quorum 沒達標。
 3. 可提高 replacement budget 後重跑，或明確接受 degraded report。
