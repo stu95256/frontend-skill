@@ -35,6 +35,8 @@
 
 新增重點：`skills/frontend-staged-review-workflow/` 是本專案整理的前端 staged diff review workflow；只 review `git add` 後的 `git diff --cached`，每個選用 review skill 至少派 2 個 sub-agent，並明確排除 unit test 建議。
 
+新增重點：`skills/frontend-branch-review-workflow/` 是本專案整理的前端 branch merge review workflow；將 source、target 與 merge base 固定成 commit SHA，只 review merge base 到 source tip 的 committed changes，適合在 feature/fix branch 合併進 `master` 前執行。
+
 新增重點：`skills/frontend-staged-commit-message/` 是本專案整理的前端 staged commit message skill；只讀 `git diff --cached`，不 stage、不 commit、不改檔，輸出 `feat: ...` / `fix: ...` / `style: ...` 這類不含 scope 括號的單行英文 commit message。
 
 新增重點：`skills/frontend-debug-workflow/` 是本專案整理的前端 debug workflow；使用者提供程式碼位置與問題後，先讀指定檔案與附近使用、建立 evidence / root cause，再選 exact local frontend skills 修正並驗證。
@@ -50,5 +52,6 @@
 - [前端任務前期 Workflow 調查與草案](./FRONTEND_TASK_PREFLIGHT_WORKFLOW.md)：整理使用者目標、相關程式碼、Figma/設計稿落差、sub-agent 分工、網路 research、implementation plan 與 plan review 的前期工作流，之後可轉成 skill。
 - [Code Review Skills 調查與安裝紀錄](./CODE_REVIEW_SKILLS_RESEARCH.md)：盤點現有 review/quality skills，並記錄本次新增的 `audit-code-reviewer` 與 `secpriv-code-review`。
 - [`frontend-staged-review-workflow` research notes](./skills/frontend-staged-review-workflow/references/research-notes.md)：記錄前端 staged review workflow 的外部來源與設計決策。
+- [前端 Branch Merge Review Workflow](./FRONTEND_BRANCH_REVIEW_WORKFLOW.md)：整理「source branch 準備合併進 `master`」的 pinned-SHA、多 sub-agent、findings-only 審查流程。
 - [前端 Debug Workflow](./FRONTEND_DEBUG_WORKFLOW.md)：整理「使用者給程式碼位置 + 問題 → 查附近使用 → root cause → 選 skill → 修正 → 驗證 → 紀錄」的 debug 工作流。
 - [`frontend-debug-workflow` research notes](./skills/frontend-debug-workflow/references/research-notes.md)：記錄前端 debug workflow 的外部來源與設計決策。

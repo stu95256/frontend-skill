@@ -1,12 +1,12 @@
 # Skills Validation Report
 
-日期：2026-05-30
+日期：2026-07-24
 
 ## 結果摘要
 
 - 安裝位置：`skills/`
-- skill 目錄數：66
-- 檔案數：426
+- skill 目錄數：67
+- 檔案數：431
 - `SKILL.md` frontmatter 檢查：通過
 - `name` 與目錄名稱一致性：通過
 - 高風險 shell 命令掃描：未發現真實高風險命令；掃描規則本身不列入命中
@@ -38,6 +38,13 @@
   - 研究紀錄：`skills/frontend-staged-review-workflow/references/research-notes.md`
   - 模板：`skills/frontend-staged-review-workflow/templates/subagent-prompt.md`、`skills/frontend-staged-review-workflow/templates/final-report.md`
   - 授權策略：project-curated MIT；引用外部 workflow 文件與本專案既有 local review skills，不直接 vendoring 第三方內容。
+
+- `frontend-branch-review-workflow`：本專案整理的前端 branch merge review workflow；pin source、target、merge base commit SHAs，只 review merge base 到 source tip 的 committed branch contribution。
+  - 位置：`skills/frontend-branch-review-workflow/SKILL.md`
+  - 完整 workflow：`FRONTEND_BRANCH_REVIEW_WORKFLOW.md`、`skills/frontend-branch-review-workflow/references/FRONTEND_BRANCH_REVIEW_WORKFLOW.md`
+  - 研究紀錄：`skills/frontend-branch-review-workflow/references/research-notes.md`
+  - 模板：`skills/frontend-branch-review-workflow/templates/subagent-prompt.md`、`skills/frontend-branch-review-workflow/templates/final-report.md`
+  - 授權策略：project-curated MIT；參考 Git merge-base/diff semantics、GitHub base-head review conventions、本專案 staged review workflow 與 local review skills，不直接 vendoring 第三方內容。
 
 - `frontend-staged-commit-message`：本專案整理的前端 staged commit message skill；只讀 `git diff --cached`，不 stage、不 commit、不改檔，輸出 `feat: ...` / `fix: ...` / `style: ...` 這類不含 scope 括號的單行英文 commit message。
   - 位置：`skills/frontend-staged-commit-message/SKILL.md`

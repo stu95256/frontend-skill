@@ -11,7 +11,7 @@ Planned global target:
 Kilo global config target:
 `~/.kilo/kilo.jsonc`
 
-Skill directories included: 68
+Skill directories included: 69
 
 ## Required Kilo config
 
@@ -38,6 +38,7 @@ Skill directories included: 68
 
 ## Included workflow documents
 
+- `workflows/FRONTEND_BRANCH_REVIEW_WORKFLOW.md`
 - `workflows/FRONTEND_DEBUG_WORKFLOW.md`
 - `workflows/FRONTEND_HEAVY_STAGED_REVIEW_WORKFLOW.md`
 - `workflows/FRONTEND_STAGED_REVIEW_WORKFLOW.md`
@@ -45,6 +46,7 @@ Skill directories included: 68
 
 ## Included rules
 
+- `rules/frontend-branch-review.md`
 - `rules/frontend-debug.md`
 - `rules/frontend-heavy-staged-review.md`
 - `rules/frontend-preflight.md`
@@ -52,6 +54,7 @@ Skill directories included: 68
 
 ## Included user guides
 
+- `docs/FRONTEND_BRANCH_REVIEW_WORKFLOW_USAGE.zh-TW.md`
 - `docs/FRONTEND_DEBUG_WORKFLOW_USAGE.zh-TW.md`
 - `docs/FRONTEND_HEAVY_STAGED_REVIEW_WORKFLOW_USAGE.zh-TW.md`
 - `docs/FRONTEND_STAGED_COMMIT_MESSAGE_USAGE.zh-TW.md`
@@ -78,6 +81,7 @@ Skill directories included: 68
 - `executing-plans`
 - `finishing-a-development-branch`
 - `frontend-design`
+- `frontend-branch-review-workflow`
 - `frontend-debug-workflow`
 - `frontend-heavy-staged-review-workflow`
 - `frontend-staged-commit-message`
