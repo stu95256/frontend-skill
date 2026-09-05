@@ -1,13 +1,45 @@
 ---
 name: frontend-branch-review-workflow
-description: Use when reviewing the frontend changes a source branch would contribute before merging it into `master` or another target branch. Pins source, target, and merge-base commits; reviews only the merge-base-to-source diff; uses at least two real independent sub-agents for every selected review skill; excludes working-tree changes and unit-test suggestions; and returns a concise Chinese findings-only report.
-version: 1.0.0
-author: Hermes Agent
+description: Use when reviewing the frontend changes a source branch would contribute before merging it into `master` or another
+  target branch. Pins source, target, and merge-base commits; reviews only the merge-base-to-source diff; uses at least two
+  real independent sub-agents for every selected review skill; excludes working-tree changes and unit-test suggestions; and
+  returns a concise Chinese findings-only report.
 license: MIT
 metadata:
   hermes:
-    tags: [frontend, code-review, branch-diff, merge-review, subagent, workflow, react, typescript, no-unit-tests]
-    related_skills: [frontend-staged-review-workflow, audit-code-reviewer, code-review-excellence, typescript-code-reviewer, code-review-and-quality, secpriv-code-review, react-dev, react-useeffect, vercel-react-best-practices, web-design-guidelines, accessibility-compliance, tailwind-design-system, tailwind-v4-shadcn, ant-design, ag-grid, react-hook-form-zod, internationalization-i18n, react-router-declarative-mode, react-router-data-mode, react-router-framework-mode, playwright-best-practices, webapp-testing]
+    version: 1.1.0
+    author: Hermes Agent
+    tags:
+    - frontend
+    - code-review
+    - branch-diff
+    - merge-review
+    - subagent
+    - workflow
+    - react
+    - typescript
+    - no-unit-tests
+    related_skills:
+    - frontend-staged-review-workflow
+    - code-review-and-quality
+    - typescript-code-reviewer
+    - secpriv-code-review
+    - react-dev
+    - react-useeffect
+    - vercel-react-best-practices
+    - web-design-guidelines
+    - accessibility-compliance
+    - accessibility
+    - tailwind-design-system
+    - shadcn
+    - ant-design
+    - ag-dev
+    - react-hook-form-zod
+    - internationalization-i18n
+    - react-router
+    - playwright-best-practices
+    - playwright-cli
+    - webapp-testing
 ---
 
 # Frontend Branch Review Workflow
@@ -165,7 +197,7 @@ Baseline:
 
 | Trigger evidence | Exact skill | Minimum reviewers | Focus |
 |---|---|---:|---|
-| Any frontend branch contribution | `code-review-excellence` | 2 | Correctness, maintainability, architecture, performance, constructive review quality. |
+| Any frontend branch contribution | `code-review-and-quality` | 2 | Correctness, maintainability, architecture, performance, constructive review quality. |
 
 Conditional skills:
 
@@ -179,16 +211,16 @@ Conditional skills:
 | React performance, memoization, expensive renders, bundle/runtime concerns | `vercel-react-best-practices` | 2 | Avoidable rerenders and frontend runtime performance. |
 | UI, layout, visual hierarchy, copy, interaction states, responsive behavior | `web-design-guidelines` | 2 | UI/UX quality, affordance, responsive behavior. |
 | Accessibility, keyboard, ARIA, semantic HTML, focus | `accessibility-compliance` | 2 | WCAG/accessibility risks and remediation. |
+| Accessibility audit evidence and WCAG 2.2 verification | `accessibility` | 2 | Evidence-led keyboard, screen-reader, semantics, and contrast checks. |
 | Tailwind tokens, theme scales, variants, reusable utility composition | `tailwind-design-system` | 2 | Token consistency and maintainable utilities. |
-| Tailwind v4, shadcn-style components, CSS variables | `tailwind-v4-shadcn` | 2 | Tailwind v4/shadcn compatibility and tokens. |
+| Tailwind v4, shadcn-style components, CSS variables | `shadcn` | 2 | Tailwind v4/shadcn compatibility and tokens. |
 | Ant Design components, Table/Form/Modal, theme tokens | `ant-design` | 2 | antd API correctness, tokens, accessibility/performance. |
-| AG Grid files, column defs, renderers, row models | `ag-grid` | 2 | Grid config, row identity, rendering performance, types. |
+| AG Grid files, column defs, renderers, row models | `ag-dev` | 2 | Grid config, row identity, rendering performance, types. |
 | React Hook Form, Zod, validation, field errors | `react-hook-form-zod` | 2 | Form state, validation, error UX. |
 | i18n keys, interpolation, locale formatting, react-i18next | `internationalization-i18n` | 2 | Translation completeness and formatting safety. |
-| `<Routes>`, `<Route>`, `useNavigate` | `react-router-declarative-mode` | 2 | Declarative routing and navigation. |
-| loaders/actions, `useLoaderData`, fetchers | `react-router-data-mode` | 2 | Data-router boundaries and error states. |
-| Framework-mode route files/config | `react-router-framework-mode` | 2 | Framework routing conventions. |
+| React Router routes/navigation/loaders/actions/framework config | `react-router` | 2 | Detect installed version and mode before reviewing route behavior. |
 | Playwright config/specs/selectors/fixtures or E2E-visible selector changes | `playwright-best-practices` | 2 | Selector and browser automation risk; no unit-test advice. |
+| Reproducible browser interaction or DOM/screenshot verification | `playwright-cli` | 2 | Runtime browser evidence with replayable commands. |
 | Browser-visible runtime behavior | `webapp-testing` | 2 | Runtime/browser verification risk; no unit-test advice. |
 
 Selection rules:
@@ -197,7 +229,7 @@ Selection rules:
 2. Do not use generic labels such as “React skill”.
 3. If two skills directly match and capacity allows, select both.
 4. Determine React Router mode from branch/target evidence before selecting a router skill.
-5. `audit-code-reviewer` is a coordinator pattern by default, not a substitute reviewer.
+5. Use `code-review-and-quality` as the generic reviewer skill; the workflow coordinator remains responsible for dispatch, quorum, and aggregation.
 
 ## Gate 3 — Internal Dispatch Plan
 

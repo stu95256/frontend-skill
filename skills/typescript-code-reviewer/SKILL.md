@@ -1,13 +1,28 @@
 ---
 name: typescript-code-reviewer
-description: Use when reviewing TypeScript or TSX code, PR diffs, or AI-generated frontend changes. Provides a TypeScript-focused reviewer workflow for type safety, strict tsconfig, unsafe assertions, async/error handling, React Hooks/props, XSS/security, performance, and test coverage.
-version: 1.0.0
-author: Hermes Agent
+description: Use when reviewing TypeScript or TSX code, PR diffs, or AI-generated frontend changes. Provides a TypeScript-focused
+  reviewer workflow for type safety, strict tsconfig, unsafe assertions, async/error handling, React Hooks/props, XSS/security,
+  performance, and test coverage.
 license: MIT
 metadata:
   hermes:
-    tags: [typescript, code-review, reviewer, react, security, quality, frontend]
-    related_skills: [code-review-excellence, code-review-and-quality, typescript-advanced-types, react-dev, react-useeffect, vitest-testing, javascript-testing-patterns]
+    version: 1.1.0
+    author: Hermes Agent
+    tags:
+    - typescript
+    - code-review
+    - reviewer
+    - react
+    - security
+    - quality
+    - frontend
+    related_skills:
+    - code-review-and-quality
+    - typescript-advanced-types
+    - react-dev
+    - react-useeffect
+    - vitest
+    - javascript-testing-patterns
 ---
 
 # TypeScript Code Reviewer
@@ -31,7 +46,7 @@ Do not use this skill for:
 
 - Pure CSS/design-only review with no TypeScript changes.
 - Deep type-level library design where the main task is creating complex types rather than reviewing product code; use `typescript-advanced-types` first.
-- End-to-end test authoring from scratch; use `playwright-best-practices` or `vitest-testing` first, then this skill for review.
+- End-to-end test authoring from scratch; use `playwright-best-practices` or `vitest` first, then this skill for review.
 
 ## Review Inputs
 

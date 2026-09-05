@@ -1,13 +1,47 @@
 ---
 name: frontend-heavy-staged-review-workflow
-description: Use when reviewing git-staged frontend changes with a heavy real-sub-agent process. Reviews only `git diff --cached`, defaults to five valid sub-agent reviewers per selected review skill, supports configurable reviewer counts and replacement reviewers, validates quorum, runs aggregation validators, forbids unit-test-only suggestions, and returns a concise findings-only report.
-version: 1.1.0
-author: Hermes Agent
+description: Use when reviewing git-staged frontend changes with a heavy real-sub-agent process. Reviews only `git diff --cached`,
+  defaults to five valid sub-agent reviewers per selected review skill, supports configurable reviewer counts and replacement
+  reviewers, validates quorum, runs aggregation validators, forbids unit-test-only suggestions, and returns a concise findings-only
+  report.
 license: MIT
 metadata:
   hermes:
-    tags: [frontend, code-review, staged-diff, subagent, heavy-review, quorum, workflow, react, typescript, no-unit-tests, kilo]
-    related_skills: [frontend-staged-review-workflow, audit-code-reviewer, code-review-excellence, typescript-code-reviewer, code-review-and-quality, secpriv-code-review, react-dev, react-useeffect, vercel-react-best-practices, web-design-guidelines, accessibility-compliance, tailwind-design-system, tailwind-v4-shadcn, ant-design, ag-grid, react-hook-form-zod, internationalization-i18n, react-router-declarative-mode, react-router-data-mode, react-router-framework-mode, playwright-best-practices, webapp-testing]
+    version: 1.2.0
+    author: Hermes Agent
+    tags:
+    - frontend
+    - code-review
+    - staged-diff
+    - subagent
+    - heavy-review
+    - quorum
+    - workflow
+    - react
+    - typescript
+    - no-unit-tests
+    - kilo
+    related_skills:
+    - frontend-staged-review-workflow
+    - code-review-and-quality
+    - typescript-code-reviewer
+    - secpriv-code-review
+    - react-dev
+    - react-useeffect
+    - vercel-react-best-practices
+    - web-design-guidelines
+    - accessibility-compliance
+    - accessibility
+    - tailwind-design-system
+    - shadcn
+    - ant-design
+    - ag-dev
+    - react-hook-form-zod
+    - internationalization-i18n
+    - react-router
+    - playwright-best-practices
+    - playwright-cli
+    - webapp-testing
 ---
 
 # Frontend Heavy Staged Review Workflow
@@ -24,7 +58,7 @@ Use this skill when the user wants a heavier version of the frontend staged revi
 6. The coordinator/main agent must not simulate multiple reviewers or count its own analysis as a reviewer pass.
 7. If no real sub-agent mechanism is available, return `Incomplete` and stop.
 8. Every selected review skill defaults to five valid reviewer sub-agent outputs.
-9. User may override `reviewers_per_skill`, `min_valid_reviewers_per_skill`, `replacement_budget_per_skill`, `max_selected_skills`, `wave_size`, and `allow_degraded_report`.
+9. User may override `reviewers_per_skill`, `min_valid_reviewers_per_skill`, `replacement_budget_per_skill`, `max_selected_skills`, `wave_size`, and `allow_degraded_report`, but both reviewer-count and valid-reviewer quorum are clamped to a minimum of two.
 10. Failed, timed-out, invalid, missing, simulated, or non-skill-grounded outputs do not count toward quorum.
 11. Use replacement reviewer waves until quorum is reached or replacement budget is exhausted.
 12. Primary reviewers must be independent; do not show H01-H05 each other's findings.
@@ -92,14 +126,13 @@ Stop if `git diff --cached --name-only` is empty.
 
 ## Skill selection
 
-Select the smallest exact local skill set that matches the staged diff. Baseline skill: `code-review-excellence` for any frontend staged diff.
+Select the smallest exact local skill set that matches the staged diff. Baseline skill: `code-review-and-quality` for any frontend staged diff.
 
 Add conditional skills only when staged paths or diff evidence support them:
 
-- `code-review-and-quality` for complex multi-file, architecture/API boundary, or broad maintainability risk.
 - `typescript-code-reviewer` for TypeScript/TSX type changes, `any`/`unknown`, assertions, async/error handling, React hooks or props.
 - `secpriv-code-review` for auth, permissions, user data, persistence, XSS/HTML injection, secrets, third-party scripts, analytics, privacy, or dangerous browser APIs.
-- Stack-specific skills when directly triggered: `react-dev`, `react-useeffect`, `vercel-react-best-practices`, `web-design-guidelines`, `accessibility-compliance`, `tailwind-design-system`, `tailwind-v4-shadcn`, `ant-design`, `ag-grid`, `react-hook-form-zod`, `internationalization-i18n`, `react-router-declarative-mode`, `react-router-data-mode`, `react-router-framework-mode`, `playwright-best-practices`, `webapp-testing`.
+- Stack-specific skills when directly triggered: `react-dev`, `react-useeffect`, `vercel-react-best-practices`, `web-design-guidelines`, `accessibility-compliance`, `accessibility`, `tailwind-design-system`, `shadcn`, `ant-design`, `ag-dev`, `ag-update`, `react-hook-form-zod`, `internationalization-i18n`, `react-router`, `vitest`, `playwright-best-practices`, `playwright-cli`, `webapp-testing`.
 
 If too many skills match, rank by direct staged evidence, core quality/security/type safety, explicit user request, then weak inference. Keep dropped/deferred skill decisions internal unless they affect verdict/confidence.
 

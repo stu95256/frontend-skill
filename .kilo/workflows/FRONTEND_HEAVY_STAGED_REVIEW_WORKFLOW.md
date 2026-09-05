@@ -50,7 +50,7 @@ Do not use for:
 
 ## 3. Runtime Config
 
-Coordinator creates this internally. User may override values in the prompt.
+Coordinator creates this internally. User may override values in the prompt, but `reviewers_per_skill` and `min_valid_reviewers_per_skill` are each clamped to a minimum of two.
 
 ```yaml
 heavy_review_config:
@@ -122,13 +122,12 @@ Baseline skill:
 
 | Trigger evidence in staged files / diff | Exact skill | Default valid reviewers | Focus |
 |---|---|---:|---|
-| Any frontend staged diff | `code-review-excellence` | `reviewers_per_skill` | General correctness, maintainability, architecture, performance, constructive review quality. |
+| Any frontend staged diff | `code-review-and-quality` | `reviewers_per_skill` | General correctness, maintainability, architecture, performance, constructive review quality. |
 
 Conditional skills:
 
 | Trigger evidence in staged files / diff | Exact skill | Default valid reviewers | Focus |
 |---|---|---:|---|
-| Complex multi-file change, architecture/API boundary, broad maintainability risk | `code-review-and-quality` | `reviewers_per_skill` | Correctness, readability, architecture, security, performance. |
 | TypeScript/TSX type changes, `any`/`unknown`, assertions, async/error handling, React hooks or props | `typescript-code-reviewer` | `reviewers_per_skill` | TypeScript/TSX type safety, unsafe assertions, async/error handling. |
 | Auth, permissions, user data, persistence, XSS/HTML injection, secrets, third-party scripts, analytics, privacy, or dangerous browser APIs | `secpriv-code-review` | `reviewers_per_skill` | Security + privacy findings, CWE/GDPR-style classification, false-positive suppression. |
 | `.tsx`, React components, hooks, state, props | `react-dev` | `reviewers_per_skill` | Component boundaries, hook correctness, state ownership, React idioms. |
@@ -136,16 +135,16 @@ Conditional skills:
 | React performance, memoization, expensive renders, runtime/bundle concerns | `vercel-react-best-practices` | `reviewers_per_skill` | Avoidable re-renders, composition, client/runtime performance. |
 | UI, layout, visual hierarchy, copy, interaction states, responsive behavior | `web-design-guidelines` | `reviewers_per_skill` | UX quality, polish, affordance, responsive behavior. |
 | Accessibility, keyboard, ARIA, semantic HTML, focus management | `accessibility-compliance` | `reviewers_per_skill` | WCAG/accessibility risks and concrete remediation. |
+| Accessibility audit evidence and WCAG 2.2 verification | `accessibility` | `reviewers_per_skill` | Evidence-led keyboard, screen-reader, semantics, and contrast checks. |
 | Tailwind classes, design tokens, variants, theme scales | `tailwind-design-system` | `reviewers_per_skill` | Token consistency, maintainable utility composition. |
-| Tailwind v4, shadcn-style components, CSS variables | `tailwind-v4-shadcn` | `reviewers_per_skill` | Tailwind v4/shadcn compatibility, tokens, component styling. |
+| Tailwind v4, shadcn-style components, CSS variables | `shadcn` | `reviewers_per_skill` | Tailwind v4/shadcn compatibility, tokens, component styling. |
 | Ant Design components, Table/Form/Modal, theme tokens | `ant-design` | `reviewers_per_skill` | antd API correctness, theme/token usage, a11y/performance. |
-| AG Grid files, column defs, cell renderers, row models | `ag-grid` | `reviewers_per_skill` | Grid config, rendering performance, typed row data, accessibility. |
+| AG Grid files, column defs, cell renderers, row models | `ag-dev` | `reviewers_per_skill` | Grid config, rendering performance, typed row data, accessibility. |
 | forms, validation, React Hook Form, Zod, field errors | `react-hook-form-zod` | `reviewers_per_skill` | Form state, schema validation, error UX, controlled/uncontrolled risks. |
 | i18n files, translation keys, interpolation, locale formatting | `internationalization-i18n` | `reviewers_per_skill` | Missing translations, interpolation safety, date/number formatting. |
-| React Router declarative routes, `<Routes>`, `<Route>`, `useNavigate` | `react-router-declarative-mode` | `reviewers_per_skill` | Declarative routing correctness and navigation behavior. |
-| React Router data APIs, loaders/actions, `useLoaderData`, fetchers | `react-router-data-mode` | `reviewers_per_skill` | Data-router correctness, loader/action boundaries, error states. |
-| React Router framework-mode file routes/config | `react-router-framework-mode` | `reviewers_per_skill` | Framework-mode route conventions and integration. |
+| React Router routes/navigation/loaders/actions/framework config | `react-router` | `reviewers_per_skill` | Detect installed version and mode before applying official guidance. |
 | Playwright config/specs/selectors/fixtures or E2E-visible selector changes | `playwright-best-practices` | `reviewers_per_skill` | E2E selector stability and browser automation risk; no unit-test advice. |
+| Reproducible browser interaction or DOM/screenshot verification | `playwright-cli` | `reviewers_per_skill` | Runtime browser evidence with replayable commands. |
 | Browser-visible runtime behavior changed | `webapp-testing` | `reviewers_per_skill` | Runtime/browser verification risks; no unit-test advice. |
 
 Selection rules:
@@ -153,8 +152,8 @@ Selection rules:
 1. Do not select a skill unless `skills/<skill-name>/SKILL.md` exists.
 2. Do not use generic labels like "React skill".
 3. If two skills both match and caps allow it, select both.
-4. If React Router mode is unknown, inspect routing evidence before selecting router mode skill.
-5. `audit-code-reviewer` is a coordinator pattern by default, not a reviewer skill, unless the user explicitly requests it as a reviewer.
+4. If React Router mode is unknown, inspect routing evidence; the official `react-router` skill then selects the matching mode/version guidance.
+5. Use `code-review-and-quality` as the generic reviewer skill; the coordinator still owns dispatch, quorum, and aggregation.
 6. Rank by direct staged evidence, core quality/security/type safety, explicit user request, then weak inference.
 
 ---

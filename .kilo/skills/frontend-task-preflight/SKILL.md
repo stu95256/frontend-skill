@@ -1,13 +1,41 @@
 ---
 name: frontend-task-preflight
-description: Use before implementing frontend tasks, especially React, TypeScript, Tailwind, AG Grid React, Ant Design, react-i18next, react-router-dom, react-hook-form, or Figma/design-to-code tasks.
-version: 1.0.0
-author: Local project workflow
+description: Use before implementing frontend tasks, especially React, TypeScript, Tailwind, AG Grid React, Ant Design, react-i18next,
+  react-router-dom, react-hook-form, or Figma/design-to-code tasks.
 license: Local project documentation
 metadata:
   hermes:
-    tags: [frontend, planning, figma, react, typescript, tailwind, ant-design, ag-grid, i18n, forms, kilo]
-    related_skills: [playwright-mcp-usage, react-dev, typescript-code-reviewer, frontend-ui-engineering, accessibility-compliance, responsive-design, qa-test-planner]
+    version: 1.1.0
+    author: Local project workflow
+    tags:
+    - frontend
+    - planning
+    - figma
+    - react
+    - typescript
+    - tailwind
+    - ant-design
+    - ag-dev
+    - i18n
+    - forms
+    - kilo
+    related_skills:
+    - playwright-cli
+    - react-router
+    - ag-dev
+    - ag-update
+    - shadcn
+    - vitest
+    - openapi-typescript
+    - react-dev
+    - react-doctor
+    - typescript-code-reviewer
+    - frontend-ui-engineering
+    - accessibility-compliance
+    - accessibility
+    - responsive-design
+    - qa-test-planner
+    - skill-scanner
 ---
 
 # Frontend Task Preflight

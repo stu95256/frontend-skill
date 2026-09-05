@@ -1,13 +1,42 @@
 ---
 name: frontend-staged-review-workflow
-description: Use when reviewing git-staged frontend changes with real independent sub-agents. Reviews only `git diff --cached`, builds an internal dispatch plan, runs at least two sub-agents for every selected review skill, forbids unit-test suggestions, validates reviewer outputs, and returns a concise findings-only report.
-version: 1.1.0
-author: Hermes Agent
+description: Use when reviewing git-staged frontend changes with real independent sub-agents. Reviews only `git diff --cached`,
+  builds an internal dispatch plan, runs at least two sub-agents for every selected review skill, forbids unit-test suggestions,
+  validates reviewer outputs, and returns a concise findings-only report.
 license: MIT
 metadata:
   hermes:
-    tags: [frontend, code-review, staged-diff, subagent, workflow, react, typescript, no-unit-tests]
-    related_skills: [audit-code-reviewer, code-review-excellence, typescript-code-reviewer, code-review-and-quality, secpriv-code-review, react-dev, react-useeffect, vercel-react-best-practices, web-design-guidelines, accessibility-compliance, tailwind-design-system, tailwind-v4-shadcn, ant-design, ag-grid, react-hook-form-zod, internationalization-i18n, react-router-declarative-mode, react-router-data-mode, react-router-framework-mode, playwright-best-practices, webapp-testing]
+    version: 1.2.0
+    author: Hermes Agent
+    tags:
+    - frontend
+    - code-review
+    - staged-diff
+    - subagent
+    - workflow
+    - react
+    - typescript
+    - no-unit-tests
+    related_skills:
+    - code-review-and-quality
+    - typescript-code-reviewer
+    - secpriv-code-review
+    - react-dev
+    - react-useeffect
+    - vercel-react-best-practices
+    - web-design-guidelines
+    - accessibility-compliance
+    - accessibility
+    - tailwind-design-system
+    - shadcn
+    - ant-design
+    - ag-dev
+    - react-hook-form-zod
+    - internationalization-i18n
+    - react-router
+    - playwright-best-practices
+    - playwright-cli
+    - webapp-testing
 ---
 
 # Frontend Staged Review Workflow
@@ -49,7 +78,7 @@ Do not use for:
 
 ## Research Basis
 
-Detailed rationale lives in `references/research-notes.md`. At runtime, keep only the operational rule: independent reviewer passes reduce blind spots, and `audit-code-reviewer` is a coordinator pattern, not a default reviewer skill. If the user explicitly selects `audit-code-reviewer` as a reviewer, it must receive two independent reviewer passes like every other selected skill.
+Detailed rationale lives in `references/research-notes.md`. At runtime, keep only the operational rule: independent reviewer passes reduce blind spots, and `code-review-and-quality` is the general baseline reviewer for every frontend staged diff. It must receive two independent reviewer passes like every other selected skill.
 
 ## Gate 1 — Pre-flight: staged diff only
 
@@ -79,7 +108,7 @@ Baseline skill:
 
 | Trigger evidence in staged files / diff | Exact skill | Minimum sub-agents | Focus |
 |---|---|---:|---|
-| Any frontend staged diff | `code-review-excellence` | 2 | General correctness, maintainability, architecture, performance, constructive review quality. |
+| Any frontend staged diff | `code-review-and-quality` | 2 | General correctness, maintainability, architecture, performance, constructive review quality. |
 
 Conditional skills:
 
@@ -93,16 +122,16 @@ Conditional skills:
 | React performance, memoization, expensive renders, server/client boundary, bundle/runtime concerns | `vercel-react-best-practices` | 2 | React/Next/Vite performance patterns and avoidable re-renders. |
 | UI, layout, visual hierarchy, copy, UX, interaction states, responsive behavior | `web-design-guidelines` | 2 | UI quality, affordance, polish, responsive behavior. |
 | Accessibility, keyboard interaction, ARIA, semantic HTML, focus management | `accessibility-compliance` | 2 | WCAG/accessibility risks and concrete remediation. |
+| Accessibility audit evidence, WCAG 2.2 checks, keyboard/screen-reader verification | `accessibility` | 2 | Evidence-led accessibility audit and reproducible verification. |
 | Tailwind design tokens, theme scales, variants, reusable utility composition | `tailwind-design-system` | 2 | Token consistency, class composition, design-system maintainability. |
-| Tailwind v4 config, shadcn-style components, CSS variables, design tokens in shadcn patterns | `tailwind-v4-shadcn` | 2 | Tailwind v4 / shadcn compatibility, token usage, component styling. |
+| Tailwind v4 config, shadcn-style components, CSS variables, design tokens in shadcn patterns | `shadcn` | 2 | Tailwind v4 / shadcn compatibility, token usage, component styling. |
 | Ant Design components, ProComponents, Table/Form/Modal APIs, theme tokens | `ant-design` | 2 | antd component API, theme/token usage, accessibility/performance. |
-| AG Grid files, column defs, cell renderers, row models, grid performance | `ag-grid` | 2 | Grid config, rendering performance, typed row data, accessibility. |
+| AG Grid files, column defs, cell renderers, row models, grid performance | `ag-dev` | 2 | Grid config, rendering performance, typed row data, accessibility. |
 | forms, validation schemas, React Hook Form, Zod, field errors | `react-hook-form-zod` | 2 | Form state, schema validation, error UX, controlled/uncontrolled issues. |
 | i18n files, translation keys, interpolation, locale formatting, react-i18next usage | `internationalization-i18n` | 2 | Missing translations, interpolation safety, date/number formatting. |
-| React Router declarative routes, `<Routes>`, `<Route>`, `useNavigate`, route elements | `react-router-declarative-mode` | 2 | Declarative routing correctness and navigation behavior. |
-| React Router data APIs, loaders/actions, `defer`, `useLoaderData`, fetchers | `react-router-data-mode` | 2 | Data-router correctness, loader/action boundaries, error states. |
-| React Router framework-mode conventions, file routes, framework config | `react-router-framework-mode` | 2 | Framework-mode route conventions and integration. |
+| React Router routes/navigation/loaders/actions/framework config | `react-router` | 2 | Detect the installed version and mode, then review with the matching official guidance. |
 | Playwright config/specs/selectors/fixtures were staged or the diff changes E2E-visible selectors | `playwright-best-practices` | 2 | E2E selector stability and browser automation risk. Do not ask for unit tests. |
+| Reproducible browser interaction or DOM/screenshot verification is needed | `playwright-cli` | 2 | Browser evidence using snapshots first and screenshots for visual state. |
 | Browser-visible runtime behavior changed but no Playwright-specific files were staged | `webapp-testing` | 2 | Runtime/browser behavior risk and manual/browser verification ideas. Do not ask for unit tests. |
 
 Do not select a skill unless `skills/<skill-name>/SKILL.md` exists. Do not write generic labels like "React skill" or ambiguous rows like "A or B" in the dispatch plan. If two skills both match, select both and run two sub-agents for each.
@@ -131,7 +160,7 @@ Example:
 | Skill | Skill path | Trigger evidence | Reviewer IDs | Angles | Wave | Input scope |
 |---|---|---|---|---|---:|---|
 | `typescript-code-reviewer` | `skills/typescript-code-reviewer/SKILL.md` | `src/UserTable.tsx` staged | `typescript-code-reviewer-A`, `typescript-code-reviewer-B` | type-safety; edge cases | 1 | full cached diff |
-| `ag-grid` | `skills/ag-grid/SKILL.md` | `columnDefs` changed | `ag-grid-A`, `ag-grid-B` | grid API; rendering performance | 2 | AG Grid-related files |
+| `ag-dev` | `skills/ag-dev/SKILL.md` | `columnDefs` changed | `ag-dev-A`, `ag-dev-B` | grid API; rendering performance | 2 | AG Grid-related files |
 
 ## Shared Review Packet
 
@@ -275,7 +304,7 @@ The workflow is complete only when:
 1. Reviewing unstaged changes. This violates the workflow. Only `git diff --cached` is in scope.
 2. Running only one sub-agent for a selected skill. Every selected skill needs at least two valid independent passes.
 3. Simulating multiple reviewers in the main/coordinator context. This does not count; use real sub-agents/custom agents or return `Incomplete`.
-4. Treating `audit-code-reviewer` as a reviewer replacement. It is the coordinator pattern by default, not a substitute for the two-pass rule.
+4. Treating `code-review-and-quality` as a reviewer replacement. It is the coordinator pattern by default, not a substitute for the two-pass rule.
 5. Letting reviewers recommend unit tests. Remove those findings and remind reviewer prompts that unit-test advice is forbidden.
 6. Listing generic skill labels. Use exact local names such as `typescript-code-reviewer`, not "TypeScript skill".
 7. Using ambiguous `or` routing. If two skills match, select both; otherwise use deterministic trigger evidence.

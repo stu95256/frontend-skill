@@ -242,17 +242,21 @@ What would disprove this:
 | React component / props / hooks / state | `react-dev`、`react-state-management` | React component/state pattern 修正。 |
 | `useEffect` / cleanup / stale closure / async effect | `react-useeffect` | Effect lifecycle 與依賴修正。 |
 | TypeScript type / TSX / generics / unsafe assertion | `typescript-advanced-types`、`typescript-code-reviewer` | 型別設計與 unsafe TypeScript 修正。 |
-| Router / route params / navigation / loaders/actions | `react-router-declarative-mode`、`react-router-data-mode`、`react-router-framework-mode` | 依專案 routing mode 選用。 |
+| Router / route params / navigation / loaders/actions | `react-router` | 先偵測安裝版本與 routing mode，再載入官方對應文件。 |
 | Ant Design / Antd component behavior | `ant-design`、`antd` | AntD API、Form/Table/Modal、theme/token。 |
-| AG Grid behavior / rendering / data update | `ag-grid` | Grid API、row identity、column defs、performance。 |
+| AG Grid behavior / rendering / data update | `ag-dev`；升級才用 `ag-update` | Grid API、row identity、column defs、performance。 |
 | React Hook Form / validation / submit | `react-hook-form-zod` | Form state、schema、errors、controlled/uncontrolled。 |
 | i18n / react-i18next / missing text | `internationalization-i18n` | namespace/key/interpolation/locale formatting。 |
-| Tailwind / responsive / design tokens | `tailwind-design-system`、`tailwind-v4-shadcn`、`responsive-design` | class/token/responsive 修正。 |
-| Accessibility / keyboard / focus | `accessibility-compliance` | a11y root cause 與修正。 |
-| Browser-visible runtime issue | `browser-testing-with-devtools`、`webapp-testing` | Browser verification、console/network/DOM。 |
+| Tailwind / responsive / design tokens | `tailwind-design-system`、`shadcn`、`responsive-design` | class/token/responsive 修正。 |
+| Accessibility / keyboard / focus | `accessibility-compliance`、`accessibility` | 實作規則加 evidence-led WCAG 2.2 驗證。 |
+| Browser-visible runtime issue | `playwright-cli`、`webapp-testing` | 可重播 browser interaction、DOM snapshot、必要時 screenshot。 |
+| DevTools console/network/performance diagnosis | `browser-testing-with-devtools` | Chrome DevTools MCP 專項診斷。 |
 | Playwright trace / E2E reproduction | `playwright-best-practices` | Trace viewer、selector/action/debug pattern。 |
+| React 修正完成後的診斷補充 | `react-doctor` | 在 root-cause fix 後掃描；不能取代 debug 方法。 |
 | Performance / excessive renders / expensive UI | `performance-optimization`、`vercel-react-best-practices` | 前端效能與 render behavior。 |
 | Security / privacy bug | `security-and-hardening`、`secpriv-code-review` | 安全與 privacy 修正。 |
+
+Browser fallback：一般可重播互動先用 `playwright-cli`。若 CLI 無法啟動、browser 安裝受阻或目標仍不可存取，才 fallback 到 `browser-testing-with-devtools`；記錄失敗原因、URL、fallback、DOM/screenshot/console/network 證據，且不得把未觀察的行為宣稱為已驗證。
 
 Skill selection record：
 

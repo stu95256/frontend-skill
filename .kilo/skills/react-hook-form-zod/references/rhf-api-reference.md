@@ -1,6 +1,6 @@
 # React Hook Form API Reference
 
-Complete API reference for React Hook Form v7.65.0
+API reference snapshot for React Hook Form. Confirm the installed version and current official documentation before relying on signatures that may have changed.
 
 ---
 

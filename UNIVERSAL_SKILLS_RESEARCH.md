@@ -182,7 +182,7 @@
 | Repository / 網站 | 推薦原因 |
 |---|---|
 | https://github.com/Jeffallan/claude-skills | Full-stack developer skills；包含 `react-expert`、`typescript-pro`、`code-reviewer`、`debugging-wizard`、`playwright-expert` 等。 |
-| https://github.com/softaworks/agent-toolkit | 多種通用 agent toolkit；包含 `react-dev`、`react-useeffect`、`openapi-to-typescript`、QA、文件、溝通與專案流程 skills。 |
+| https://github.com/softaworks/agent-toolkit | 多種通用 agent toolkit；包含 `react-dev`、`react-useeffect`、`openapi-typescript`、QA、文件、溝通與專案流程 skills。 |
 | https://github.com/wshobson/agents | 大型 multi-harness agentic plugin marketplace；skills 分散在 `plugins/*/skills`，包含 UI design、frontend/mobile、TypeScript、parallel debugging、team coordination。 |
 | https://github.com/bmad-labs/skills | TypeScript clean code、unit testing、E2E testing、UI/UX、RCA、multi-repo git ops 等。 |
 | https://github.com/awesome-skills/code-review-skill | 專門 code review；含 React、TypeScript、CSS、architecture、performance。 |

@@ -18,7 +18,7 @@ Workflow/quality sources:
 - Existing local `frontend-staged-review-workflow` for skill selection, real-sub-agent quorum, strict JSON, validation, aggregation, no-unit-test policy, and concise Chinese findings-only output.
 - Git documentation concepts: revisions, merge-base, diff ranges, diff rename detection, and merge-tree.
 - GitHub code-review conventions for reviewing `base...head` changes before merge.
-- Local `audit-code-reviewer`, `code-review-excellence`, `typescript-code-reviewer`, and stack-specific frontend skills.
+- Local `code-review-and-quality`, `typescript-code-reviewer`, `secpriv-code-review`, and stack-specific frontend skills.
 
 ## Deliberate decisions
 

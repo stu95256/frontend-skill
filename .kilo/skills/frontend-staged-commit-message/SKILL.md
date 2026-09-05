@@ -1,13 +1,27 @@
 ---
 name: frontend-staged-commit-message
-description: Use when generating one concise English commit message from already staged frontend changes. Reads only `git diff --cached`, never stages, commits, edits, or runs fixes, and outputs a single line such as `fix: preserve login redirect target after sign-in` with page, component, API, or shared-module context written in the description instead of Conventional Commit scope parentheses.
-version: 1.0.0
-author: Hermes Agent
+description: 'Use when generating one concise English commit message from already staged frontend changes. Reads only `git
+  diff --cached`, never stages, commits, edits, or runs fixes, and outputs a single line such as `fix: preserve login redirect
+  target after sign-in` with page, component, API, or shared-module context written in the description instead of Conventional
+  Commit scope parentheses.'
 license: MIT
 metadata:
   hermes:
-    tags: [frontend, git, commit-message, staged-diff, conventional-commits, react, typescript, kilo]
-    related_skills: [frontend-staged-review-workflow, code-review-and-quality, writing-skills]
+    version: 1.0.0
+    author: Hermes Agent
+    tags:
+    - frontend
+    - git
+    - commit-message
+    - staged-diff
+    - conventional-commits
+    - react
+    - typescript
+    - kilo
+    related_skills:
+    - frontend-staged-review-workflow
+    - code-review-and-quality
+    - writing-skills
 ---
 
 # Frontend Staged Commit Message

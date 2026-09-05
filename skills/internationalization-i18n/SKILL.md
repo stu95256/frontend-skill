@@ -35,11 +35,11 @@ const { t } = useTranslation();
 ## Pluralization
 
 ```javascript
-// Translation file
+// i18next JSON format v4 (i18next v21+)
 {
-  "items": "{{count}} item",
-  "items_plural": "{{count}} items",
-  "items_zero": "No items"
+  "items_zero": "No items",
+  "items_one": "{{count}} item",
+  "items_other": "{{count}} items"
 }
 
 // Usage
@@ -47,6 +47,17 @@ t('items', { count: 0 })  // "No items"
 t('items', { count: 1 })  // "1 item"
 t('items', { count: 5 })  // "5 items"
 ```
+
+Do not use the legacy `_plural` suffix. Keep `Intl.PluralRules` available in target runtimes or load the documented polyfill. Languages can require categories beyond `one` and `other`; follow that locale rather than copying English rules.
+
+## Version and Project Awareness
+
+- Inspect installed `i18next` and `react-i18next` versions before applying examples.
+- Preserve `compatibilityJSON`, namespaces, key separators, fallback languages, and the configured backend/loading strategy.
+- Prefer typed selectors (`enableSelector`) when the project already uses generated or augmented resource types.
+- Split large catalogs by namespace and lazy-load feature/route namespaces.
+- For SSR, create one i18n instance per request, preload required namespaces, and hydrate with the same language/resources.
+- Sanitize untrusted rich content. React text rendering with `escapeValue: false` does not make translated HTML safe.
 
 ## Date/Number Formatting
 

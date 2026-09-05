@@ -12,7 +12,7 @@
 
 | Skill | 來源 | 用途 |
 |---|---|---|
-| `code-review-excellence` | `awesome-skills/code-review-skill` | 大型通用 review skill；含 React、TypeScript、CSS、architecture、security、performance 多語言/多框架參考。 |
+| `code-review-and-quality` | `awesome-skills/code-review-skill` | 大型通用 review skill；含 React、TypeScript、CSS、architecture、security、performance 多語言/多框架參考。 |
 | `typescript-code-reviewer` | project-curated | TypeScript / TSX 專用 reviewer；檢查 `any`/`unknown`、unsafe assertions、strict tsconfig、async/error handling、React hooks、XSS 與測試覆蓋。 |
 | `code-review-and-quality` | `addyosmani/agent-skills` | 五軸 review：correctness、readability、architecture、security、performance；適合 merge 前品質 gate。 |
 | `requesting-code-review` | `obra/superpowers` | 開發完成後派 reviewer sub-agent；強調 reviewer 使用獨立 context。 |
@@ -42,7 +42,7 @@
 
 - 是否有明確 LICENSE 或檔案內授權。
 - 是否是標準 `SKILL.md`，不是單純 prompt、slash command 或 MCP。
-- 是否補足本專案缺口，而非與既有 `code-review-excellence` / `typescript-code-reviewer` 重複。
+- 是否補足本專案缺口，而非與既有 `code-review-and-quality` / `typescript-code-reviewer` 重複。
 - 是否適合 sub-agent review：可拆 pass、可輸出結構化 findings、可作為 merge/release gate。
 
 ## 候選來源與判斷
@@ -50,9 +50,9 @@
 | Repository / Skill | Stars（搜尋時） | License | 判斷 |
 |---|---:|---|---|
 | `facebookresearch/secpriv-skill` / root `SKILL.md` | 3 | MIT | 已安裝為 `secpriv-code-review`。雖然 stars 少，但來源是 Meta / Facebook Research，README 記錄 128-case benchmark；重點是 security + privacy 合一、CWE/GDPR mapping、detector-validator、confidence threshold，適合安全/隱私 reviewer sub-agent。 |
-| `vosslab/vosslab-skills` / `skills/audit-code-reviewer` | 2 | MIT | 已安裝為 `audit-code-reviewer`。它明確要求 6 個獨立 sub-agent pass，再由主 agent 彙整 findings，正好符合本專案後續大量使用 sub-agent review 的需求。 |
-| `mamamou/ai-coding-skills` / `code-reviewer-react`、`code-reviewer`、`security-auditor` | 14 | GitHub API 未標示 repo license；個別 skill frontmatter 寫 MIT | 暫不直接安裝。內容看起來很完整，尤其 React overlay 覆蓋 React 17/18/19、RSC、React Compiler、TanStack Query、Zustand、React Hook Form；但 repo 層級 license 不明，且與既有 `typescript-code-reviewer`、`code-review-excellence` 部分重疊。後續若要補 React 專用 reviewer，可參考官方文件另建 project-curated skill。 |
-| `irfad7/claude-power-skills` / `code-review`、`security-review` | 4 | MIT | 暫不安裝。內容是清楚的 multi-pass senior review，但與 `code-review-excellence`、`code-review-and-quality`、`security-and-hardening` 高度重疊。 |
+| `vosslab/vosslab-skills` / `skills/code-review-and-quality` | 2 | MIT | 已安裝為 `code-review-and-quality`。它明確要求 6 個獨立 sub-agent pass，再由主 agent 彙整 findings，正好符合本專案後續大量使用 sub-agent review 的需求。 |
+| `mamamou/ai-coding-skills` / `code-reviewer-react`、`code-reviewer`、`security-auditor` | 14 | GitHub API 未標示 repo license；個別 skill frontmatter 寫 MIT | 暫不直接安裝。內容看起來很完整，尤其 React overlay 覆蓋 React 17/18/19、RSC、React Compiler、TanStack Query、Zustand、React Hook Form；但 repo 層級 license 不明，且與既有 `typescript-code-reviewer`、`code-review-and-quality` 部分重疊。後續若要補 React 專用 reviewer，可參考官方文件另建 project-curated skill。 |
+| `irfad7/claude-power-skills` / `code-review`、`security-review` | 4 | MIT | 暫不安裝。內容是清楚的 multi-pass senior review，但與 `code-review-and-quality`、`security-and-hardening` 高度重疊。 |
 | `setmpp/claude-code-skills` / `skills/code-review` | 0 | MIT | 暫不安裝。簡潔、好用，但與既有通用 review skill 重疊。 |
 | `kakarot-oncloud/claude-dev-skills` / `skills/code-reviewer` | 0 | MIT | 暫不安裝。適合 senior review output format，但內容較短，與既有技能重複。 |
 | `shaunlatip/converge` / root `SKILL.md` | 0 | MIT | 暫不安裝。它是 iterative review + fix loop orchestrator，不是純 reviewer；有價值但會驅動修改檔案，之後若要做自動修復閉環可再加入。 |
@@ -64,13 +64,13 @@
 
 ## 本次安裝
 
-### `skills/audit-code-reviewer/`
+### `skills/code-review-and-quality/`
 
 來源：
 
 - Repo: https://github.com/vosslab/vosslab-skills
 - Commit: `8382b5e830530db393b8a1fe2891a12cd41dd1e8`
-- Source path: `skills/audit-code-reviewer`
+- Source path: `skills/code-review-and-quality`
 - License: MIT
 
 用途：
@@ -108,18 +108,18 @@
 
 ### 前端 PR / AI 產生 code 的一般 review
 
-- `code-review-excellence`
+- `code-review-and-quality`
 - `typescript-code-reviewer`
 - `web-design-guidelines`（如果有 UI/UX 變更）
 - `playwright-best-practices` 或 `webapp-testing`（如果有 browser behavior / E2E 風險）
 
 ### merge / release 前的平行 sub-agent audit
 
-- `audit-code-reviewer` 作為 coordinator skill。
+- `code-review-and-quality` 作為 coordinator skill。
 - 子 reviewer 可分配：
   - `typescript-code-reviewer`：TypeScript / TSX / React hooks / strictness。
   - `secpriv-code-review`：security + privacy。
-  - `code-review-excellence`：general correctness、architecture、performance。
+  - `code-review-and-quality`：general correctness、architecture、performance。
   - `web-design-guidelines`：UI / accessibility。
   - `playwright-best-practices`：E2E / browser runtime / flakiness。
   - `verification-before-completion`：最後驗證與 evidence gate。
@@ -142,4 +142,4 @@
 - 最終報告必須列出 path、severity、issue、why it matters、recommended fix。
 - 依使用者要求，workflow 明確禁止 unit test 建議，彙整時也會移除 unit-test-only finding。
 
-研究來源包含 Anthropic Claude Code subagents docs、GitHub PR review docs、Google Engineering Practices、SmartBear review practices，以及本專案已安裝的 `audit-code-reviewer` / `secpriv-code-review`。詳細記錄在 `skills/frontend-staged-review-workflow/references/research-notes.md`。
+研究來源包含 Anthropic Claude Code subagents docs、GitHub PR review docs、Google Engineering Practices、SmartBear review practices，以及本專案已安裝的 `code-review-and-quality` / `secpriv-code-review`。詳細記錄在 `skills/frontend-staged-review-workflow/references/research-notes.md`。

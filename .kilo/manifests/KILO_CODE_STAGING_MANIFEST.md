@@ -1,88 +1,50 @@
 # Kilo Code Staging Manifest
 
-Generated for manual installation into Kilo Code global settings.
+Generated: 2026-09-02
 
-Staging source:
-`frontend-skill/.kilo`
-
-Planned global target:
-`~/.kilo`
-
-Kilo global config target:
-`~/.kilo/kilo.jsonc`
-
-Skill directories included: 69
+- Staging source: `frontend-skill/.kilo`
+- Planned global target: `~/.kilo`
+- Skill directories included: **67**
+- Portable catalog mirrors: **65**
+- Kilo-only workflow wrappers: `frontend-task-preflight`, `frontend-heavy-staged-review-workflow`
 
 ## Required Kilo config
 
 ```jsonc
 {
-  "skills": {
-    "paths": [
-      "~/.kilo/skills"
-    ]
-  },
-  "instructions": [
-    "~/.kilo/rules/*.md"
-  ]
+  "skills": { "paths": ["~/.kilo/skills"] },
+  "instructions": ["~/.kilo/rules/*.md"]
 }
 ```
 
-## Included top-level folders
+## Workflow documents
 
-- `skills/`
-- `workflows/`
-- `rules/`
-- `docs/`
-- `manifests/`
-
-## Included workflow documents
-
-- `workflows/FRONTEND_BRANCH_REVIEW_WORKFLOW.md`
-- `workflows/FRONTEND_DEBUG_WORKFLOW.md`
-- `workflows/FRONTEND_HEAVY_STAGED_REVIEW_WORKFLOW.md`
-- `workflows/FRONTEND_STAGED_REVIEW_WORKFLOW.md`
 - `workflows/FRONTEND_TASK_PREFLIGHT_WORKFLOW.md`
-
-## Included rules
-
-- `rules/frontend-branch-review.md`
-- `rules/frontend-debug.md`
-- `rules/frontend-heavy-staged-review.md`
-- `rules/frontend-preflight.md`
-- `rules/frontend-staged-review.md`
-
-## Included user guides
-
-- `docs/FRONTEND_BRANCH_REVIEW_WORKFLOW_USAGE.zh-TW.md`
-- `docs/FRONTEND_DEBUG_WORKFLOW_USAGE.zh-TW.md`
-- `docs/FRONTEND_HEAVY_STAGED_REVIEW_WORKFLOW_USAGE.zh-TW.md`
-- `docs/FRONTEND_STAGED_COMMIT_MESSAGE_USAGE.zh-TW.md`
-- `docs/FRONTEND_STAGED_REVIEW_WORKFLOW_USAGE.zh-TW.md`
-- `docs/FRONTEND_TASK_PREFLIGHT_USAGE.zh-TW.md`
+- `workflows/FRONTEND_DEBUG_WORKFLOW.md`
+- `workflows/FRONTEND_STAGED_REVIEW_WORKFLOW.md`
+- `workflows/FRONTEND_BRANCH_REVIEW_WORKFLOW.md`
+- `workflows/FRONTEND_HEAVY_STAGED_REVIEW_WORKFLOW.md`
 
 ## Included skills
 
+- `accessibility`
 - `accessibility-compliance`
-- `ag-grid`
+- `ag-dev`
+- `ag-update`
 - `ant-design`
 - `antd`
-- `audit-code-reviewer`
 - `brainstorming`
 - `browser-testing-with-devtools`
 - `code-review-and-quality`
-- `code-review-excellence`
 - `context-engineering`
 - `design-system-patterns`
-- `design-system-starter`
 - `dispatching-parallel-agents`
 - `documentation-and-adrs`
-- `e2e-testing-patterns`
 - `executing-plans`
 - `finishing-a-development-branch`
-- `frontend-design`
 - `frontend-branch-review-workflow`
 - `frontend-debug-workflow`
+- `frontend-design`
 - `frontend-heavy-staged-review-workflow`
 - `frontend-staged-commit-message`
 - `frontend-staged-review-workflow`
@@ -91,17 +53,16 @@ Skill directories included: 69
 - `incremental-implementation`
 - `internationalization-i18n`
 - `javascript-testing-patterns`
-- `openapi-to-typescript`
+- `openapi-typescript`
 - `performance-optimization`
 - `planning-and-task-breakdown`
 - `playwright-best-practices`
-- `playwright-mcp-usage`
+- `playwright-cli`
 - `qa-test-planner`
 - `react-dev`
+- `react-doctor`
 - `react-hook-form-zod`
-- `react-router-data-mode`
-- `react-router-declarative-mode`
-- `react-router-framework-mode`
+- `react-router`
 - `react-state-management`
 - `react-useeffect`
 - `receiving-code-review`
@@ -109,13 +70,14 @@ Skill directories included: 69
 - `responsive-design`
 - `secpriv-code-review`
 - `security-and-hardening`
+- `shadcn`
 - `skill-creator`
+- `skill-scanner`
 - `source-driven-development`
 - `spec-driven-development`
 - `subagent-driven-development`
 - `systematic-debugging`
 - `tailwind-design-system`
-- `tailwind-v4-shadcn`
 - `test-driven-development`
 - `typescript-advanced-types`
 - `typescript-code-reviewer`
@@ -126,9 +88,19 @@ Skill directories included: 69
 - `vercel-react-best-practices`
 - `vercel-react-view-transitions`
 - `verification-before-completion`
-- `vitest-testing`
+- `vitest`
 - `web-artifacts-builder`
 - `web-design-guidelines`
 - `webapp-testing`
 - `writing-plans`
 - `writing-skills`
+
+## Verification
+
+Run from the repository root:
+
+```bash
+python scripts/validate_skill_catalog.py
+```
+
+Do not install this staging directory globally until the validation report is green.

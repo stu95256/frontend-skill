@@ -54,9 +54,11 @@ docs/FRONTEND_STAGED_COMMIT_MESSAGE_USAGE.zh-TW.md
 Important:
 
 - This repository folder is staging only. It does not change your actual Kilo global configuration until you manually move/copy it.
-- The current `skills/` set was copied from this project's reviewed skill catalog, then Kilo-facing workflow skills were added for frontend task preflight, debug, staged review, branch merge review, and heavy staged review.
-- Debug workflow support includes `frontend-debug-workflow`, `systematic-debugging`, `react-dev`, `react-useeffect`, `typescript-advanced-types`, `browser-testing-with-devtools`, `webapp-testing`, and stack-specific frontend skills.
-- Review workflow support includes `frontend-staged-review-workflow`, `frontend-heavy-staged-review-workflow`, `audit-code-reviewer`, and `secpriv-code-review`.
+- The current `skills/` set mirrors all 65 portable catalog skills and adds two Kilo-only wrappers, for 67 total directories.
+- Library routing uses the official/maintainer skills `react-router`, `ag-dev`/`ag-update`, `shadcn`, `vitest`, and `playwright-cli`.
+- Debug routing uses `playwright-cli` for reproducible browser interaction, `browser-testing-with-devtools` for DevTools-specific diagnosis, and `react-doctor` only as a post-fix diagnostic.
+- Review workflow support includes `frontend-staged-review-workflow`, `frontend-heavy-staged-review-workflow`, `code-review-and-quality`, `typescript-code-reviewer`, and `secpriv-code-review`.
+- Accessibility implementation and audit responsibilities are split between `accessibility-compliance` and the evidence-led `accessibility` skill.
 - Branch merge review support includes `frontend-branch-review-workflow`, which pins source/target/merge-base SHAs and reviews only committed merge-base-to-source changes before merging into `master`.
 - Commit-message support includes `frontend-staged-commit-message`, which reads only `git diff --cached` and outputs one concise English line without Conventional Commit scope parentheses.
 - Heavy staged review defaults to five valid reviewer sub-agents per selected review skill, supports replacement reviewers for failed/invalid/timed-out outputs, and runs aggregation validator sub-agents before finalizing.

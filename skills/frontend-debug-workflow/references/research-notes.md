@@ -28,7 +28,7 @@ Create a frontend-focused workflow for debugging user-specified code paths and s
    - The workflow borrows the `systematic-debugging` rule: do not fix until evidence supports why the issue happens.
 
 3. **Skill selection is explicit and local**
-   - Debug fixes are routed to exact local skills such as `react-useeffect`, `ag-grid`, `ant-design`, `react-hook-form-zod`, `internationalization-i18n`, `browser-testing-with-devtools`, and `verification-before-completion`.
+   - Debug fixes are routed to exact local skills such as `react-useeffect`, `ag-dev`, `ant-design`, `react-hook-form-zod`, `internationalization-i18n`, `browser-testing-with-devtools`, and `verification-before-completion`.
 
 4. **Workflow recording is required**
    - The final answer must preserve intake, evidence, hypothesis, selected skills, changed files, verification, and remaining risk so the debug run can be replayed or audited.

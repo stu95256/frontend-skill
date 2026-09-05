@@ -35,14 +35,14 @@
 | TypeScript | `typescript-e2e-testing` | https://github.com/bmad-labs/skills | TypeScript E2E / integration testing；原 skill 偏 backend infra，但 Given-When-Then、test isolation、flaky debugging 可參考。 | `npx skills add bmad-labs/skills --skill typescript-e2e-testing` |
 | TypeScript / Code review | `typescript-code-reviewer` | 本專案 `skills/typescript-code-reviewer`，研究來源見 `skills/typescript-code-reviewer/references/research-sources.md` | TypeScript / TSX 專用 reviewer workflow；檢查 strict tsconfig、`any`/`unknown`、unsafe assertions、async/error、React hooks/props、XSS、runtime validation、tests。 | 已下載/建立於 `skills/typescript-code-reviewer/`；可複製到 `.claude/skills/`、`.opencode/skills/`、`.agents/skills/`。 |
 | Tailwind / shadcn | `tailwind-design-system` | https://github.com/wshobson/agents | Tailwind CSS v4、design tokens、component libraries、responsive patterns；適合建立設計系統。 | `npx skills add wshobson/agents --skill tailwind-design-system` |
-| Tailwind / shadcn | `tailwind-v4-shadcn` | https://github.com/secondsky/claude-skills | Tailwind v4 + shadcn/ui + Vite + React production setup；含 `@theme inline`、CSS variables、dark mode、v3→v4 migration gotchas。 | `/plugin install tailwind-v4-shadcn@claude-skills` 或 `npx skills add secondsky/claude-skills --skill tailwind-v4-shadcn` |
+| Tailwind / shadcn | `shadcn` | https://github.com/secondsky/claude-skills | Tailwind v4 + shadcn/ui + Vite + React production setup；含 `@theme inline`、CSS variables、dark mode、v3→v4 migration gotchas。 | `/plugin install shadcn@claude-skills` 或 `npx skills add secondsky/claude-skills --skill shadcn` |
 | Tailwind / shadcn | `shadcn` official skill | https://ui.shadcn.com/docs/skills | shadcn/ui 官方 skills；提供 components、patterns、best practices、CLI workflow、component composition rules。 | `npx shadcn@latest add skills` |
 | Tailwind / shadcn | `shadcn-ui` | https://github.com/jezweb/claude-skills | React 專案安裝與設定 shadcn/ui components；涵蓋 forms、data tables、navigation、modals、semantic tokens。 | `npx skills add jezweb/claude-skills --skill shadcn-ui` |
 | Tailwind / UI | `frontend-design` | https://github.com/anthropics/skills | Anthropic 官方 frontend design skill；用於 dashboard、React components、HTML/CSS layout，避免 generic AI aesthetics。 | `npx skills add anthropics/skills --skill frontend-design` |
-| React Router | `react-router-framework-mode` | https://github.com/remix-run/agent-skills | React Router 官方 skill；framework mode、loaders、actions、forms、pending/optimistic UI、error boundaries。 | `npx skills add remix-run/agent-skills --skill react-router-framework-mode` |
-| React Router | `react-router-data-mode` | https://github.com/remix-run/agent-skills | React Router data mode；`createBrowserRouter`、`RouterProvider`、route objects、loaders/actions、`useFetcher`。 | `npx skills add remix-run/agent-skills --skill react-router-data-mode` |
-| React Router | `react-router-declarative-mode` | https://github.com/remix-run/agent-skills | React Router declarative mode；`BrowserRouter`、JSX routes、`Link/NavLink`、URL params、search params。 | `npx skills add remix-run/agent-skills --skill react-router-declarative-mode` |
-| AG Grid React | `ag-grid` | https://github.com/majiayu000/claude-skill-registry | AG Grid + React + TypeScript；涵蓋 configuration、accessibility、column definitions、cell renderers、performance。 | 複製 `skills/development/ag-grid/SKILL.md`；未看到通用 `npx skills add` 指令。 |
+| React Router | `react-router` | https://github.com/remix-run/agent-skills | React Router 官方 skill；framework mode、loaders、actions、forms、pending/optimistic UI、error boundaries。 | `npx skills add remix-run/agent-skills --skill react-router` |
+| React Router | `react-router` | https://github.com/remix-run/agent-skills | React Router data mode；`createBrowserRouter`、`RouterProvider`、route objects、loaders/actions、`useFetcher`。 | `npx skills add remix-run/agent-skills --skill react-router` |
+| React Router | `react-router` | https://github.com/remix-run/agent-skills | React Router declarative mode；`BrowserRouter`、JSX routes、`Link/NavLink`、URL params、search params。 | `npx skills add remix-run/agent-skills --skill react-router` |
+| AG Grid React | `ag-dev` | https://github.com/majiayu000/claude-skill-registry | AG Grid + React + TypeScript；涵蓋 configuration、accessibility、column definitions、cell renderers、performance。 | 複製 `skills/development/ag-grid/SKILL.md`；未看到通用 `npx skills add` 指令。 |
 | AG Grid React | `ag-grid-patterns` | https://skillsmp.com/skills/creatifcoding-gbg-packages-tmnl-claude-skills-ag-grid-patterns-skill-md | SkillsMP 條目；AG-Grid v34 integration patterns、custom cell renderers、themes、grid UI。注意描述中出現 TMNL 專案脈絡，可能需要改寫才能通用化。 | `npx skills add creatifcoding/gbg` |
 | AG Grid React | AG Grid MCP Server | https://www.ag-grid.com/javascript-data-grid/mcp-server/ | 官方 MCP Server，不是 skill；可讓 agent 查 AG Grid docs / API，之後若常寫 AG Grid 值得研究。 | 依官方 MCP 文件設定。 |
 | Ant Design | `ant-design` | https://github.com/ant-design/antd-skill | 官方 Ant Design ecosystem skill；antd v6、Ant Design Pro 5、ProComponents、Ant Design X v2、component selection、tokens、SSR、a11y、performance、migration。 | `npx skills add ant-design/antd-skill --skill ant-design` |
@@ -54,7 +54,7 @@
 | Testing / Browser | `webapp-testing` | https://github.com/anthropics/skills | Anthropic 官方 Playwright local web app testing；可驗證 frontend functionality、UI behavior、screenshots、browser logs。 | `npx skills add anthropics/skills --skill webapp-testing` |
 | Testing / Browser | `playwright-best-practices` | https://github.com/currents-dev/playwright-best-practices-skill | Playwright E2E、component、API、visual regression、a11y、CI、fixtures、mocking、auth、flaky debugging。 | `npx skills add currents-dev/playwright-best-practices-skill` |
 | Testing / Browser | `playwright-expert` | https://github.com/Jeffallan/claude-skills | Playwright E2E test infrastructure、page objects、fixtures、reporters、CI、API mocking、visual regression、flaky tests。 | `npx skills add Jeffallan/claude-skills --skill playwright-expert` |
-| Testing / Unit | `vitest-testing` | https://github.com/secondsky/claude-skills | Vitest for TypeScript/JavaScript；unit/integration tests、native ESM、Vite-powered testing、mocking。 | `/plugin install vitest-testing@claude-skills` 或 `npx skills add secondsky/claude-skills --skill vitest-testing` |
+| Testing / Unit | `vitest` | https://github.com/secondsky/claude-skills | Vitest for TypeScript/JavaScript；unit/integration tests、native ESM、Vite-powered testing、mocking。 | `/plugin install vitest@claude-skills` 或 `npx skills add secondsky/claude-skills --skill vitest` |
 | Web Quality | `web-quality` | https://github.com/addyosmani/web-quality-skills | Lighthouse、Core Web Vitals、performance、accessibility WCAG、SEO、best practices；支援 React/Vue/Angular/Svelte/Next/Nuxt/Astro。 | `npx skills add addyosmani/web-quality-skills` |
 | UI Review | `web-design-guidelines` | https://github.com/vercel-labs/agent-skills | Vercel Web Interface Guidelines；適合 review UI、accessibility、UX、design audit。 | `npx skills add vercel-labs/agent-skills --skill web-design-guidelines` |
 | Code Review | `code-review-skill` | https://github.com/awesome-skills/code-review-skill | 包含 React 19、TypeScript、CSS、architecture、performance 的 review guide；適合作為 merge 前檢查。 | `git clone https://github.com/awesome-skills/code-review-skill ~/.claude/skills/code-review-skill` |
@@ -65,18 +65,18 @@
 
 1. React：`vercel-react-best-practices`、`react-dev`、`react-useeffect`、`react-expert`
 2. TypeScript：`typescript-clean-code`、`typescript-advanced-types`、`typescript-pro`、`typescript-code-reviewer`
-3. Tailwind / UI：`tailwind-design-system`、`tailwind-v4-shadcn`、shadcn 官方 skill、`frontend-design`
-4. React Router：依專案實際模式選 `react-router-declarative-mode` 或 `react-router-data-mode`；若走 full-stack framework mode 才用 `react-router-framework-mode`
+3. Tailwind / UI：`tailwind-design-system`、`shadcn`、shadcn 官方 skill、`frontend-design`
+4. React Router：依專案實際模式選 `react-router` 或 `react-router`；若走 full-stack framework mode 才用 `react-router`
 5. Ant Design：官方 `ant-design` + `antd`
 6. react-hook-form：`react-hook-form-zod` 或 `react-hook-form`
 7. react-i18next：`internationalization-i18n` + `i18n-agent/i18n-skills` commands
-8. AG Grid：`ag-grid` + AG Grid 官方 MCP Server；`ag-grid-patterns` 可參考但要注意其專案特化內容
+8. AG Grid：`ag-dev` + AG Grid 官方 MCP Server；`ag-grid-patterns` 可參考但要注意其專案特化內容
 
 ### B. 品質保證組合
 
 1. `webapp-testing`：本地前端功能、console、browser logs、screenshots
 2. `playwright-best-practices` 或 `playwright-expert`：建立 / review E2E 測試
-3. `vitest-testing`：單元測試與 integration tests
+3. `vitest`：單元測試與 integration tests
 4. `web-quality`：Lighthouse / Core Web Vitals / a11y / SEO
 5. `web-design-guidelines`：UI / UX / accessibility review
 6. `code-review-skill`：React / TypeScript / CSS / architecture / performance code review
@@ -91,7 +91,7 @@
 4. `softaworks/agent-toolkit --skill react-dev`
 5. `softaworks/agent-toolkit --skill react-useeffect`
 6. `wshobson/agents --skill tailwind-design-system`
-7. `remix-run/agent-skills --skill react-router-declarative-mode` 或 `react-router-data-mode`
+7. `remix-run/agent-skills --skill react-router` 或 `react-router`
 8. `ant-design/antd-skill --skill ant-design`
 9. `secondsky/claude-skills --skill react-hook-form-zod`
 10. `secondsky/claude-skills --skill internationalization-i18n`
@@ -103,15 +103,15 @@ AG Grid 因為目前找到的來源較少，建議獨立整理成專案自有 sk
 2026-05-28 已下載/建立 60 個可移植 skill 目錄，其中前端與品質保證重點包含：
 
 - React：`vercel-react-best-practices`、`react-dev`、`react-useeffect`、`react-state-management`
-- TypeScript：`typescript-advanced-types`、`openapi-to-typescript`、`typescript-code-reviewer`
-- Tailwind / UI：`tailwind-design-system`、`tailwind-v4-shadcn`、`frontend-design`、`web-design-guidelines`、`design-system-patterns`、`responsive-design`
-- React Router：`react-router-declarative-mode`、`react-router-data-mode`、`react-router-framework-mode`（移植時依專案模式選用）
+- TypeScript：`typescript-advanced-types`、`openapi-typescript`、`typescript-code-reviewer`
+- Tailwind / UI：`tailwind-design-system`、`shadcn`、`frontend-design`、`web-design-guidelines`、`design-system-patterns`、`responsive-design`
+- React Router：`react-router`（移植時依專案模式選用）
 - Ant Design：`ant-design`、`antd`
 - react-hook-form：`react-hook-form-zod`
 - i18n：`internationalization-i18n`
-- AG Grid：`ag-grid`
-- Testing / Quality：`webapp-testing`、`playwright-best-practices`、`vitest-testing`、`browser-testing-with-devtools`、`frontend-ui-engineering`、`accessibility-compliance`
-- Code review：`code-review-and-quality`、`code-review-excellence`、`typescript-code-reviewer`
+- AG Grid：`ag-dev`
+- Testing / Quality：`webapp-testing`、`playwright-best-practices`、`vitest`、`browser-testing-with-devtools`、`frontend-ui-engineering`、`accessibility-compliance`
+- Code review：`code-review-and-quality`、`typescript-code-reviewer`
 
 完整來源、commit 與原始路徑請看 `skills/SKILLS_MANIFEST.md`；驗證結果請看 `skills/VALIDATION_REPORT.md`。
 

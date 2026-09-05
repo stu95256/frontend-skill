@@ -1,13 +1,55 @@
 ---
 name: frontend-debug-workflow
-description: Use when the user gives frontend code paths plus a bug, runtime symptom, console error, TypeScript error, failing test, or broken UI behavior and wants the agent to debug and fix the code. The workflow reads the specified files and nearby usage, gathers evidence, forms a root-cause hypothesis, selects exact local frontend skills, applies a minimal fix, verifies it, and reports a replayable debug record.
-version: 1.0.0
-author: Hermes Agent
+description: Use when the user gives frontend code paths plus a bug, runtime symptom, console error, TypeScript error, failing
+  test, or broken UI behavior and wants the agent to debug and fix the code. The workflow reads the specified files and nearby
+  usage, gathers evidence, forms a root-cause hypothesis, selects exact local frontend skills, applies a minimal fix, verifies
+  it, and reports a replayable debug record.
 license: MIT
 metadata:
   hermes:
-    tags: [frontend, debugging, root-cause, workflow, react, typescript, browser, verification, kilo]
-    related_skills: [systematic-debugging, incremental-implementation, verification-before-completion, source-driven-development, react-dev, react-useeffect, react-state-management, typescript-advanced-types, typescript-code-reviewer, react-router-declarative-mode, react-router-data-mode, react-router-framework-mode, ant-design, antd, ag-grid, react-hook-form-zod, internationalization-i18n, tailwind-design-system, tailwind-v4-shadcn, responsive-design, accessibility-compliance, browser-testing-with-devtools, webapp-testing, playwright-best-practices, performance-optimization, vercel-react-best-practices, security-and-hardening, secpriv-code-review]
+    version: 1.1.0
+    author: Hermes Agent
+    tags:
+    - frontend
+    - debugging
+    - root-cause
+    - workflow
+    - react
+    - typescript
+    - browser
+    - verification
+    - kilo
+    related_skills:
+    - systematic-debugging
+    - incremental-implementation
+    - verification-before-completion
+    - source-driven-development
+    - react-dev
+    - react-doctor
+    - react-useeffect
+    - react-state-management
+    - typescript-advanced-types
+    - typescript-code-reviewer
+    - react-router
+    - ant-design
+    - antd
+    - ag-dev
+    - ag-update
+    - react-hook-form-zod
+    - internationalization-i18n
+    - tailwind-design-system
+    - shadcn
+    - responsive-design
+    - accessibility-compliance
+    - accessibility
+    - playwright-cli
+    - browser-testing-with-devtools
+    - webapp-testing
+    - playwright-best-practices
+    - performance-optimization
+    - vercel-react-best-practices
+    - security-and-hardening
+    - secpriv-code-review
 ---
 
 # Frontend Debug Workflow
@@ -101,17 +143,21 @@ Always include `systematic-debugging` conceptually for bugs. Add exact local ski
 | React component/state | `react-dev`, `react-state-management` |
 | `useEffect`, stale closure, cleanup, async sync | `react-useeffect` |
 | TypeScript / TSX / generics / unsafe assertions | `typescript-advanced-types`, `typescript-code-reviewer` |
-| Routing/navigation/loaders/actions | `react-router-declarative-mode`, `react-router-data-mode`, `react-router-framework-mode` |
+| Routing/navigation/loaders/actions | `react-router` (detect installed mode/version first) |
 | Ant Design | `ant-design`, `antd` |
-| AG Grid | `ag-grid` |
+| AG Grid feature/debugging | `ag-dev`; use `ag-update` only for dependency upgrades |
 | React Hook Form / Zod | `react-hook-form-zod` |
 | i18n | `internationalization-i18n` |
-| Tailwind / responsive / tokens | `tailwind-design-system`, `tailwind-v4-shadcn`, `responsive-design` |
-| A11y/focus/keyboard | `accessibility-compliance` |
-| Browser-visible behavior | `browser-testing-with-devtools`, `webapp-testing` |
+| Tailwind / responsive / tokens | `tailwind-design-system`, `shadcn`, `responsive-design` |
+| A11y/focus/keyboard | `accessibility-compliance`, `accessibility` |
+| Browser-visible behavior | `playwright-cli`, `webapp-testing` |
+| DevTools-specific console/network/performance diagnosis | `browser-testing-with-devtools` |
 | Playwright trace/E2E | `playwright-best-practices` |
+| Post-fix React diagnostic scan | `react-doctor` (after the root-cause fix, not instead of debugging) |
 | Performance/rendering | `performance-optimization`, `vercel-react-best-practices` |
 | Security/privacy | `security-and-hardening`, `secpriv-code-review` |
+
+Browser fallback rule: use `playwright-cli` first for repeatable browser interaction. If the CLI cannot start, browser installation is blocked, or the target remains inaccessible, fall back to `browser-testing-with-devtools`. Record the failure reason, URL, fallback used, and DOM/screenshot/console/network evidence; never claim behavior that was not observed.
 
 Do not cite a skill unless `skills/<skill-name>/SKILL.md` exists.
 

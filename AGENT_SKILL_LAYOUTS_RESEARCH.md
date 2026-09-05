@@ -540,7 +540,7 @@ skills/
 ├── frontend-design/SKILL.md
 ├── vercel-react-best-practices/SKILL.md
 ├── react-dev/SKILL.md
-├── react-router-declarative-mode/SKILL.md
+├── react-router/SKILL.md
 ├── ant-design/SKILL.md
 ├── react-hook-form-zod/SKILL.md
 └── ...

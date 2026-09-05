@@ -1,13 +1,25 @@
 ---
 name: secpriv-code-review
-description: Use when reviewing code, diffs, or PRs for both security weaknesses and privacy violations. Adapts Meta/Facebook Research SecPriv detector-validator methodology with CWE/GDPR mapping, framework-aware suppression rules, high-confidence findings, and JSON output for sub-agent review passes.
-version: 1.0.0
-author: Meta Platforms, Inc. and affiliates; staged by Hermes Agent
+description: Use when reviewing code, diffs, or PRs for both security weaknesses and privacy violations. Adapts Meta/Facebook
+  Research SecPriv detector-validator methodology with CWE/GDPR mapping, framework-aware suppression rules, high-confidence
+  findings, and JSON output for sub-agent review passes.
 license: MIT
 metadata:
   hermes:
-    tags: [security, privacy, code-review, cwe, gdpr, detector-validator, subagent]
-    related_skills: [code-review-excellence, code-review-and-quality, security-and-hardening, typescript-code-reviewer, audit-code-reviewer]
+    version: 1.1.0
+    author: Meta Platforms, Inc. and affiliates; staged by Hermes Agent
+    tags:
+    - security
+    - privacy
+    - code-review
+    - cwe
+    - gdpr
+    - detector-validator
+    - subagent
+    related_skills:
+    - code-review-and-quality
+    - security-and-hardening
+    - typescript-code-reviewer
 ---
 
 > Project staging note: upstream `facebookresearch/secpriv-skill` ships its root `SKILL.md` without YAML frontmatter. This staged copy adds project-compatible frontmatter at byte 0 and otherwise keeps the upstream methodology content below.

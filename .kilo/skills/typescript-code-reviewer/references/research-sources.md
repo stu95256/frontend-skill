@@ -6,7 +6,7 @@
 
 本專案原本已有：
 
-- `code-review-excellence`：通用 code review skill，含 `reference/typescript.md`。
+- `code-review-and-quality`：通用 code review skill，含 `reference/typescript.md`。
 - `code-review-and-quality` / `requesting-code-review`：通用 review / pre-commit workflow。
 - `typescript-advanced-types`：TypeScript advanced type skill。
 
@@ -26,7 +26,7 @@
 
 | Source | URL | License | What was useful |
 |---|---|---|---|
-| awesome-skills/code-review-skill | https://github.com/awesome-skills/code-review-skill | MIT | Existing `code-review-excellence` skill and `reference/typescript.md`; broad PR review framing plus TypeScript checklist ideas. Commit `aca7203b420bdf9664c25c3adbb426bec164c233`. |
+| awesome-skills/code-review-skill | https://github.com/awesome-skills/code-review-skill | MIT | Existing `code-review-and-quality` skill and `reference/typescript.md`; broad PR review framing plus TypeScript checklist ideas. Commit `aca7203b420bdf9664c25c3adbb426bec164c233`. |
 | William-Yeh/common-code-reviewer | https://github.com/William-Yeh/common-code-reviewer | Apache-2.0 | Principal-engineer review persona, severity/output discipline, and JS/TS review rules in `skill/references/typescript.md`. Commit `96c43a797788444f362aae21c7ace7ae39e6ee68`. |
 | yoriiis/ai-skills `frontend-code-review` | https://github.com/yoriiis/ai-skills/tree/main/skills/frontend-code-review | MIT | Frontend MR/PR review workflow, XSS/a11y/performance framing, JS/TS reference. Commit `6952aa721f98ba7a478485cf6435a1f39ab2bb57`. |
 | scottgl9/skelm-code-reviewer | https://github.com/scottgl9/skelm-code-reviewer | MIT | PR reviewer agent + language-specific review skill; JS/TS reference includes unsafe `any`, `as unknown as T`, type-only imports, discriminated unions. Commit `b474dd2f7e10a570ab081e666e5b06cf1034bfc8`. |
