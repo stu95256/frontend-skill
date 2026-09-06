@@ -1,6 +1,6 @@
-# Project Skills Staging
+# VS Code Chat Personal Skills
 
-這個目錄是本專案的 AI coding agent skills staging / catalog。
+這個目錄是要安裝至 `~/.copilot/skills/` 的 Agent Skills catalog。
 
 每個可移植 skill 都採用 flat layout：
 
@@ -8,25 +8,17 @@
 skills/<skill-name>/SKILL.md
 ```
 
-## 如何移植
+## 如何安裝
 
-依目標 agent 複製需要的 skill 子目錄：
+在 Repository 根目錄執行：
 
 ```bash
-# Claude Code
-cp -a skills/<skill-name> .claude/skills/
-
-# OpenCode
-cp -a skills/<skill-name> .opencode/skills/
-
-# Codex / Open Agent standard
-cp -a skills/<skill-name> .agents/skills/
-
-# Kilo Code
-cp -a skills/<skill-name> .kilo/skills/
+bash scripts/install-vscode-chat.sh
 ```
 
-不要假設專案根目錄的 `skills/` 會被所有 agent 自動載入；它主要是 canonical staging 目錄。
+也可只複製需要的子目錄到 `~/.copilot/skills/`。不要假設 Repository 根目錄的 `skills/` 會被 VS Code 自動載入；它是 canonical source layout。
+
+工作流相關 Skill 與 `../agents/*.agent.md` 搭配：Skill 保存程序和資源，Custom Agent 保存工具限制、handoff、worker allowlist 與 `agent/runSubagent` 編排。
 
 ## 索引與驗證
 

@@ -5,41 +5,6 @@ description: Use when reviewing the frontend changes a source branch would contr
   real independent sub-agents for every selected review skill; excludes working-tree changes and unit-test suggestions; and
   returns a concise Chinese findings-only report.
 license: MIT
-metadata:
-  hermes:
-    version: 1.1.0
-    author: Hermes Agent
-    tags:
-    - frontend
-    - code-review
-    - branch-diff
-    - merge-review
-    - subagent
-    - workflow
-    - react
-    - typescript
-    - no-unit-tests
-    related_skills:
-    - frontend-staged-review-workflow
-    - code-review-and-quality
-    - typescript-code-reviewer
-    - secpriv-code-review
-    - react-dev
-    - react-useeffect
-    - vercel-react-best-practices
-    - web-design-guidelines
-    - accessibility-compliance
-    - accessibility
-    - tailwind-design-system
-    - shadcn
-    - ant-design
-    - ag-dev
-    - react-hook-form-zod
-    - internationalization-i18n
-    - react-router
-    - playwright-best-practices
-    - playwright-cli
-    - webapp-testing
 ---
 
 # Frontend Branch Review Workflow
@@ -47,6 +12,8 @@ metadata:
 ## Overview
 
 Use this workflow to review the frontend content a source branch would contribute before it is merged into `master` or another target branch. Unlike `frontend-staged-review-workflow`, this workflow ignores the index and working tree. It pins the source tip, target tip, and merge base, then reviews the committed branch-introduced diff from the merge base to the source tip.
+
+Preferred VS Code entry point: select the **Frontend Branch Review** custom agent. If this skill is invoked directly in another top-level agent, use `#tool:agent/runSubagent`; invoke hidden reviewer/validator workers when installed or anonymous subagents with the complete bundled prompt.
 
 Core contract:
 
@@ -57,7 +24,7 @@ Core contract:
 5. Do not use `git diff <target>..<source>` as the content definition when histories diverged; that two-dot endpoint diff can mix target-only changes into the review. The merge-base-to-source range is the branch contribution.
 6. Working-tree, staged, and untracked changes are out of scope because they are not committed in `source_sha`.
 7. Do not checkout, switch, merge, rebase, reset, stage, edit, auto-fix, or commit.
-8. Use real independent sub-agents or Kilo custom agents. The coordinator must not simulate reviewer personas.
+8. Use real independent VS Code Chat subagents through `#tool:agent/runSubagent`. The coordinator must not simulate reviewer personas.
 9. Every selected review skill requires at least two valid independent reviewer outputs.
 10. Every reviewer must load or receive the exact local skill assigned to it.
 11. Do not suggest unit tests, unit-test coverage, or “add a unit test” follow-ups.
@@ -225,7 +192,7 @@ Conditional skills:
 
 Selection rules:
 
-1. The exact `skills/<skill-name>/SKILL.md` must exist.
+1. The exact `~/.copilot/skills/<skill-name>/SKILL.md` must exist or Copilot diagnostics must resolve it from another supported location.
 2. Do not use generic labels such as “React skill”.
 3. If two skills directly match and capacity allows, select both.
 4. Determine React Router mode from branch/target evidence before selecting a router skill.
@@ -246,7 +213,7 @@ Before dispatching, write an internal plan with:
 - full-diff or path/chunk input scope;
 - expected outputs and coverage assignment.
 
-Hard gate: verify that the runtime can launch real independent sub-agents/custom agents. If not, return `Incomplete`. The coordinator may prepare context, dispatch, validate, and aggregate, but its own analysis never counts as a reviewer pass.
+Hard gate: verify that `#tool:agent/runSubagent` is enabled and the current model can launch real independent subagents. If not, return `Incomplete`. The coordinator may prepare context, dispatch, validate, and aggregate, but its own analysis never counts as a reviewer pass.
 
 ## Sub-agent Dispatch and Output Contract
 
@@ -356,12 +323,6 @@ If there are no findings, output `結論: Approve` and `在指定 branch 合併�
 11. Letting unit-test suggestions leak into the final report.
 12. Claiming `Approve` with incomplete file coverage or reviewer quorum.
 
-## Kilo Code Usage
+## VS Code Chat Usage
 
-After global installation, pair this skill with:
-
-- rule: `~/.kilo/rules/frontend-branch-review.md`;
-- full workflow: `~/.kilo/workflows/FRONTEND_BRANCH_REVIEW_WORKFLOW.md`;
-- usage guide: `~/.kilo/docs/FRONTEND_BRANCH_REVIEW_WORKFLOW_USAGE.zh-TW.md`;
-- reviewer prompt: `~/.kilo/skills/frontend-branch-review-workflow/templates/subagent-prompt.md`;
-- final report template: `~/.kilo/skills/frontend-branch-review-workflow/templates/final-report.md`.
+Select the **Frontend Branch Review** custom agent from `~/.copilot/agents/frontend-branch-review.agent.md`. Keep `#tool:agent/runSubagent` enabled so the coordinator can invoke the allowed reviewer agents.

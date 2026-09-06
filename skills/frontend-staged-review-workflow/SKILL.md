@@ -4,39 +4,6 @@ description: Use when reviewing git-staged frontend changes with real independen
   builds an internal dispatch plan, runs at least two sub-agents for every selected review skill, forbids unit-test suggestions,
   validates reviewer outputs, and returns a concise findings-only report.
 license: MIT
-metadata:
-  hermes:
-    version: 1.2.0
-    author: Hermes Agent
-    tags:
-    - frontend
-    - code-review
-    - staged-diff
-    - subagent
-    - workflow
-    - react
-    - typescript
-    - no-unit-tests
-    related_skills:
-    - code-review-and-quality
-    - typescript-code-reviewer
-    - secpriv-code-review
-    - react-dev
-    - react-useeffect
-    - vercel-react-best-practices
-    - web-design-guidelines
-    - accessibility-compliance
-    - accessibility
-    - tailwind-design-system
-    - shadcn
-    - ant-design
-    - ag-dev
-    - react-hook-form-zod
-    - internationalization-i18n
-    - react-router
-    - playwright-best-practices
-    - playwright-cli
-    - webapp-testing
 ---
 
 # Frontend Staged Review Workflow
@@ -45,10 +12,12 @@ metadata:
 
 This workflow reviews only the code that is already staged with `git add`. It is designed for frontend projects where the user wants real independent reviewer sub-agents to inspect the same staged diff, while the user receives a concise findings-only report.
 
+Preferred VS Code entry point: select the **Frontend Staged Review** custom agent. If this skill is invoked directly in another top-level agent, use `#tool:agent/runSubagent`; invoke the hidden `Frontend Reviewer` workers when installed or anonymous reviewer subagents with the complete bundled prompt. Do not simulate reviewer seats inline.
+
 Core contract:
 
 1. Review target is **only** `git diff --cached`.
-2. Use real independent sub-agents or Kilo custom agents for reviewer passes.
+2. Use real independent VS Code Chat subagents through `#tool:agent/runSubagent` for reviewer passes.
 3. The coordinator / main agent must **not** perform reviewer passes itself and must **not** simulate multiple reviewers with internal personas.
 4. Every selected review skill must be executed by **at least two independent sub-agents**.
 5. Every sub-agent must load or be given the exact local review skill it is assigned.
@@ -102,7 +71,7 @@ Rules:
 
 ## Review Skill Selection Matrix
 
-Select the smallest set of exact local skills that matches the staged diff. Every selected skill still requires at least two real sub-agent reviewer passes. Do not run a broad skill set just because the workflow is available.
+Select the smallest set of exact personal skills under `~/.copilot/skills` that matches the staged diff. Every selected skill still requires at least two real subagent reviewer passes. Do not run a broad skill set just because the workflow is available.
 
 Baseline skill:
 
@@ -134,20 +103,20 @@ Conditional skills:
 | Reproducible browser interaction or DOM/screenshot verification is needed | `playwright-cli` | 2 | Browser evidence using snapshots first and screenshots for visual state. |
 | Browser-visible runtime behavior changed but no Playwright-specific files were staged | `webapp-testing` | 2 | Runtime/browser behavior risk and manual/browser verification ideas. Do not ask for unit tests. |
 
-Do not select a skill unless `skills/<skill-name>/SKILL.md` exists. Do not write generic labels like "React skill" or ambiguous rows like "A or B" in the dispatch plan. If two skills both match, select both and run two sub-agents for each.
+Do not select a skill unless `~/.copilot/skills/<skill-name>/SKILL.md` exists or Copilot's skill diagnostics confirms it is loaded from another supported location. Do not write generic labels like "React skill" or ambiguous rows like "A or B" in the dispatch plan. If two skills both match, select both and run two subagents for each.
 
 ## Gate 2 — Dispatch Plan
 
 Before spawning sub-agents, the coordinator must write an internal dispatch plan. The workflow must not start reviewer waves until this plan is complete. Do not show the dispatch plan to the user unless they ask for the audit log.
 
-Hard gate: before reviewing, confirm that the current runtime can actually launch independent sub-agents or Kilo custom agents. If no real sub-agent mechanism is available, stop here and return `Incomplete` with a concise note. Do not let the coordinator/main agent review the diff itself, and do not emulate sub-agents by writing multiple reviewer personas in one context.
+Hard gate: before reviewing, confirm that `#tool:agent/runSubagent` is enabled and the current model can launch independent subagents. If no real subagent mechanism is available, stop here and return `Incomplete` with a concise note. Do not let the coordinator/main agent review the diff itself, and do not emulate subagents by writing multiple reviewer personas in one context.
 
 Dispatch plan fields:
 
 | Field | Requirement |
 |---|---|
 | `selected_skill` | Exact local skill slug. |
-| `skill_path` | `skills/<selected_skill>/SKILL.md`. Must exist. |
+| `skill_path` | `~/.copilot/skills/<selected_skill>/SKILL.md`. Must exist or be resolved by Copilot diagnostics. |
 | `trigger_evidence` | File path, extension, code pattern, or diff evidence that selected the skill. |
 | `reviewer_ids` | At least two IDs per selected skill, e.g. `typescript-code-reviewer-A`, `typescript-code-reviewer-B`. |
 | `angles` | Distinct angle for each reviewer. |
@@ -159,8 +128,8 @@ Example:
 
 | Skill | Skill path | Trigger evidence | Reviewer IDs | Angles | Wave | Input scope |
 |---|---|---|---|---|---:|---|
-| `typescript-code-reviewer` | `skills/typescript-code-reviewer/SKILL.md` | `src/UserTable.tsx` staged | `typescript-code-reviewer-A`, `typescript-code-reviewer-B` | type-safety; edge cases | 1 | full cached diff |
-| `ag-dev` | `skills/ag-dev/SKILL.md` | `columnDefs` changed | `ag-dev-A`, `ag-dev-B` | grid API; rendering performance | 2 | AG Grid-related files |
+| `typescript-code-reviewer` | `~/.copilot/skills/typescript-code-reviewer/SKILL.md` | `src/UserTable.tsx` staged | `typescript-code-reviewer-A`, `typescript-code-reviewer-B` | type-safety; edge cases | 1 | full cached diff |
+| `ag-dev` | `~/.copilot/skills/ag-dev/SKILL.md` | `columnDefs` changed | `ag-dev-A`, `ag-dev-B` | grid API; rendering performance | 2 | AG Grid-related files |
 
 ## Shared Review Packet
 
@@ -201,12 +170,12 @@ For each selected review skill:
    - Reviewer A: correctness / architecture / likely runtime bugs.
    - Reviewer B: edge cases / maintainability / integration / false positives.
    - Additional reviewers, if any: performance, accessibility, security/privacy, framework integration, or UI polish as appropriate.
-4. Require every sub-agent to read `skills/<selected_skill>/SKILL.md` before reviewing when file tools are available.
+4. Require every sub-agent to read `~/.copilot/skills/<selected_skill>/SKILL.md` before reviewing when file tools are available.
 5. If a sub-agent cannot read the skill file, the coordinator must paste the skill's key review criteria into the prompt or mark that reviewer output as degraded.
 6. Tell every sub-agent: **do not suggest unit tests**.
 7. Ask every sub-agent to return strict JSON only.
 
-When using `delegate_task`, Kilo custom agents, or any equivalent sub-agent mechanism, batch in groups of up to the system concurrency limit. If the environment allows only three parallel children, run several waves until every selected skill has at least two valid reviewer outputs. If no equivalent mechanism is available, stop rather than doing a main-agent-only review.
+Invoke the named **Frontend Reviewer** custom agent through `#tool:agent/runSubagent` and dispatch independent calls together up to the current concurrency limit. Run additional waves until every selected skill has at least two valid reviewer outputs. Every invocation is stateless, so a retry must receive the complete review packet again. If the tool is unavailable, stop rather than doing a main-agent-only review.
 
 ## Sub-agent Output Contract
 
@@ -224,7 +193,7 @@ A reviewer output is valid only if:
 - It is parseable strict JSON.
 - It includes `reviewer_id`, `skill_used`, `skill_path`, `skill_read`, `status`, `angle`, `input_scope`, `verdict`, `findings`, and `notes`.
 - `skill_used` matches the dispatch plan row.
-- `skill_path` points to an existing local `skills/<skill-name>/SKILL.md`.
+- `skill_path` points to an existing personal `~/.copilot/skills/<skill-name>/SKILL.md` or another path confirmed by Copilot diagnostics.
 - `findings[*]` include path, severity, summary, evidence, recommended fix, confidence, and blocking status.
 - It does not include unit-test-only advice.
 

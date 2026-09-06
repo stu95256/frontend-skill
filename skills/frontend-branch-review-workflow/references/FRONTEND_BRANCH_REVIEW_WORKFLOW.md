@@ -57,7 +57,7 @@ Core contract:
 5. Do not use `git diff <target>..<source>` as the content definition when histories diverged; that two-dot endpoint diff can mix target-only changes into the review. The merge-base-to-source range is the branch contribution.
 6. Working-tree, staged, and untracked changes are out of scope because they are not committed in `source_sha`.
 7. Do not checkout, switch, merge, rebase, reset, stage, edit, auto-fix, or commit.
-8. Use real independent sub-agents or Kilo custom agents. The coordinator must not simulate reviewer personas.
+8. Use real independent custom-agent subagents through `agent/runSubagent`. The coordinator must not simulate reviewer personas.
 9. Every selected review skill requires at least two valid independent reviewer outputs.
 10. Every reviewer must load or receive the exact local skill assigned to it.
 11. Do not suggest unit tests, unit-test coverage, or “add a unit test” follow-ups.
@@ -225,7 +225,7 @@ Conditional skills:
 
 Selection rules:
 
-1. The exact `skills/<skill-name>/SKILL.md` must exist.
+1. The exact `~/.copilot/skills/<skill-name>/SKILL.md` must exist or Copilot diagnostics must resolve it from another supported location.
 2. Do not use generic labels such as “React skill”.
 3. If two skills directly match and capacity allows, select both.
 4. Determine React Router mode from branch/target evidence before selecting a router skill.
@@ -356,12 +356,6 @@ If there are no findings, output `結論: Approve` and `在指定 branch 合併�
 11. Letting unit-test suggestions leak into the final report.
 12. Claiming `Approve` with incomplete file coverage or reviewer quorum.
 
-## Kilo Code Usage
+## VS Code Chat Usage
 
-After global installation, pair this skill with:
-
-- rule: `~/.kilo/rules/frontend-branch-review.md`;
-- full workflow: `~/.kilo/workflows/FRONTEND_BRANCH_REVIEW_WORKFLOW.md`;
-- usage guide: `~/.kilo/docs/FRONTEND_BRANCH_REVIEW_WORKFLOW_USAGE.zh-TW.md`;
-- reviewer prompt: `~/.kilo/skills/frontend-branch-review-workflow/templates/subagent-prompt.md`;
-- final report template: `~/.kilo/skills/frontend-branch-review-workflow/templates/final-report.md`.
+Select the **Frontend Branch Review** custom agent from `~/.copilot/agents/frontend-branch-review.agent.md`. Keep `agent/runSubagent` enabled so the coordinator can invoke the allowlisted reviewer agents. Supporting prompts and report templates remain relative to this skill directory.

@@ -40,7 +40,7 @@
 
 4. **依問題類型選 skill，而不是固定套同一套技能。**
    - React hook 問題、router 問題、form 問題、AG Grid 問題、AntD 問題、Tailwind / responsive 問題、i18n 問題、browser behavior 問題要選不同 local skills。
-   - 只能引用本專案存在的 `skills/<skill-name>/SKILL.md`。
+   - 只能引用 `~/.copilot/skills/<skill-name>/SKILL.md` 存在或 Copilot diagnostics 可解析的 skill。
 
 5. **修正要最小化且可驗證。**
    - 一次只修 root cause，不順手重構。
@@ -231,7 +231,7 @@ What would disprove this:
 
 ### Step 5：選擇應使用的 local skills
 
-所有選用 skill 必須存在於 `skills/<skill-name>/SKILL.md`。選 skill 的結果要寫進 debug record。
+所有選用 skill 必須存在於 `~/.copilot/skills/<skill-name>/SKILL.md`，或由 Copilot diagnostics 解析。選 skill 的結果要寫進 debug record。
 
 | 問題 / evidence | 應使用 skill（exact local names） | 使用目的 |
 |---|---|---|
@@ -265,8 +265,8 @@ Skill selection record：
 
 | Skill | Path | Why selected | How it affects the fix |
 |---|---|---|---|
-| `systematic-debugging` | `skills/systematic-debugging/SKILL.md` | Bug report with reproducible symptom | Root cause gate before edits |
-| `react-useeffect` | `skills/react-useeffect/SKILL.md` | Evidence points to stale closure | Fix effect dependencies / cleanup |
+| `systematic-debugging` | `~/.copilot/skills/systematic-debugging/SKILL.md` | Bug report with reproducible symptom | Root cause gate before edits |
+| `react-useeffect` | `~/.copilot/skills/react-useeffect/SKILL.md` | Evidence points to stale closure | Fix effect dependencies / cleanup |
 ```
 
 ### Step 6：最小修正方案

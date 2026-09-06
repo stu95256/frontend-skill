@@ -1,12 +1,12 @@
 # frontend-skill
 
-A curated, pinned, and validated Agent Skills catalog for React/TypeScript frontend work. The repository keeps portable skills under `skills/` and a synchronized Kilo Code staging tree under `.kilo/`.
+A curated VS Code Chat / GitHub Copilot BYOK customization catalog for React and TypeScript frontend work. The repository root mirrors the runtime directories installed under `~/.copilot`.
 
 ## Catalog at a glance
 
-- **65** portable skills
-- **33** default-core skills and **32** on-demand specialists
-- **67** Kilo skills after adding two Kilo-only workflow wrappers
+- **67** Agent Skills under `skills/`
+- **17** custom agents under `agents/`: eight user-facing workflow agents and nine hidden subagent workers
+- **2** cross-project instruction files under `instructions/`
 - Upstream source, pinned commit, path, and license tracked in [`skills/SKILLS_MANIFEST.md`](./skills/SKILLS_MANIFEST.md)
 - Update families and safe migration procedure tracked in [`SKILL_SOURCES.md`](./SKILL_SOURCES.md)
 - Machine-checkable catalog validation in [`scripts/validate_skill_catalog.py`](./scripts/validate_skill_catalog.py)
@@ -30,23 +30,25 @@ The catalog targets React, TypeScript, Tailwind/shadcn, AG Grid React, Ant Desig
 
 ## Project-specific workflows
 
-These workflows intentionally remain project-curated because generic upstream skills do not preserve all local guarantees:
+These workflows combine an Agent Skill for reusable policy with a VS Code custom coordinator agent for tools, handoffs, and named subagents:
 
 - [`frontend-staged-review-workflow`](./skills/frontend-staged-review-workflow/) — reviews `git diff --cached` only, dispatches at least two real sub-agents per selected skill, and excludes unit-test-only suggestions.
 - [`frontend-branch-review-workflow`](./skills/frontend-branch-review-workflow/) — pins source, target, and merge-base SHAs and reviews only committed merge-base-to-source changes.
 - [`frontend-debug-workflow`](./skills/frontend-debug-workflow/) — evidence-first root-cause workflow with stack-aware skill routing and explicit verification.
 - [`frontend-staged-commit-message`](./skills/frontend-staged-commit-message/) — reads only staged changes and returns one concise English commit subject without staging, editing, committing, or pushing.
-- `.kilo/skills/frontend-task-preflight/` — Kilo-only task planning wrapper.
-- `.kilo/skills/frontend-heavy-staged-review-workflow/` — Kilo-only high-quorum staged review wrapper.
+- [`frontend-task-preflight`](./skills/frontend-task-preflight/) + **Frontend Task Preflight** — read-only research and an implementation-plan handoff.
+- [`frontend-heavy-staged-review-workflow`](./skills/frontend-heavy-staged-review-workflow/) + **Frontend Heavy Staged Review** — five independent reviewer seats per selected skill plus validator subagents.
 
-Workflow copies under root documents, `.kilo/skills/`, and `.kilo/workflows/` are synchronized by the catalog validator.
+All coordinator and worker definitions live in [`agents/`](./agents/). Worker agents are hidden from the picker and explicitly allowlisted by coordinators. Subagent invocations are treated as stateless; retries receive a complete task packet instead of relying on follow-up messages.
 
 ## Validation
 
 Run from the repository root:
 
 ```bash
-python scripts/validate_skill_catalog.py
+python3 -m pip install -r requirements-dev.txt
+python3 scripts/validate_skill_catalog.py
+python3 -m unittest -v tests/test_vscode_conversion.py
 ```
 
 Then validate each skill against the official Agent Skills reference implementation:
@@ -63,25 +65,27 @@ The committed validation result is recorded in [`skills/VALIDATION_REPORT.md`](.
 
 ## Installation
 
-Copy only the required skill directories into a supported agent skill root, for example:
+Preview and install the complete personal customization set on Ubuntu:
 
-```text
-.claude/skills/<skill-name>/
-.opencode/skills/<skill-name>/
-~/.copilot/skills/<skill-name>/
+```bash
+bash scripts/install-vscode-chat.sh --dry-run
+bash scripts/install-vscode-chat.sh
 ```
 
-For Kilo Code, review [`.kilo/README.md`](./.kilo/README.md), validate the staging tree, then copy or merge it into `~/.kilo/`.
+The installer merges `skills/`, `agents/`, and `instructions/` into `~/.copilot` without deleting unrelated personal customizations or changing VS Code/BYOK settings. See the [Ubuntu setup and diagnostics guide](./docs/VS_CODE_CHAT_SETUP.zh-TW.md).
+
+Repository folders are canonical source only; VS Code does not discover this root layout automatically. Install it under `~/.copilot`, reload VS Code, then use **Chat: Open Customizations** and Chat Diagnostics to verify discovery.
 
 ## Repository documents
 
 - [Source and update policy](./SKILL_SOURCES.md)
 - [Per-skill manifest](./skills/SKILLS_MANIFEST.md)
 - [Validation report](./skills/VALIDATION_REPORT.md)
-- [Frontend task preflight workflow](./FRONTEND_TASK_PREFLIGHT_WORKFLOW.md)
-- [Branch review workflow](./FRONTEND_BRANCH_REVIEW_WORKFLOW.md)
-- [Debug workflow](./FRONTEND_DEBUG_WORKFLOW.md)
-- [Heavy staged review workflow](./FRONTEND_HEAVY_STAGED_REVIEW_WORKFLOW.md)
-- [Agent skill layout research](./AGENT_SKILL_LAYOUTS_RESEARCH.md)
+- [Ubuntu VS Code Chat setup](./docs/VS_CODE_CHAT_SETUP.zh-TW.md)
+- [Frontend task preflight workflow](./skills/frontend-task-preflight/references/FRONTEND_TASK_PREFLIGHT_WORKFLOW.md)
+- [Branch review workflow](./skills/frontend-branch-review-workflow/references/FRONTEND_BRANCH_REVIEW_WORKFLOW.md)
+- [Debug workflow](./skills/frontend-debug-workflow/references/FRONTEND_DEBUG_WORKFLOW.md)
+- [Heavy staged review workflow](./skills/frontend-heavy-staged-review-workflow/references/FRONTEND_HEAVY_STAGED_REVIEW_WORKFLOW.md)
+
 
 Do not store API keys, access tokens, cookies, passwords, or other credentials in skills, manifests, examples, or validation output.

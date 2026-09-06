@@ -23,7 +23,7 @@ Structure context from most persistent to most transient:
 
 ```
 ┌─────────────────────────────────────┐
-│  1. Rules Files (CLAUDE.md, etc.)   │ ← Always loaded, project-wide
+│  1. Copilot instructions            │ ← Always loaded, project-wide
 ├─────────────────────────────────────┤
 │  2. Spec / Architecture Docs        │ ← Loaded per feature/session
 ├─────────────────────────────────────┤
@@ -39,7 +39,7 @@ Structure context from most persistent to most transient:
 
 Create a rules file that persists across sessions. This is the highest-leverage context you can provide.
 
-**CLAUDE.md** (for Claude Code):
+**`.github/copilot-instructions.md`** (repository-wide VS Code Chat instructions):
 ```markdown
 # Project: [Name]
 
@@ -71,11 +71,11 @@ Create a rules file that persists across sessions. This is the highest-leverage 
 [One short example of a well-written component in your style]
 ```
 
-**Equivalent files for other tools:**
-- `.cursorrules` or `.cursor/rules/*.md` (Cursor)
-- `.windsurfrules` (Windsurf)
-- `.github/copilot-instructions.md` (GitHub Copilot)
-- `AGENTS.md` (OpenAI Codex)
+**More precise VS Code Chat scopes:**
+- `.github/instructions/*.instructions.md` for path-specific repository rules using `applyTo`.
+- `~/.copilot/instructions/*.instructions.md` for personal rules shared across repositories.
+- `~/.copilot/skills/<name>/SKILL.md` for reusable procedures loaded on demand.
+- `~/.copilot/agents/*.agent.md` for named roles, tool restrictions, handoffs, and subagent allowlists.
 
 ### Level 2: Specs and Architecture
 

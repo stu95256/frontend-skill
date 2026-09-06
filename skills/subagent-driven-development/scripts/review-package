@@ -4,8 +4,8 @@
 # call. Using the recorded per-task BASE (not HEAD~1) keeps multi-commit
 # tasks intact.
 #
-# Usage: review-package PLAN_FILE BASE HEAD [OUTFILE]
-# Default OUTFILE: <repo-root>/.superpowers/sdd/<plan-basename>/review-<base7>..<head7>.diff
+# Usage: review-package PLAN_FILE BASE HEAD_OR_WORKTREE [OUTFILE]
+# Default OUTFILE: <repo-root>/.copilot-workflows/sdd/<plan-basename>/review-<base7>..<head7-or-worktree>.diff
 # (named per range, so a re-review after fixes gets a distinct fresh file).
 set -euo pipefail
 
@@ -20,27 +20,39 @@ head=$3
 [ -f "$plan" ] || { echo "no such plan file: $plan" >&2; exit 2; }
 
 git rev-parse --verify --quiet "$base" >/dev/null || { echo "bad BASE: $base" >&2; exit 2; }
-git rev-parse --verify --quiet "$head" >/dev/null || { echo "bad HEAD: $head" >&2; exit 2; }
+if [ "$head" = "WORKTREE" ]; then
+  range="$base"
+  head_label="worktree"
+else
+  git rev-parse --verify --quiet "$head" >/dev/null || { echo "bad HEAD: $head" >&2; exit 2; }
+  range="${base}..${head}"
+  head_label=$(git rev-parse --short "$head")
+fi
 
 if [ $# -eq 4 ]; then
   out=$4
 else
   dir=$("$(cd "$(dirname "$0")" && pwd)/sdd-workspace" "$plan")
-  out="$dir/review-$(git rev-parse --short "$base")..$(git rev-parse --short "$head").diff"
+  out="$dir/review-$(git rev-parse --short "$base")..${head_label}.diff"
 fi
 
 {
   echo "# Review package: ${base}..${head}"
   echo
   echo "## Commits"
-  git log --oneline "${base}..${head}"
+  if [ "$head" = "WORKTREE" ]; then git log --oneline "${base}..HEAD"; else git log --oneline "$range"; fi
   echo
   echo "## Files changed"
-  git diff --stat "${base}..${head}"
+  if [ "$head" = "WORKTREE" ]; then git status --short; else git diff --stat "$range"; fi
   echo
   echo "## Diff"
-  git diff -U10 "${base}..${head}"
+  git diff -U10 "$range"
+  if [ "$head" = "WORKTREE" ]; then
+    while IFS= read -r -d '' file; do
+      git diff --no-index -U10 /dev/null "$file" || [ $? -eq 1 ]
+    done < <(git ls-files --others --exclude-standard -z)
+  fi
 } > "$out"
 
-commits=$(git rev-list --count "${base}..${head}")
+if [ "$head" = "WORKTREE" ]; then commits=$(git rev-list --count "${base}..HEAD"); else commits=$(git rev-list --count "$range"); fi
 echo "wrote ${out}: ${commits} commit(s), $(wc -c < "$out" | tr -d ' ') bytes"

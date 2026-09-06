@@ -1,64 +1,33 @@
 ---
 name: executing-plans
-description: Use when you have a written implementation plan to execute in a separate session with review checkpoints
+description: Use when a written implementation plan must be executed and verified in the current workspace.
+license: MIT
 ---
 
 # Executing Plans
 
-## Overview
+Execute an approved plan in dependency order and prove each acceptance criterion with repository evidence.
 
-Load plan, review critically, execute all tasks, report when complete.
+## Procedure
 
-**Announce at start:** "I'm using the executing-plans skill to implement this plan."
+1. Read the complete plan and any authoritative specification. Identify contradictions, missing prerequisites, and protected side effects before editing.
+2. Confirm an isolated feature branch or worktree. Do not implement directly on the protected default branch without explicit approval.
+3. Create one tracked task per plan item and record the starting Git SHA.
+4. For each task:
+   - mark it in progress;
+   - inspect relevant code and usages;
+   - implement only the stated scope;
+   - run the specified targeted verification;
+   - record changed files and actual results;
+   - mark it complete only when its criteria pass.
+5. Use `subagent-driven-development` when `agent/runSubagent` and the required worker agents are available. Keep dependent tasks sequential and use fresh invocations for every repair.
+6. After all tasks, review the full diff and run relevant integration tests, lint, typecheck, build, and runtime checks.
+7. Report completed tasks, exact verification results, skipped checks, coordinator rulings, and remaining risks.
 
-**Note:** Tell your human partner that Superpowers works much better with access to subagents (Claude Code, Codex CLI, Codex App, Copilot CLI, and Gemini CLI all qualify; see the per-platform tool refs in `../using-superpowers/references/`). If subagents are available, use superpowers:subagent-driven-development instead of this skill.
+## Stop Conditions
 
-## The Process
+Stop for an irreversible or destructive operation, a security-sensitive action, an external side effect that requires approval, or a plan so incomplete that every implementation path would be a guess. Resolve ordinary technical ambiguity from repository evidence and record the ruling.
 
-### Step 1: Load and Review Plan
-1. Ensure an isolated workspace: use superpowers:using-git-worktrees to create one or verify the existing one
-2. Read plan file
-3. Review critically - identify any questions or concerns about the plan
-4. If concerns: Raise them with your human partner before starting
-5. If no concerns: Create todos for the plan items and proceed
+## Verification
 
-### Step 2: Execute Tasks
-
-For each task:
-1. Mark as in_progress
-2. Follow each step exactly (plan has bite-sized steps)
-3. Run verifications as specified
-4. Mark as completed
-
-### Step 3: Complete Development
-
-After all tasks complete and verified:
-- Announce: "I'm using the finishing-a-development-branch skill to complete this work."
-- **REQUIRED SUB-SKILL:** Use superpowers:finishing-a-development-branch
-- Follow that skill to verify tests, present options, execute choice
-
-## When to Stop and Ask for Help
-
-**STOP executing immediately when:**
-- Hit a blocker (missing dependency, test fails, instruction unclear)
-- Plan has critical gaps preventing starting
-- You don't understand an instruction
-- Verification fails repeatedly
-
-**Ask for clarification rather than guessing.**
-
-## When to Revisit Earlier Steps
-
-**Return to Review (Step 1) when:**
-- Partner updates the plan based on your feedback
-- Fundamental approach needs rethinking
-
-**Don't force through blockers** - stop and ask.
-
-## Remember
-- Review plan critically first
-- Follow plan steps exactly
-- Don't skip verifications
-- Reference skills when plan says to
-- Stop when blocked, don't guess
-- Never start implementation on main/master branch without explicit user consent
+The plan is complete only when every task and acceptance criterion is accounted for and the final integrated workspace passes the relevant checks.

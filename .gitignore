@@ -1,0 +1,5 @@
+__pycache__/
+*.py[cod]
+.test-copilot/
+.test-sdd/
+.test-skill-creator/

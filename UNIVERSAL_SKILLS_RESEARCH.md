@@ -47,7 +47,7 @@
 
 | Skill | 作用 |
 |---|---|
-| `using-superpowers` | 對話開始時建立「先找技能、再回應」的工作規則。 |
+| `using-vscode-chat` | 對話開始時建立「先找技能、再回應」的 VS Code Chat 工作規則。 |
 | `brainstorming` | 實作前先探索意圖、需求、設計；適合任何創作、功能、元件或行為變更。 |
 | `writing-plans` | 已有 spec 或需求後，先寫可執行的實作計畫，再碰程式碼。 |
 | `executing-plans` | 依已寫好的實作計畫執行，並設 review checkpoints。 |
@@ -66,7 +66,7 @@
 
 如果之後只想先學一套通用 workflow，建議優先研究這個順序：
 
-1. `using-superpowers`
+1. `using-vscode-chat`
 2. `brainstorming`
 3. `writing-plans`
 4. `test-driven-development`
@@ -199,7 +199,7 @@
 若只選一組通用 workflow，建議：
 
 1. `obra/superpowers`
-   - `using-superpowers`
+   - `using-vscode-chat`
    - `brainstorming`
    - `writing-plans`
    - `test-driven-development`
@@ -248,11 +248,11 @@
 4. Firecrawl plugin / CLI
 5. Skills registry / leaderboard：SkillsMP、SkillsMD、SkillLeaderboard、SkillRegistry、AgenticSkills、Skills Playground
 
-## 已下載到 `skills/` staging 的通用核心集合
+## 現行 `skills/` 的通用核心集合
 
-2026-05-28 已下載 59 個可移植 skill 目錄，其中通用 workflow 重點包含：
+2026-09-06 現行 VS Code Chat catalog 已整理為 67 個可移植 Agent Skill，其中通用 workflow 重點包含：
 
-- Superpowers：`using-superpowers`、`brainstorming`、`writing-plans`、`executing-plans`、`test-driven-development`、`systematic-debugging`、`requesting-code-review`、`verification-before-completion` 等 14 個。
+- Superpowers 來源並已轉為 VS Code Chat：`using-vscode-chat`、`brainstorming`、`writing-plans`、`executing-plans`、`test-driven-development`、`systematic-debugging`、`requesting-code-review`、`verification-before-completion` 等 14 個。
 - Anthropic 官方：`skill-creator`、`frontend-design`、`webapp-testing`、`web-artifacts-builder`。
 - Addy Osmani engineering workflow：`using-agent-skills`、`spec-driven-development`、`planning-and-task-breakdown`、`source-driven-development`、`incremental-implementation`、`code-review-and-quality`、`security-and-hardening`、`performance-optimization`、`frontend-ui-engineering`、`browser-testing-with-devtools` 等。
 - 前端與品質補強：Vercel、Softaworks、wshobson、React Router、Ant Design、secondsky、Playwright、AG Grid、code review skills。

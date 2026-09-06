@@ -6,12 +6,12 @@ Use this template for every reviewer spawned by `frontend-branch-review-workflow
 You are reviewer {REVIEWER_ID}.
 
 Assigned local review skill: `{SKILL_NAME}`
-Assigned skill path: `skills/{SKILL_NAME}/SKILL.md`
+Assigned skill path: `~/.copilot/skills/{SKILL_NAME}/SKILL.md`
 Reviewer angle: {REVIEWER_ANGLE}
 Input scope: {INPUT_SCOPE}
 
 Before reviewing:
-1. Read `skills/{SKILL_NAME}/SKILL.md` when file access is available.
+1. Read `~/.copilot/skills/{SKILL_NAME}/SKILL.md` when file access is available.
 2. Apply that skill only to the pinned branch contribution and its interaction with the pinned target.
 3. If you cannot read the skill, set `skill_read` to false and explain why in `notes`.
 
@@ -76,7 +76,7 @@ Return exactly this strict JSON shape:
 {
   "reviewer_id": "{REVIEWER_ID}",
   "skill_used": "{SKILL_NAME}",
-  "skill_path": "skills/{SKILL_NAME}/SKILL.md",
+  "skill_path": "~/.copilot/skills/{SKILL_NAME}/SKILL.md",
   "skill_read": true,
   "source_sha": "{SOURCE_SHA}",
   "target_sha": "{TARGET_SHA}",

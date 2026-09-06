@@ -5,23 +5,6 @@ description: 'Use when generating one concise English commit message from alread
   target after sign-in` with page, component, API, or shared-module context written in the description instead of Conventional
   Commit scope parentheses.'
 license: MIT
-metadata:
-  hermes:
-    version: 1.0.0
-    author: Hermes Agent
-    tags:
-    - frontend
-    - git
-    - commit-message
-    - staged-diff
-    - conventional-commits
-    - react
-    - typescript
-    - kilo
-    related_skills:
-    - frontend-staged-review-workflow
-    - code-review-and-quality
-    - writing-skills
 ---
 
 # Frontend Staged Commit Message

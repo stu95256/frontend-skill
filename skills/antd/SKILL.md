@@ -5,12 +5,7 @@ description: >
   debugging antd issues, querying antd APIs/props/tokens/demos, migrating between
   antd versions, or analyzing antd usage in a project. Triggers on antd-related
   code, imports from 'antd', or explicit antd questions.
-allowed-tools:
-  - Bash(antd *)
-  - Bash(antd bug*)
-  - Bash(antd bug-cli*)
-  - Bash(npm install -g @ant-design/cli*)
-  - Bash(which antd)
+
 ---
 
 # Ant Design CLI
@@ -206,7 +201,7 @@ antd bug-cli --title "antd info Button returns wrong props for v5.12.0" \
 
 ### 10. Using as MCP server
 
-If working in an IDE that supports MCP (Claude Desktop, Cursor, etc.), the CLI can also run as an MCP server, exposing all knowledge-query tools directly:
+In VS Code, the CLI can also run as an MCP server through `.vscode/mcp.json`, exposing its knowledge-query tools directly:
 
 ```json
 {

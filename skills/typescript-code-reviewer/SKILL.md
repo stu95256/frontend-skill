@@ -4,25 +4,6 @@ description: Use when reviewing TypeScript or TSX code, PR diffs, or AI-generate
   reviewer workflow for type safety, strict tsconfig, unsafe assertions, async/error handling, React Hooks/props, XSS/security,
   performance, and test coverage.
 license: MIT
-metadata:
-  hermes:
-    version: 1.1.0
-    author: Hermes Agent
-    tags:
-    - typescript
-    - code-review
-    - reviewer
-    - react
-    - security
-    - quality
-    - frontend
-    related_skills:
-    - code-review-and-quality
-    - typescript-advanced-types
-    - react-dev
-    - react-useeffect
-    - vitest
-    - javascript-testing-patterns
 ---
 
 # TypeScript Code Reviewer

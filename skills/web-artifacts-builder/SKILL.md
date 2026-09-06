@@ -1,12 +1,12 @@
 ---
 name: web-artifacts-builder
-description: Suite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web technologies (React, Tailwind CSS, shadcn/ui). Use for complex artifacts requiring state management, routing, or shadcn/ui components - not for simple single-file HTML/JSX artifacts.
+description: Build self-contained interactive HTML artifacts with React, Tailwind CSS, and shadcn/ui. Use for complex previews that need state, routing, or component libraries, not simple single-file HTML.
 license: Complete terms in LICENSE.txt
 ---
 
 # Web Artifacts Builder
 
-To build powerful frontend claude.ai artifacts, follow these steps:
+To build a complex frontend artifact for browser preview or attachment in VS Code Chat, follow these steps:
 1. Initialize the frontend repo using `scripts/init-artifact.sh`
 2. Develop your artifact by editing the generated code
 3. Bundle all code into a single HTML file using `scripts/bundle-artifact.sh`
@@ -49,7 +49,7 @@ To bundle the React app into a single HTML artifact:
 bash scripts/bundle-artifact.sh
 ```
 
-This creates `bundle.html` - a self-contained artifact with all JavaScript, CSS, and dependencies inlined. This file can be directly shared in Claude conversations as an artifact.
+This creates `bundle.html`, a self-contained artifact with all JavaScript, CSS, and dependencies inlined. Open it in a browser or attach the file to the VS Code Chat response.
 
 **Requirements**: Your project must have an `index.html` in the root directory.
 

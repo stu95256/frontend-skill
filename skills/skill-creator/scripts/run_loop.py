@@ -1,327 +1,233 @@
 #!/usr/bin/env python3
-"""Run the eval + improve loop until all pass or max iterations reached.
+"""Maintain a resumable VS Code Agent Skill evaluation loop.
 
-Combines run_eval.py and improve_description.py in a loop, tracking history
-and returning the best description found. Supports train/test split to prevent
-overfitting.
+Model calls are deliberately external: the VS Code Skill Creator coordinator
+invokes protected BYOK subagents and records their JSON. This script owns the
+train/holdout split, scoring state, history, and best-description selection.
 """
+
+from __future__ import annotations
 
 import argparse
 import json
 import random
 import sys
-import tempfile
-import time
-import webbrowser
 from pathlib import Path
 
-from scripts.generate_report import generate_html
-from scripts.improve_description import improve_description
-from scripts.run_eval import find_project_root, run_eval
-from scripts.utils import parse_skill_md
+try:
+    from .improve_description import build_improvement_prompt, parse_description
+    from .run_eval import score_observations
+    from .utils import parse_skill_md
+except ImportError:
+    from improve_description import build_improvement_prompt, parse_description
+    from run_eval import score_observations
+    from utils import parse_skill_md
 
 
-def split_eval_set(eval_set: list[dict], holdout: float, seed: int = 42) -> tuple[list[dict], list[dict]]:
-    """Split eval set into train and test sets, stratified by should_trigger."""
-    random.seed(seed)
-
-    # Separate by should_trigger
-    trigger = [e for e in eval_set if e["should_trigger"]]
-    no_trigger = [e for e in eval_set if not e["should_trigger"]]
-
-    # Shuffle each group
-    random.shuffle(trigger)
-    random.shuffle(no_trigger)
-
-    # Calculate split points
-    n_trigger_test = max(1, int(len(trigger) * holdout))
-    n_no_trigger_test = max(1, int(len(no_trigger) * holdout))
-
-    # Split
-    test_set = trigger[:n_trigger_test] + no_trigger[:n_no_trigger_test]
-    train_set = trigger[n_trigger_test:] + no_trigger[n_no_trigger_test:]
-
-    return train_set, test_set
+def read_json(path: Path):
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
-def run_loop(
-    eval_set: list[dict],
-    skill_path: Path,
-    description_override: str | None,
-    num_workers: int,
-    timeout: int,
-    max_iterations: int,
-    runs_per_query: int,
-    trigger_threshold: float,
-    holdout: float,
-    model: str,
-    verbose: bool,
-    live_report_path: Path | None = None,
-    log_dir: Path | None = None,
-) -> dict:
-    """Run the eval + improvement loop."""
-    project_root = find_project_root()
-    name, original_description, content = parse_skill_md(skill_path)
-    current_description = description_override or original_description
+def write_json(path: Path, data) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-    # Split into train/test if holdout > 0
-    if holdout > 0:
-        train_set, test_set = split_eval_set(eval_set, holdout)
-        if verbose:
-            print(f"Split: {len(train_set)} train, {len(test_set)} test (holdout={holdout})", file=sys.stderr)
-    else:
-        train_set = eval_set
-        test_set = []
 
-    history = []
-    exit_reason = "unknown"
+def stratified_split(eval_set: list[dict], holdout: float, seed: int) -> tuple[list[str], list[str]]:
+    rng = random.Random(seed)
+    groups = {
+        True: [item["query"] for item in eval_set if item["should_trigger"]],
+        False: [item["query"] for item in eval_set if not item["should_trigger"]],
+    }
+    train: list[str] = []
+    test: list[str] = []
+    for queries in groups.values():
+        rng.shuffle(queries)
+        count = int(len(queries) * holdout)
+        if holdout > 0 and len(queries) > 1:
+            count = max(1, min(count, len(queries) - 1))
+        elif len(queries) <= 1:
+            count = 0
+        test.extend(queries[:count])
+        train.extend(queries[count:])
+    return train, test
 
-    for iteration in range(1, max_iterations + 1):
-        if verbose:
-            print(f"\n{'='*60}", file=sys.stderr)
-            print(f"Iteration {iteration}/{max_iterations}", file=sys.stderr)
-            print(f"Description: {current_description}", file=sys.stderr)
-            print(f"{'='*60}", file=sys.stderr)
 
-        # Evaluate train + test together in one batch for parallelism
-        all_queries = train_set + test_set
-        t0 = time.time()
-        all_results = run_eval(
-            eval_set=all_queries,
-            skill_name=name,
-            description=current_description,
-            num_workers=num_workers,
-            timeout=timeout,
-            project_root=project_root,
-            runs_per_query=runs_per_query,
-            trigger_threshold=trigger_threshold,
-            model=model,
-        )
-        eval_elapsed = time.time() - t0
+def subset(state: dict, split: str) -> list[dict]:
+    selected = set(state[f"{split}_queries"])
+    return [item for item in state["eval_set"] if item["query"] in selected]
 
-        # Split results back into train/test by matching queries
-        train_queries_set = {q["query"] for q in train_set}
-        train_result_list = [r for r in all_results["results"] if r["query"] in train_queries_set]
-        test_result_list = [r for r in all_results["results"] if r["query"] not in train_queries_set]
 
-        train_passed = sum(1 for r in train_result_list if r["pass"])
-        train_total = len(train_result_list)
-        train_summary = {"passed": train_passed, "failed": train_total - train_passed, "total": train_total}
-        train_results = {"results": train_result_list, "summary": train_summary}
+def cmd_init(args) -> None:
+    eval_set = read_json(args.eval_set)
+    if not isinstance(eval_set, list) or not eval_set:
+        raise ValueError("eval set must be a non-empty JSON array")
+    for item in eval_set:
+        if not isinstance(item, dict) or not isinstance(item.get("query"), str) or not item["query"].strip():
+            raise ValueError("each eval item requires a non-empty string query")
+        if not isinstance(item.get("should_trigger"), bool):
+            raise ValueError("each eval item requires boolean should_trigger")
+    if len({item["query"] for item in eval_set}) != len(eval_set):
+        raise ValueError("eval queries must be unique")
+    name, description, _ = parse_skill_md(args.skill_path)
+    train, test = stratified_split(eval_set, args.holdout, args.seed)
+    state = {
+        "skill_name": name,
+        "skill_path": str(args.skill_path),
+        "original_description": description,
+        "current_description": description,
+        "iteration": 1,
+        "max_iterations": args.max_iterations,
+        "trigger_threshold": args.trigger_threshold,
+        "eval_set": eval_set,
+        "train_queries": train,
+        "test_queries": test,
+        "current_results": {},
+        "history": [],
+    }
+    write_json(args.state, state)
+    print(f"initialized {args.state}: train={len(train)} holdout={len(test)}")
 
-        if test_set:
-            test_passed = sum(1 for r in test_result_list if r["pass"])
-            test_total = len(test_result_list)
-            test_summary = {"passed": test_passed, "failed": test_total - test_passed, "total": test_total}
-            test_results = {"results": test_result_list, "summary": test_summary}
-        else:
-            test_results = None
-            test_summary = None
 
-        history.append({
-            "iteration": iteration,
-            "description": current_description,
-            "train_passed": train_summary["passed"],
-            "train_failed": train_summary["failed"],
-            "train_total": train_summary["total"],
-            "train_results": train_results["results"],
-            "test_passed": test_summary["passed"] if test_summary else None,
-            "test_failed": test_summary["failed"] if test_summary else None,
-            "test_total": test_summary["total"] if test_summary else None,
-            "test_results": test_results["results"] if test_results else None,
-            # For backward compat with report generator
-            "passed": train_summary["passed"],
-            "failed": train_summary["failed"],
-            "total": train_summary["total"],
-            "results": train_results["results"],
-        })
+def cmd_score(args) -> None:
+    state = read_json(args.state)
+    eval_subset = subset(state, args.split)
+    if not eval_subset:
+        raise ValueError(f"{args.split} split is empty")
+    result = score_observations(
+        eval_subset,
+        read_json(args.observations),
+        state["skill_name"],
+        state["current_description"],
+        state["trigger_threshold"],
+    )
+    state["current_results"][args.split] = result
+    write_json(args.state, state)
+    print(json.dumps(result, indent=2, ensure_ascii=False))
 
-        # Write live report if path provided
-        if live_report_path:
-            partial_output = {
-                "original_description": original_description,
-                "best_description": current_description,
-                "best_score": "in progress",
-                "iterations_run": len(history),
-                "holdout": holdout,
-                "train_size": len(train_set),
-                "test_size": len(test_set),
-                "history": history,
-            }
-            live_report_path.write_text(generate_html(partial_output, auto_refresh=True, skill_name=name))
 
-        if verbose:
-            def print_eval_stats(label, results, elapsed):
-                pos = [r for r in results if r["should_trigger"]]
-                neg = [r for r in results if not r["should_trigger"]]
-                tp = sum(r["triggers"] for r in pos)
-                pos_runs = sum(r["runs"] for r in pos)
-                fn = pos_runs - tp
-                fp = sum(r["triggers"] for r in neg)
-                neg_runs = sum(r["runs"] for r in neg)
-                tn = neg_runs - fp
-                total = tp + tn + fp + fn
-                precision = tp / (tp + fp) if (tp + fp) > 0 else 1.0
-                recall = tp / (tp + fn) if (tp + fn) > 0 else 1.0
-                accuracy = (tp + tn) / total if total > 0 else 0.0
-                print(f"{label}: {tp+tn}/{total} correct, precision={precision:.0%} recall={recall:.0%} accuracy={accuracy:.0%} ({elapsed:.1f}s)", file=sys.stderr)
-                for r in results:
-                    status = "PASS" if r["pass"] else "FAIL"
-                    rate_str = f"{r['triggers']}/{r['runs']}"
-                    print(f"  [{status}] rate={rate_str} expected={r['should_trigger']}: {r['query'][:60]}", file=sys.stderr)
+def cmd_prompt(args) -> None:
+    state = read_json(args.state)
+    train = state["current_results"].get("train")
+    if not train:
+        raise ValueError("score the train split before building an optimizer prompt")
+    _, _, content = parse_skill_md(Path(state["skill_path"]))
+    blinded_history = [
+        {key: value for key, value in record.items() if not key.startswith("test_")}
+        for record in state["history"]
+    ]
+    prompt = build_improvement_prompt(
+        state["skill_name"],
+        content,
+        state["current_description"],
+        train,
+        blinded_history,
+    )
+    args.output.write_text(prompt, encoding="utf-8")
+    print(args.output)
 
-            print_eval_stats("Train", train_results["results"], eval_elapsed)
-            if test_summary:
-                print_eval_stats("Test ", test_results["results"], 0)
 
-        if train_summary["failed"] == 0:
-            exit_reason = f"all_passed (iteration {iteration})"
-            if verbose:
-                print(f"\nAll train queries passed on iteration {iteration}!", file=sys.stderr)
-            break
-
-        if iteration == max_iterations:
-            exit_reason = f"max_iterations ({max_iterations})"
-            if verbose:
-                print(f"\nMax iterations reached ({max_iterations}).", file=sys.stderr)
-            break
-
-        # Improve the description based on train results
-        if verbose:
-            print(f"\nImproving description...", file=sys.stderr)
-
-        t0 = time.time()
-        # Strip test scores from history so improvement model can't see them
-        blinded_history = [
-            {k: v for k, v in h.items() if not k.startswith("test_")}
-            for h in history
-        ]
-        new_description = improve_description(
-            skill_name=name,
-            skill_content=content,
-            current_description=current_description,
-            eval_results=train_results,
-            history=blinded_history,
-            model=model,
-            log_dir=log_dir,
-            iteration=iteration,
-        )
-        improve_elapsed = time.time() - t0
-
-        if verbose:
-            print(f"Proposed ({improve_elapsed:.1f}s): {new_description}", file=sys.stderr)
-
-        current_description = new_description
-
-    # Find the best iteration by TEST score (or train if no test set)
-    if test_set:
-        best = max(history, key=lambda h: h["test_passed"] or 0)
-        best_score = f"{best['test_passed']}/{best['test_total']}"
-    else:
-        best = max(history, key=lambda h: h["train_passed"])
-        best_score = f"{best['train_passed']}/{best['train_total']}"
-
-    if verbose:
-        print(f"\nExit reason: {exit_reason}", file=sys.stderr)
-        print(f"Best score: {best_score} (iteration {best['iteration']})", file=sys.stderr)
-
+def current_record(state: dict) -> dict:
+    train = state["current_results"].get("train")
+    test = state["current_results"].get("test")
+    if not train:
+        raise ValueError("train results are missing")
     return {
-        "exit_reason": exit_reason,
-        "original_description": original_description,
-        "best_description": best["description"],
-        "best_score": best_score,
-        "best_train_score": f"{best['train_passed']}/{best['train_total']}",
-        "best_test_score": f"{best['test_passed']}/{best['test_total']}" if test_set else None,
-        "final_description": current_description,
-        "iterations_run": len(history),
-        "holdout": holdout,
-        "train_size": len(train_set),
-        "test_size": len(test_set),
-        "history": history,
+        "iteration": state["iteration"],
+        "description": state["current_description"],
+        "train_passed": train["summary"]["passed"],
+        "train_total": train["summary"]["total"],
+        "train_results": train["results"],
+        "test_passed": test["summary"]["passed"] if test else None,
+        "test_total": test["summary"]["total"] if test else None,
+        "test_results": test["results"] if test else None,
     }
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Run eval + improve loop")
-    parser.add_argument("--eval-set", required=True, help="Path to eval set JSON file")
-    parser.add_argument("--skill-path", required=True, help="Path to skill directory")
-    parser.add_argument("--description", default=None, help="Override starting description")
-    parser.add_argument("--num-workers", type=int, default=10, help="Number of parallel workers")
-    parser.add_argument("--timeout", type=int, default=30, help="Timeout per query in seconds")
-    parser.add_argument("--max-iterations", type=int, default=5, help="Max improvement iterations")
-    parser.add_argument("--runs-per-query", type=int, default=3, help="Number of runs per query")
-    parser.add_argument("--trigger-threshold", type=float, default=0.5, help="Trigger rate threshold")
-    parser.add_argument("--holdout", type=float, default=0.4, help="Fraction of eval set to hold out for testing (0 to disable)")
-    parser.add_argument("--model", required=True, help="Model for improvement")
-    parser.add_argument("--verbose", action="store_true", help="Print progress to stderr")
-    parser.add_argument("--report", default="auto", help="Generate HTML report at this path (default: 'auto' for temp file, 'none' to disable)")
-    parser.add_argument("--results-dir", default=None, help="Save all outputs (results.json, report.html, log.txt) to a timestamped subdirectory here")
-    args = parser.parse_args()
+def cmd_apply(args) -> None:
+    state = read_json(args.state)
+    if state["iteration"] >= state["max_iterations"]:
+        raise ValueError("maximum iterations reached")
+    if state.get("test_queries") and "test" not in state.get("current_results", {}):
+        raise ValueError("score the holdout split before advancing the iteration")
+    description = parse_description(args.response.read_text(encoding="utf-8"))
+    state["history"].append(current_record(state))
+    state["current_description"] = description
+    state["iteration"] += 1
+    state["current_results"] = {}
+    write_json(args.state, state)
+    print(description)
 
-    eval_set = json.loads(Path(args.eval_set).read_text())
-    skill_path = Path(args.skill_path)
 
-    if not (skill_path / "SKILL.md").exists():
-        print(f"Error: No SKILL.md found at {skill_path}", file=sys.stderr)
-        sys.exit(1)
+def cmd_best(args) -> None:
+    state = read_json(args.state)
+    records = list(state["history"])
+    if state.get("current_results", {}).get("train"):
+        records.append(current_record(state))
+    if not records:
+        print(state["current_description"])
+        return
 
-    name, _, _ = parse_skill_md(skill_path)
-
-    # Set up live report path
-    if args.report != "none":
-        if args.report == "auto":
-            timestamp = time.strftime("%Y%m%d_%H%M%S")
-            live_report_path = Path(tempfile.gettempdir()) / f"skill_description_report_{skill_path.name}_{timestamp}.html"
+    def score(item: dict) -> tuple[float, float]:
+        if item.get("test_total"):
+            primary = item["test_passed"] / item["test_total"]
         else:
-            live_report_path = Path(args.report)
-        # Open the report immediately so the user can watch
-        live_report_path.write_text("<html><body><h1>Starting optimization loop...</h1><meta http-equiv='refresh' content='5'></body></html>")
-        webbrowser.open(str(live_report_path))
-    else:
-        live_report_path = None
+            primary = item["train_passed"] / item["train_total"]
+        secondary = item["train_passed"] / item["train_total"]
+        return primary, secondary
 
-    # Determine output directory (create before run_loop so logs can be written)
-    if args.results_dir:
-        timestamp = time.strftime("%Y-%m-%d_%H%M%S")
-        results_dir = Path(args.results_dir) / timestamp
-        results_dir.mkdir(parents=True, exist_ok=True)
-    else:
-        results_dir = None
+    best = max(records, key=score)
+    print(best["description"])
 
-    log_dir = results_dir / "logs" if results_dir else None
 
-    output = run_loop(
-        eval_set=eval_set,
-        skill_path=skill_path,
-        description_override=args.description,
-        num_workers=args.num_workers,
-        timeout=args.timeout,
-        max_iterations=args.max_iterations,
-        runs_per_query=args.runs_per_query,
-        trigger_threshold=args.trigger_threshold,
-        holdout=args.holdout,
-        model=args.model,
-        verbose=args.verbose,
-        live_report_path=live_report_path,
-        log_dir=log_dir,
-    )
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description=__doc__)
+    sub = parser.add_subparsers(dest="command", required=True)
 
-    # Save JSON output
-    json_output = json.dumps(output, indent=2)
-    print(json_output)
-    if results_dir:
-        (results_dir / "results.json").write_text(json_output)
+    init = sub.add_parser("init")
+    init.add_argument("--eval-set", required=True, type=Path)
+    init.add_argument("--skill-path", required=True, type=Path)
+    init.add_argument("--state", required=True, type=Path)
+    init.add_argument("--holdout", type=float, default=0.4)
+    init.add_argument("--seed", type=int, default=42)
+    init.add_argument("--max-iterations", type=int, default=5)
+    init.add_argument("--trigger-threshold", type=float, default=0.5)
+    init.set_defaults(func=cmd_init)
 
-    # Write final HTML report (without auto-refresh)
-    if live_report_path:
-        live_report_path.write_text(generate_html(output, auto_refresh=False, skill_name=name))
-        print(f"\nReport: {live_report_path}", file=sys.stderr)
+    score = sub.add_parser("score")
+    score.add_argument("--state", required=True, type=Path)
+    score.add_argument("--split", required=True, choices=["train", "test"])
+    score.add_argument("--observations", required=True, type=Path)
+    score.set_defaults(func=cmd_score)
 
-    if results_dir and live_report_path:
-        (results_dir / "report.html").write_text(generate_html(output, auto_refresh=False, skill_name=name))
+    prompt = sub.add_parser("prompt")
+    prompt.add_argument("--state", required=True, type=Path)
+    prompt.add_argument("--output", required=True, type=Path)
+    prompt.set_defaults(func=cmd_prompt)
 
-    if results_dir:
-        print(f"Results saved to: {results_dir}", file=sys.stderr)
+    apply = sub.add_parser("apply")
+    apply.add_argument("--state", required=True, type=Path)
+    apply.add_argument("--response", required=True, type=Path)
+    apply.set_defaults(func=cmd_apply)
+
+    best = sub.add_parser("best")
+    best.add_argument("--state", required=True, type=Path)
+    best.set_defaults(func=cmd_best)
+    return parser
+
+
+def main() -> None:
+    parser = build_parser()
+    args = parser.parse_args()
+    try:
+        if hasattr(args, "holdout") and not 0 <= args.holdout < 1:
+            parser.error("--holdout must be in [0, 1)")
+        if hasattr(args, "trigger_threshold") and not 0 <= args.trigger_threshold <= 1:
+            parser.error("--trigger-threshold must be in [0, 1]")
+        args.func(args)
+    except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        raise SystemExit(2) from exc
 
 
 if __name__ == "__main__":

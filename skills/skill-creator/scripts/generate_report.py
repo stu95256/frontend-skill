@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Generate an HTML report from run_loop.py output.
+"""Generate an HTML report from Agent Skill evaluation JSON.
 
-Takes the JSON output from run_loop.py and generates a visual HTML report
+Takes evaluation JSON and generates a visual HTML report
 showing each description attempt with check/x for each test case.
 Distinguishes between train and test queries.
 """
@@ -148,7 +148,7 @@ def generate_html(data: dict, auto_refresh: bool = False, skill_name: str = "") 
 <body>
     <h1>""" + title_prefix + """Skill Description Optimization</h1>
     <div class="explainer">
-        <strong>Optimizing your skill's description.</strong> This page updates automatically as Claude tests different versions of your skill's description. Each row is an iteration — a new description attempt. The columns show test queries: green checkmarks mean the skill triggered correctly (or correctly didn't trigger), red crosses mean it got it wrong. The "Train" score shows performance on queries used to improve the description; the "Test" score shows performance on held-out queries the optimizer hasn't seen. When it's done, Claude will apply the best-performing description to your skill.
+        <strong>Optimizing your skill's description.</strong> This page records how VS Code Chat evaluated different versions of the skill description. Each row is an iteration — a new description attempt. The columns show test queries: green checkmarks mean the skill triggered correctly (or correctly did not trigger), red crosses mean it got the decision wrong. The "Train" score shows performance on queries used to improve the description; the "Test" score shows performance on held-out queries the optimizer never saw.
     </div>
 """]
 
@@ -301,9 +301,68 @@ def generate_html(data: dict, auto_refresh: bool = False, skill_name: str = "") 
     return "".join(html_parts)
 
 
+def normalize_loop_state(data: dict) -> dict:
+    """Convert the resumable VS Code loop state into report-generator input."""
+    if "current_description" not in data:
+        return data
+
+    history = list(data.get("history", []))
+    current = data.get("current_results", {})
+    train = current.get("train")
+    test = current.get("test")
+    if train:
+        history.append(
+            {
+                "iteration": data.get("iteration"),
+                "description": data.get("current_description", ""),
+                "train_passed": train["summary"]["passed"],
+                "train_total": train["summary"]["total"],
+                "train_results": train["results"],
+                "test_passed": test["summary"]["passed"] if test else None,
+                "test_total": test["summary"]["total"] if test else None,
+                "test_results": test["results"] if test else None,
+            }
+        )
+
+    def score(item: dict) -> tuple[float, float]:
+        test_total = item.get("test_total") or 0
+        train_total = item.get("train_total") or 0
+        primary = item.get("test_passed", 0) / test_total if test_total else 0
+        secondary = item.get("train_passed", 0) / train_total if train_total else 0
+        return (primary if test_total else secondary, secondary)
+
+    best = max(history, key=score) if history else None
+    test_size = len(data.get("test_queries", []))
+    total_size = test_size + len(data.get("train_queries", []))
+    return {
+        "original_description": data.get("original_description", ""),
+        "best_description": best["description"] if best else data.get("current_description", ""),
+        "best_score": (
+            f"{best['test_passed']}/{best['test_total']}"
+            if best and best.get("test_total")
+            else f"{best['train_passed']}/{best['train_total']}"
+            if best
+            else "not scored"
+        ),
+        "best_train_score": (
+            f"{best['train_passed']}/{best['train_total']}" if best else None
+        ),
+        "best_test_score": (
+            f"{best['test_passed']}/{best['test_total']}"
+            if best and best.get("test_total")
+            else None
+        ),
+        "iterations_run": len(history),
+        "train_size": len(data.get("train_queries", [])),
+        "test_size": test_size,
+        "holdout": test_size / total_size if total_size else 0,
+        "history": history,
+    }
+
+
 def main():
-    parser = argparse.ArgumentParser(description="Generate HTML report from run_loop output")
-    parser.add_argument("input", help="Path to JSON output from run_loop.py (or - for stdin)")
+    parser = argparse.ArgumentParser(description="Generate an HTML report from Agent Skill evaluation JSON")
+    parser.add_argument("input", help="Path to evaluation JSON (or - for stdin)")
     parser.add_argument("-o", "--output", default=None, help="Output HTML file (default: stdout)")
     parser.add_argument("--skill-name", default="", help="Skill name to include in the report title")
     args = parser.parse_args()
@@ -313,7 +372,7 @@ def main():
     else:
         data = json.loads(Path(args.input).read_text())
 
-    html_output = generate_html(data, skill_name=args.skill_name)
+    html_output = generate_html(normalize_loop_state(data), skill_name=args.skill_name)
 
     if args.output:
         Path(args.output).write_text(html_output)

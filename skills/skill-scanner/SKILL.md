@@ -4,7 +4,7 @@ description: Scan agent skills for security issues. Use when asked to "scan a sk
   "audit a skill", "review skill security", "check skill for injection", "validate SKILL.md",
   or assess whether an agent skill is safe to install. Checks for prompt injection,
   malicious scripts, excessive permissions, secret exposure, and supply chain risks.
-allowed-tools: Read, Grep, Glob, Bash
+
 ---
 
 # Skill Security Scanner
@@ -34,7 +34,7 @@ Returns JSON with findings, URLs, structure info, and severity counts. The scrip
 Determine the scan target:
 
 - If the user provides a skill directory path, use it directly
-- If the user names a skill, look for it under `.agents/skills/<name>/` first, then other established layouts such as `skills/<name>/` when the repo uses a canonical root skill tree, `.claude/skills/<name>/`, `plugins/*/skills/<name>/`, or another repo-managed skill root with clear prior art
+- If the user names a personal VS Code skill, look under `~/.copilot/skills/<name>/`. For repository skills, check `.github/skills/<name>/`, then compatibility or source layouts such as `.agents/skills/<name>/`, `.claude/skills/<name>/`, `skills/<name>/`, and `plugins/*/skills/<name>/`.
 - If the user says "scan all skills", discover all `*/SKILL.md` files and scan each
 
 Validate the target contains a `SKILL.md` file. List the skill structure:
@@ -55,7 +55,7 @@ uv run scripts/scan_skill.py <skill-directory>
 
 Parse the JSON output. The script produces findings with severity levels, URL analysis, and structure information. Use these as leads for deeper analysis.
 
-**Fallback**: If the script fails, proceed with manual analysis using Grep patterns from the reference files.
+**Fallback**: If the script fails, proceed with manual analysis using VS Code's search tools and the patterns from the reference files.
 
 ### Phase 3: Frontmatter Validation
 
@@ -88,9 +88,9 @@ This phase is agent-only — no pattern matching. Read the full SKILL.md instruc
 - A skill described as "code formatter" that instructs the agent to read ~/.ssh is misaligned
 
 **Config/memory poisoning**:
-- Instructions to modify `CLAUDE.md`, `MEMORY.md`, `settings.json`, `.mcp.json`, or hook configurations
+- Instructions to modify `copilot-instructions.md`, instruction files, `CLAUDE.md`, `MEMORY.md`, `settings.json`, `.mcp.json`, or hook configurations
 - Instructions to add itself to allowlists or auto-approve permissions
-- Writing to `~/.claude/`, `~/.agents/`, or any agent configuration directory
+- Writing to `~/.copilot/`, `~/.claude/`, `~/.agents/`, or any agent configuration directory
 - Scripts that append to global config files — the poisoned instructions persist after skill removal
 
 **Scope creep**:
@@ -149,10 +149,10 @@ Evaluate:
 - **Tool justification**: Does the skill body reference operations that require each tool?
 - **Risk level**: Rate the overall permission profile using the tier system from the reference
 
-Example assessments:
-- `Read Grep Glob` — Low risk, read-only analysis skill
-- `Read Grep Glob Bash` — Medium risk, needs Bash justification (e.g., running bundled scripts)
-- `Read Grep Glob Bash Write Edit WebFetch Task` — High risk, near-full access
+Example assessments for VS Code custom-agent tool sets:
+- `read search` — Low risk, read-only analysis agent
+- `read search execute` — Medium risk; `execute` needs a concrete command justification
+- `agent read search edit execute web` — High risk, broad workspace and delegation access
 
 ## Confidence Levels
 

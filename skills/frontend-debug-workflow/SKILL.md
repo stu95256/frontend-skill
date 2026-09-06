@@ -5,56 +5,13 @@ description: Use when the user gives frontend code paths plus a bug, runtime sym
   usage, gathers evidence, forms a root-cause hypothesis, selects exact local frontend skills, applies a minimal fix, verifies
   it, and reports a replayable debug record.
 license: MIT
-metadata:
-  hermes:
-    version: 1.1.0
-    author: Hermes Agent
-    tags:
-    - frontend
-    - debugging
-    - root-cause
-    - workflow
-    - react
-    - typescript
-    - browser
-    - verification
-    - kilo
-    related_skills:
-    - systematic-debugging
-    - incremental-implementation
-    - verification-before-completion
-    - source-driven-development
-    - react-dev
-    - react-doctor
-    - react-useeffect
-    - react-state-management
-    - typescript-advanced-types
-    - typescript-code-reviewer
-    - react-router
-    - ant-design
-    - antd
-    - ag-dev
-    - ag-update
-    - react-hook-form-zod
-    - internationalization-i18n
-    - tailwind-design-system
-    - shadcn
-    - responsive-design
-    - accessibility-compliance
-    - accessibility
-    - playwright-cli
-    - browser-testing-with-devtools
-    - webapp-testing
-    - playwright-best-practices
-    - performance-optimization
-    - vercel-react-best-practices
-    - security-and-hardening
-    - secpriv-code-review
 ---
 
 # Frontend Debug Workflow
 
 Use this skill when the user provides one or more frontend code locations and a problem, then asks you to debug and fix their code.
+
+Preferred VS Code entry point: select the **Frontend Debug** custom agent. It owns the `agent` tool and an explicit worker allowlist. If this skill loads in another top-level agent, use `#tool:agent/runSubagent` with the hidden frontend workers when available, or anonymous subagents with complete task packets.
 
 ## Core contract
 
@@ -62,7 +19,7 @@ Use this skill when the user provides one or more frontend code locations and a 
 2. Read the specified files and nearby usage before fixing.
 3. Gather evidence: error messages, reproduction, stack trace, browser console/network/DOM, tests, typecheck, git diff, or source lines.
 4. Trace data/control/render flow until you can explain why the problem happens.
-5. Select exact local skills from `skills/<skill-name>/SKILL.md` based on the root cause area.
+5. Select exact personal skills from `~/.copilot/skills/<skill-name>/SKILL.md` based on the root cause area.
 6. Write a minimal fix plan before edits.
 7. Fix the root cause, not only the symptom.
 8. Verify with commands or browser/manual reproduction that match the original problem.
@@ -159,7 +116,7 @@ Always include `systematic-debugging` conceptually for bugs. Add exact local ski
 
 Browser fallback rule: use `playwright-cli` first for repeatable browser interaction. If the CLI cannot start, browser installation is blocked, or the target remains inaccessible, fall back to `browser-testing-with-devtools`. Record the failure reason, URL, fallback used, and DOM/screenshot/console/network evidence; never claim behavior that was not observed.
 
-Do not cite a skill unless `skills/<skill-name>/SKILL.md` exists.
+Do not cite a skill unless `~/.copilot/skills/<skill-name>/SKILL.md` exists or Copilot diagnostics resolves it from another supported location.
 
 ### 5. Minimal fix plan
 

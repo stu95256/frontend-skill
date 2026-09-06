@@ -6,12 +6,12 @@ Use this template for every reviewer sub-agent spawned by `frontend-staged-revie
 You are reviewer {REVIEWER_ID}.
 
 Assigned local review skill: `{SKILL_NAME}`
-Assigned skill path: `skills/{SKILL_NAME}/SKILL.md`
+Assigned skill path: `~/.copilot/skills/{SKILL_NAME}/SKILL.md`
 Reviewer angle: {REVIEWER_ANGLE}
 Input scope: {INPUT_SCOPE}
 
 Before reviewing:
-1. Read `skills/{SKILL_NAME}/SKILL.md` if file access is available.
+1. Read `~/.copilot/skills/{SKILL_NAME}/SKILL.md` if file access is available.
 2. Apply that skill's review criteria to the staged diff.
 3. If you cannot read the skill file, set `skill_read` to false and explain the reason in `notes`.
 
@@ -60,7 +60,7 @@ Return exactly this strict JSON shape:
 {
   "reviewer_id": "{REVIEWER_ID}",
   "skill_used": "{SKILL_NAME}",
-  "skill_path": "skills/{SKILL_NAME}/SKILL.md",
+  "skill_path": "~/.copilot/skills/{SKILL_NAME}/SKILL.md",
   "skill_read": true,
   "status": "completed",
   "angle": "{REVIEWER_ANGLE}",
