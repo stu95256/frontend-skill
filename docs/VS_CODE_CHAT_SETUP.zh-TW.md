@@ -97,5 +97,5 @@ Coordinator 的正文以 `#tool:agent/runSubagent` 明確要求工具呼叫。`a
 - [Agent Skills](https://code.visualstudio.com/docs/agent-customization/agent-skills)
 - [Custom agents](https://code.visualstudio.com/docs/agent-customization/custom-agents)
 - [Subagents](https://code.visualstudio.com/docs/agents/run/subagents)
-- [Custom instructions](https://code.visualstudio.com/docs/agent-customization/instructions)
+- [Custom instructions](https://code.visualstudio.com/docs/agent-customization/custom-instructions)
 - [Language models / BYOK](https://code.visualstudio.com/docs/agent-customization/language-models)

@@ -74,6 +74,14 @@ bash scripts/install-vscode-chat.sh
 
 The installer merges `skills/`, `agents/`, and `instructions/` into `~/.copilot` without deleting unrelated personal customizations or changing VS Code/BYOK settings. See the [Ubuntu setup and diagnostics guide](./docs/VS_CODE_CHAT_SETUP.zh-TW.md).
 
+To move the catalog into a VM as one file, build the portable archive:
+
+```bash
+bash scripts/build-vscode-chat-bundle.sh
+```
+
+Copy `dist/frontend-skill-vscode-chat-bundle.tar.gz` to the Ubuntu VM, extract it, and run the bundled installer. See the [VM copy-and-install guide](./docs/VM_COPY_GUIDE.zh-TW.md) for Git, `scp`, shared-folder, and direct-copy options.
+
 Repository folders are canonical source only; VS Code does not discover this root layout automatically. Install it under `~/.copilot`, reload VS Code, then use **Chat: Open Customizations** and Chat Diagnostics to verify discovery.
 
 ## Repository documents
@@ -82,6 +90,7 @@ Repository folders are canonical source only; VS Code does not discover this roo
 - [Per-skill manifest](./skills/SKILLS_MANIFEST.md)
 - [Validation report](./skills/VALIDATION_REPORT.md)
 - [Ubuntu VS Code Chat setup](./docs/VS_CODE_CHAT_SETUP.zh-TW.md)
+- [Ubuntu VM copy-and-install guide](./docs/VM_COPY_GUIDE.zh-TW.md)
 - [Frontend task preflight workflow](./skills/frontend-task-preflight/references/FRONTEND_TASK_PREFLIGHT_WORKFLOW.md)
 - [Branch review workflow](./skills/frontend-branch-review-workflow/references/FRONTEND_BRANCH_REVIEW_WORKFLOW.md)
 - [Debug workflow](./skills/frontend-debug-workflow/references/FRONTEND_DEBUG_WORKFLOW.md)
