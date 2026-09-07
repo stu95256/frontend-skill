@@ -12,7 +12,7 @@ license: MIT
 
 This workflow reviews only the code that is already staged with `git add`. It is designed for frontend projects where the user wants real independent reviewer sub-agents to inspect the same staged diff, while the user receives a concise findings-only report.
 
-Preferred VS Code entry point: select the **Frontend Staged Review** custom agent. If this skill is invoked directly in another top-level agent, use `#tool:agent/runSubagent`; invoke the hidden `Frontend Reviewer` workers when installed or anonymous reviewer subagents with the complete bundled prompt. Do not simulate reviewer seats inline.
+Preferred VS Code entry point: select the **Frontend Review** custom agent and request staged mode. If this skill is invoked directly in another top-level agent, use `#tool:agent/runSubagent`; invoke the hidden `Frontend Reviewer` workers when installed or anonymous reviewer subagents with the complete bundled prompt. Do not simulate reviewer seats inline.
 
 Core contract:
 

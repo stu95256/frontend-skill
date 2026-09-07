@@ -35,6 +35,7 @@ for path in \
   scripts/validate_skill_catalog.py \
   tests/test_vscode_conversion.py \
   requirements-dev.txt \
+  docs/AGENT_USAGE_GUIDE.zh-TW.md \
   docs/VM_COPY_GUIDE.zh-TW.md \
   docs/VS_CODE_CHAT_SETUP.zh-TW.md; do
   [[ -e "${repo_root}/${path}" ]] || {
@@ -59,6 +60,7 @@ cp "${repo_root}/scripts/install-vscode-chat.sh" "${bundle_root}/scripts/"
 cp "${repo_root}/scripts/validate_skill_catalog.py" "${bundle_root}/scripts/"
 cp "${repo_root}/tests/test_vscode_conversion.py" "${bundle_root}/tests/"
 cp "${repo_root}/requirements-dev.txt" "${bundle_root}/"
+cp "${repo_root}/docs/AGENT_USAGE_GUIDE.zh-TW.md" "${bundle_root}/docs/"
 cp "${repo_root}/docs/VM_COPY_GUIDE.zh-TW.md" "${bundle_root}/docs/"
 cp "${repo_root}/docs/VS_CODE_CHAT_SETUP.zh-TW.md" "${bundle_root}/docs/"
 

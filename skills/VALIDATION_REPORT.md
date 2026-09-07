@@ -9,9 +9,9 @@ Generated: 2026-09-06
 Validated repository state:
 
 - 67 Agent Skills under `skills/*/SKILL.md`
-- 17 custom agents under `agents/*.agent.md`
+- 14 custom agents under `agents/*.agent.md`
 - 2 personal instruction files under `instructions/*.instructions.md`
-- 8 user-facing workflow agents and 9 protected worker agents
+- 5 user-facing agents and 9 hidden worker agents
 - no legacy runtime tree, legacy tool identifiers, or `.workflow.md` files
 
 ## Executed checks
@@ -25,7 +25,7 @@ python scripts/validate_skill_catalog.py
 Observed result:
 
 ```text
-VS Code Chat catalog validation passed: 67 skills, 17 custom agents, 2 instruction files, no legacy runtime artifacts
+VS Code Chat catalog validation passed: 67 skills, 14 custom agents, 2 instruction files, no legacy runtime artifacts
 ```
 
 The validator checks Skill names/frontmatter, flat metadata, manifest parity, custom-agent names/tool sets/allowlists/handoffs, worker protection, relative links, instruction frontmatter, expected workflow mappings, and legacy runtime markers.
@@ -61,18 +61,18 @@ python -m unittest -v tests/test_vscode_conversion.py
 Observed result:
 
 ```text
-Ran 4 tests
+Ran 5 tests
 OK
 ```
 
-The suite covers catalog validation, exact installer counts, tracked and untracked SDD review packages, and Skill Creator train/holdout isolation plus report generation.
+The suite covers catalog validation, exact installer counts, five ordered staged-commit candidates, tracked and untracked SDD review packages, and Skill Creator train/holdout isolation plus report generation.
 
 ### Installer smoke test
 
 Installed into a temporary target and counted the copied runtime assets:
 
 ```text
-installed skills=67 agents=17 instructions=2
+installed skills=67 agents=14 instructions=2
 ```
 
 The temporary target was removed after verification.
@@ -103,7 +103,7 @@ The Skill Creator's resumable train/holdout lifecycle was exercised through `ini
 
 Rechecked against the current VS Code Subagents and Custom Agents documentation:
 
-- seven coordinator agents declare `tools: [agent, ...]`, use exact `agents` allowlists, and reference `#tool:agent/runSubagent` in their bodies;
+- five coordinator agents declare `tools: [agent, ...]`, use exact `agents` allowlists, and reference `#tool:agent/runSubagent` in their bodies;
 - nine workers use `user-invocable: false`, leave model invocation enabled, have no `agent` tool, and cannot create nested subagents;
 - all allowlisted names resolve case-sensitively to installed `.agent.md` definitions;
 - worker calls are one-shot and stateless; retry/fix instructions require a fresh invocation with the complete packet;
@@ -121,7 +121,7 @@ This repository was converted and mechanically exercised on the available Window
 1. Run **Chat: Open Customizations**.
 2. Inspect Chat Diagnostics.
 3. Select **Frontend Task Preflight** and verify its handoff.
-4. Stage a small test diff and select **Frontend Staged Review**.
+4. Stage a small test diff, select **Frontend Review**, and request staged mode.
 5. Confirm that at least two independent `Frontend Reviewer` subagent calls appear.
 
 See [`../docs/VS_CODE_CHAT_SETUP.zh-TW.md`](../docs/VS_CODE_CHAT_SETUP.zh-TW.md).

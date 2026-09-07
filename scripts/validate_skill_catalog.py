@@ -11,8 +11,9 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILLS = ROOT / "skills"
 AGENTS = ROOT / "agents"
 INSTRUCTIONS = ROOT / "instructions"
+AGENT_USAGE_GUIDE = ROOT / "docs" / "AGENT_USAGE_GUIDE.zh-TW.md"
 EXPECTED_SKILL_COUNT = 67
-EXPECTED_AGENT_COUNT = 17
+EXPECTED_AGENT_COUNT = 14
 EXPECTED_INSTRUCTION_COUNT = 2
 
 REQUIRED_WORKFLOW_SKILLS = {
@@ -28,10 +29,7 @@ REQUIRED_COORDINATORS = {
     "Frontend Task Preflight",
     "Frontend Implementation",
     "Frontend Debug",
-    "Frontend Staged Review",
-    "Frontend Heavy Staged Review",
-    "Frontend Branch Review",
-    "Frontend Staged Commit Message",
+    "Frontend Review",
     "VS Code Skill Creator",
 }
 
@@ -339,6 +337,18 @@ def validate_instructions(errors: list[str]) -> None:
             errors.append(f"{path.relative_to(ROOT)}: unsupported frontmatter keys {unexpected}")
 
 
+def validate_agent_usage_guide(errors: list[str]) -> None:
+    if not AGENT_USAGE_GUIDE.is_file():
+        errors.append(f"missing required path: {AGENT_USAGE_GUIDE.relative_to(ROOT)}")
+        return
+    text = AGENT_USAGE_GUIDE.read_text(encoding="utf-8-sig")
+    for name in sorted(REQUIRED_COORDINATORS):
+        if f"## {name}\n" not in text:
+            errors.append(f"{AGENT_USAGE_GUIDE.relative_to(ROOT)}: missing usage section for {name}")
+    if "/frontend-staged-commit-message" not in text:
+        errors.append(f"{AGENT_USAGE_GUIDE.relative_to(ROOT)}: missing staged commit Skill usage")
+
+
 def main() -> int:
     errors: list[str] = []
     if (ROOT / ".kilo").exists():
@@ -351,6 +361,7 @@ def main() -> int:
     agent_names = validate_agents(errors) if AGENTS.is_dir() else set()
     if INSTRUCTIONS.is_dir():
         validate_instructions(errors)
+    validate_agent_usage_guide(errors)
     for runtime_root in (SKILLS, AGENTS, INSTRUCTIONS):
         if runtime_root.is_dir():
             validate_runtime_terms(runtime_root, errors)

@@ -20,7 +20,7 @@ def run(*args: str, cwd: Path = ROOT) -> subprocess.CompletedProcess[str]:
 class VSCodeConversionTests(unittest.TestCase):
     def test_catalog_validator(self) -> None:
         result = run(sys.executable, "scripts/validate_skill_catalog.py")
-        self.assertIn("67 skills, 17 custom agents, 2 instruction files", result.stdout)
+        self.assertIn("67 skills, 14 custom agents, 2 instruction files", result.stdout)
 
     @unittest.skipUnless(shutil.which("bash"), "bash is required")
     def test_installer_copies_exact_runtime_counts(self) -> None:
@@ -30,7 +30,18 @@ class VSCodeConversionTests(unittest.TestCase):
             skills = sum((path / "SKILL.md").is_file() for path in (target / "skills").iterdir() if path.is_dir())
             agents = len(list((target / "agents").glob("*.agent.md")))
             instructions = len(list((target / "instructions").glob("*.instructions.md")))
-            self.assertEqual((67, 17, 2), (skills, agents, instructions))
+            self.assertEqual((67, 14, 2), (skills, agents, instructions))
+
+    def test_staged_commit_message_returns_ordered_candidates(self) -> None:
+        text = (ROOT / "skills" / "frontend-staged-commit-message" / "SKILL.md").read_text(encoding="utf-8")
+        for required in (
+            "Output at least five English candidates by default",
+            "Keep every candidate to one line and order them from simple to detailed",
+            "1. **Simple**",
+            "5. **Most detailed**",
+        ):
+            self.assertIn(required, text)
+        self.assertNotIn("Output exactly one English line", text)
 
     def test_skill_creator_resumable_loop_and_holdout_blinding(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

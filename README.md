@@ -5,7 +5,7 @@ A curated VS Code Chat / GitHub Copilot BYOK customization catalog for React and
 ## Catalog at a glance
 
 - **67** Agent Skills under `skills/`
-- **17** custom agents under `agents/`: eight user-facing workflow agents and nine hidden subagent workers
+- **14** custom agents under `agents/`: five user-facing agents and nine hidden subagent workers
 - **2** cross-project instruction files under `instructions/`
 - Upstream source, pinned commit, path, and license tracked in [`skills/SKILLS_MANIFEST.md`](./skills/SKILLS_MANIFEST.md)
 - Update families and safe migration procedure tracked in [`SKILL_SOURCES.md`](./SKILL_SOURCES.md)
@@ -35,9 +35,9 @@ These workflows combine an Agent Skill for reusable policy with a VS Code custom
 - [`frontend-staged-review-workflow`](./skills/frontend-staged-review-workflow/) — reviews `git diff --cached` only, dispatches at least two real sub-agents per selected skill, and excludes unit-test-only suggestions.
 - [`frontend-branch-review-workflow`](./skills/frontend-branch-review-workflow/) — pins source, target, and merge-base SHAs and reviews only committed merge-base-to-source changes.
 - [`frontend-debug-workflow`](./skills/frontend-debug-workflow/) — evidence-first root-cause workflow with stack-aware skill routing and explicit verification.
-- [`frontend-staged-commit-message`](./skills/frontend-staged-commit-message/) — reads only staged changes and returns one concise English commit subject without staging, editing, committing, or pushing.
+- [`frontend-staged-commit-message`](./skills/frontend-staged-commit-message/) — reads only staged changes and returns at least five one-line English subjects ordered from simple to detailed, without staging, editing, committing, or pushing.
 - [`frontend-task-preflight`](./skills/frontend-task-preflight/) + **Frontend Task Preflight** — read-only research and an implementation-plan handoff.
-- [`frontend-heavy-staged-review-workflow`](./skills/frontend-heavy-staged-review-workflow/) + **Frontend Heavy Staged Review** — five independent reviewer seats per selected skill plus validator subagents.
+- [`frontend-staged-review-workflow`](./skills/frontend-staged-review-workflow/), [`frontend-heavy-staged-review-workflow`](./skills/frontend-heavy-staged-review-workflow/), and [`frontend-branch-review-workflow`](./skills/frontend-branch-review-workflow/) share the **Frontend Review** coordinator while retaining separate scope and quorum policies.
 
 All coordinator and worker definitions live in [`agents/`](./agents/). Worker agents are hidden from the picker and explicitly allowlisted by coordinators. Subagent invocations are treated as stateless; retries receive a complete task packet instead of relying on follow-up messages.
 
@@ -91,6 +91,7 @@ Repository folders are canonical source only; VS Code does not discover this roo
 - [Validation report](./skills/VALIDATION_REPORT.md)
 - [Ubuntu VS Code Chat setup](./docs/VS_CODE_CHAT_SETUP.zh-TW.md)
 - [Ubuntu VM copy-and-install guide](./docs/VM_COPY_GUIDE.zh-TW.md)
+- [Custom Agents 中文使用與輸入格式](./docs/AGENT_USAGE_GUIDE.zh-TW.md)
 - [Frontend task preflight workflow](./skills/frontend-task-preflight/references/FRONTEND_TASK_PREFLIGHT_WORKFLOW.md)
 - [Branch review workflow](./skills/frontend-branch-review-workflow/references/FRONTEND_BRANCH_REVIEW_WORKFLOW.md)
 - [Debug workflow](./skills/frontend-debug-workflow/references/FRONTEND_DEBUG_WORKFLOW.md)

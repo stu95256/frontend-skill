@@ -11,7 +11,7 @@ license: MIT
 
 Use this skill when the user wants a heavier version of the frontend staged review workflow with many real independent reviewer sub-agents, replacement reviewers, quorum rules, and aggregation validators.
 
-Preferred VS Code entry point: select the **Frontend Heavy Staged Review** custom agent. If this skill is invoked directly in another top-level agent, use `#tool:agent/runSubagent`; invoke the hidden reviewer/validator workers when installed or anonymous subagents with the complete bundled prompt.
+Preferred VS Code entry point: select the **Frontend Review** custom agent and request heavy staged mode. If this skill is invoked directly in another top-level agent, use `#tool:agent/runSubagent`; invoke the hidden reviewer/validator workers when installed or anonymous subagents with the complete bundled prompt.
 
 ## Core contract
 
@@ -154,4 +154,4 @@ Read the full workflow for detailed matrices, schemas, failover rules, aggregati
 
 `references/FRONTEND_HEAVY_STAGED_REVIEW_WORKFLOW.md`
 
-For the guided VS Code Chat experience, select the **Frontend Heavy Staged Review** custom agent from `~/.copilot/agents/frontend-heavy-staged-review.agent.md`.
+For the guided VS Code Chat experience, select the **Frontend Review** custom agent from `~/.copilot/agents/frontend-review.agent.md` and request heavy staged mode.

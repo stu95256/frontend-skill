@@ -358,4 +358,4 @@ If there are no findings, output `結論: Approve` and `在指定 branch 合併�
 
 ## VS Code Chat Usage
 
-Select the **Frontend Branch Review** custom agent from `~/.copilot/agents/frontend-branch-review.agent.md`. Keep `agent/runSubagent` enabled so the coordinator can invoke the allowlisted reviewer agents. Supporting prompts and report templates remain relative to this skill directory.
+Select the **Frontend Review** custom agent from `~/.copilot/agents/frontend-review.agent.md` and request branch mode. Keep `agent/runSubagent` enabled so the coordinator can invoke the allowlisted reviewer agents. Supporting prompts and report templates remain relative to this skill directory.

@@ -109,7 +109,7 @@ After all tasks:
 
 1. Run the repository's relevant tests, lint, type checks, and build.
 2. Use `#tool:agent/runSubagent` to invoke `Frontend Verifier` with the original requirements and final diff, or an anonymous verifier subagent with the same contract.
-3. When the work spans multiple tasks or commits, run **Frontend Branch Review** as a separate top-level workflow. Do not invoke that coordinator as a subagent because nested subagents are disabled by default.
+3. When the work spans multiple tasks or commits, run **Frontend Review** in branch mode as a separate top-level workflow. Do not invoke that coordinator as a subagent because nested subagents are disabled by default.
 4. Confirm every task is `approved`, the plan hash still matches, and `git status` contains only expected files.
 5. Report files changed, exact commands/results, review findings addressed, and remaining risks.
 

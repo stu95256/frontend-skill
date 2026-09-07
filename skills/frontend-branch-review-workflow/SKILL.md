@@ -13,7 +13,7 @@ license: MIT
 
 Use this workflow to review the frontend content a source branch would contribute before it is merged into `master` or another target branch. Unlike `frontend-staged-review-workflow`, this workflow ignores the index and working tree. It pins the source tip, target tip, and merge base, then reviews the committed branch-introduced diff from the merge base to the source tip.
 
-Preferred VS Code entry point: select the **Frontend Branch Review** custom agent. If this skill is invoked directly in another top-level agent, use `#tool:agent/runSubagent`; invoke hidden reviewer/validator workers when installed or anonymous subagents with the complete bundled prompt.
+Preferred VS Code entry point: select the **Frontend Review** custom agent and request branch mode. If this skill is invoked directly in another top-level agent, use `#tool:agent/runSubagent`; invoke hidden reviewer/validator workers when installed or anonymous subagents with the complete bundled prompt.
 
 Core contract:
 
@@ -325,4 +325,4 @@ If there are no findings, output `結論: Approve` and `在指定 branch 合併�
 
 ## VS Code Chat Usage
 
-Select the **Frontend Branch Review** custom agent from `~/.copilot/agents/frontend-branch-review.agent.md`. Keep `#tool:agent/runSubagent` enabled so the coordinator can invoke the allowed reviewer agents.
+Select the **Frontend Review** custom agent from `~/.copilot/agents/frontend-review.agent.md` and request branch mode. Keep `#tool:agent/runSubagent` enabled so the coordinator can invoke the allowed reviewer agents.

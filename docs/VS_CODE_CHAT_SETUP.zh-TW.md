@@ -53,7 +53,7 @@ BYOK Provider 與模型設定仍屬於目前的 VS Code Profile；不要搬入 `
 3. 在 Chat 視窗開啟 **Diagnostics**，確認沒有 invalid name、frontmatter 或 missing resource 錯誤。
 4. 在 Tools 選單啟用 `agent/runSubagent`。
 5. 選取 **Frontend Task Preflight**，確認完成後出現 **Implement Approved Plan** handoff。
-6. 選取 **Frontend Staged Review**，在測試 Repository 暫存小型 diff，確認主 Agent 顯示兩個以上獨立 `Frontend Reviewer` subagent calls。
+6. 選取 **Frontend Review** 並要求 staged review；在測試 Repository 暫存小型 diff，確認主 Agent 顯示兩個以上獨立 `Frontend Reviewer` subagent calls。
 7. 執行 Repository validator：
 
 ```bash
@@ -69,10 +69,12 @@ python3 -m unittest -v tests/test_vscode_conversion.py
 | 實作前研究、方案與核准 | Frontend Task Preflight |
 | 執行已核准計畫 | Frontend Implementation |
 | Debug 並修正 | Frontend Debug |
-| Review `git diff --cached` | Frontend Staged Review |
-| 高冗餘 staged review | Frontend Heavy Staged Review |
-| Review branch merge-base 到 source 的貢獻 | Frontend Branch Review |
-| 根據 staged diff 產生單行 commit subject | Frontend Staged Commit Message |
+| Review `git diff --cached` | Frontend Review（staged mode） |
+| 高冗餘 staged review | Frontend Review（heavy staged mode） |
+| Review branch merge-base 到 source 的貢獻 | Frontend Review（branch mode） |
+| 根據 staged diff 產生單行 commit subject | `/frontend-staged-commit-message` Agent Skill |
+
+各 user-facing Agent 的適用情境、附件建議、最小輸入與完整輸入模板，請參考 [`AGENT_USAGE_GUIDE.zh-TW.md`](./AGENT_USAGE_GUIDE.zh-TW.md)。
 
 Worker agents 設定 `user-invocable: false`，這是 VS Code 官方文件中「不顯示在 picker、但仍可作為 subagent」的標準做法。Worker 不設定 `disable-model-invocation: true`，因為該欄位會禁止一般模型呼叫；各 coordinator 仍以明確的 `agents` allowlist 限制自己可選用的 worker。
 

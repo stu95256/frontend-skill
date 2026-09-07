@@ -2,6 +2,8 @@
 
 本指南的目標是把整套 frontend catalog 一次放進 Ubuntu VM，讓 VS Code Chat 在所有專案中共用。
 
+安裝完成後，Custom Agent 的中文使用方式與建議輸入格式請參考 [`AGENT_USAGE_GUIDE.zh-TW.md`](./AGENT_USAGE_GUIDE.zh-TW.md)。
+
 ## 最終位置
 
 只複製這三類 runtime 資產：
@@ -141,7 +143,7 @@ find ~/.copilot/instructions -maxdepth 1 -name '*.instructions.md' | wc -l
 
 ```text
 67 skills
-17 custom agents
+14 custom agents
 2 instruction files
 ```
 
@@ -160,7 +162,7 @@ python3 -m unittest -v tests/test_vscode_conversion.py
 預期 catalog validator 顯示：
 
 ```text
-VS Code Chat catalog validation passed: 67 skills, 17 custom agents, 2 instruction files, no legacy runtime artifacts
+VS Code Chat catalog validation passed: 67 skills, 14 custom agents, 2 instruction files, no legacy runtime artifacts
 ```
 
 ## 更新與移除
