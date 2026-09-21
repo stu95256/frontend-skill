@@ -72,7 +72,7 @@ python3 -m unittest -v tests/test_vscode_conversion.py
 | Review `git diff --cached` | Frontend Review（staged mode） |
 | 高冗餘 staged review | Frontend Review（heavy staged mode） |
 | Review branch merge-base 到 source 的貢獻 | Frontend Review（branch mode） |
-| 根據 staged diff 產生單行 commit subject | `/frontend-staged-commit-message` Agent Skill |
+| 解釋 staged intent 並產生多個單行 commit subjects | `/frontend-staged-commit-message` Agent Skill |
 
 各 user-facing Agent 的適用情境、附件建議、最小輸入與完整輸入模板，請參考 [`AGENT_USAGE_GUIDE.zh-TW.md`](./AGENT_USAGE_GUIDE.zh-TW.md)。
 

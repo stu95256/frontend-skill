@@ -35,7 +35,7 @@ These workflows combine an Agent Skill for reusable policy with a VS Code custom
 - [`frontend-staged-review-workflow`](./skills/frontend-staged-review-workflow/) — reviews `git diff --cached` only, dispatches at least two real sub-agents per selected skill, and excludes unit-test-only suggestions.
 - [`frontend-branch-review-workflow`](./skills/frontend-branch-review-workflow/) — pins source, target, and merge-base SHAs and reviews only committed merge-base-to-source changes.
 - [`frontend-debug-workflow`](./skills/frontend-debug-workflow/) — evidence-first root-cause workflow with stack-aware skill routing and explicit verification.
-- [`frontend-staged-commit-message`](./skills/frontend-staged-commit-message/) — reads only staged changes and returns at least five one-line English subjects ordered from simple to detailed, without staging, editing, committing, or pushing.
+- [`frontend-staged-commit-message`](./skills/frontend-staged-commit-message/) — explains the staged intent and type choice, then returns at least five one-line English subjects ordered from simple to detailed, without staging, editing, committing, or pushing.
 - [`frontend-task-preflight`](./skills/frontend-task-preflight/) + **Frontend Task Preflight** — read-only research and an implementation-plan handoff.
 - [`frontend-staged-review-workflow`](./skills/frontend-staged-review-workflow/), [`frontend-heavy-staged-review-workflow`](./skills/frontend-heavy-staged-review-workflow/), and [`frontend-branch-review-workflow`](./skills/frontend-branch-review-workflow/) share the **Frontend Review** coordinator while retaining separate scope and quorum policies.
 

@@ -396,6 +396,7 @@ Review Agent 永遠是 read-only；不要要求它順便修正。需要修正時
 ```text
 /frontend-staged-commit-message
 請只根據目前的 git diff --cached 產生至少五個英文 Conventional Commit subjects。
+先簡短解釋 staged changes 的主要意圖、commit type 選擇、候選細節如何遞增，以及是否需要拆分 commit。
 每個選項各占一行，從最簡短的安全描述依序增加到最詳細、但仍受 staged diff 支持的描述。
 不要 stage、commit 或修改檔案。
 ```

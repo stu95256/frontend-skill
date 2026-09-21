@@ -36,6 +36,9 @@ class VSCodeConversionTests(unittest.TestCase):
         text = (ROOT / "skills" / "frontend-staged-commit-message" / "SKILL.md").read_text(encoding="utf-8")
         for required in (
             "Output at least five English candidates by default",
+            "Before the candidates, provide a short explanation in the user's language",
+            "Why these candidates",
+            "Commit candidates",
             "Keep every candidate to one line and order them from simple to detailed",
             "1. **Simple**",
             "5. **Most detailed**",
