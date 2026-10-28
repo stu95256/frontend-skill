@@ -3,7 +3,7 @@ name: vitest
 description: Vitest fast unit testing framework powered by Vite with Jest-compatible API. Use when writing tests, mocking, configuring coverage, or working with test filtering and fixtures.
 metadata:
   author: Anthony Fu
-  version: "2026.6.22"
+  version: "2026.10.23"
   source: Generated from https://github.com/vitest-dev/vitest, scripts located at https://github.com/antfu/skills
 ---
 
@@ -18,7 +18,11 @@ Vitest is a next-generation testing framework powered by Vite. It provides a Jes
 - Built-in coverage via V8 or Istanbul
 - Snapshot testing, mocking, and spy utilities
 
-> The skill is based on Vitest 5.x (beta), generated at 2026-06-22.
+> The skill is based on Vitest 5.1.0-beta.1, generated at 2026-10-23.
+
+## Version and scope gate
+
+Inspect the installed Vitest, Vite and Node versions first. These references describe Vitest 5.1 beta; verify version-specific APIs against the installed major. For Vitest 3/4, use that version's official documentation instead of applying beta configuration. This catalog covers Node, jsdom and happy-dom unit/integration tests.
 
 ## Core
 

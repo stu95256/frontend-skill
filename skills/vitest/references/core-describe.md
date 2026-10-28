@@ -126,7 +126,7 @@ describe('random', { shuffle: true }, () => {})
 describe.each([
   { name: 'Chrome', version: 100 },
   { name: 'Firefox', version: 90 },
-])('$name browser', ({ name, version }) => {
+])('$name runtime', ({ name, version }) => {
   test('has version', () => {
     expect(version).toBeGreaterThan(0)
   })
@@ -139,7 +139,7 @@ describe.each([
 describe.for([
   ['Chrome', 100],
   ['Firefox', 90],
-])('%s browser', ([name, version]) => {
+])('%s runtime', ([name, version]) => {
   test('has version', () => {
     expect(version).toBeGreaterThan(0)
   })

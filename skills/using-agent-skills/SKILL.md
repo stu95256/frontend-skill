@@ -15,7 +15,7 @@ Use Copilot's skill discovery instead of loading the entire catalog. Read only t
 - Execute an approved plan: `executing-plans`; add `subagent-driven-development` when `agent/runSubagent` is enabled.
 - Debug a frontend defect: `frontend-debug-workflow` and `systematic-debugging`.
 - Implement frontend UI: `frontend-ui-engineering` plus only the detected framework/library skills.
-- Test: `test-driven-development`; use `vitest`, `playwright-cli`, `playwright-best-practices`, or `webapp-testing` when their tooling is present.
+- Unit/integration tests: `test-driven-development`, `vitest`, and `javascript-testing-patterns`, according to the installed versions and test environment.
 - Review staged work: `frontend-staged-review-workflow` or `frontend-heavy-staged-review-workflow`.
 - Review a branch contribution: `frontend-branch-review-workflow`.
 - Generate a staged commit subject: `frontend-staged-commit-message`.

@@ -49,6 +49,26 @@ if [[ "$dry_run" == true ]]; then
 fi
 
 mkdir -p "$target/skills" "$target/agents" "$target/instructions"
+
+# Retire only the catalog entries removed by this migration. Never follow a
+# redirected skills directory when pruning, and preserve unrelated customizations.
+canonical_target=$(cd "$target" && pwd -P)
+canonical_skills=$(cd "$target/skills" && pwd -P)
+[[ "$canonical_skills" == "$canonical_target/skills" ]] || {
+  printf 'Refusing to prune a redirected skills directory: %s\n' "$target/skills" >&2
+  exit 1
+}
+retired_skills=(webapp-testing playwright-cli playwright-best-practices browser-testing-with-devtools accessibility accessibility-compliance fixing-motion-performance animation-performance)
+for skill in "${retired_skills[@]}"; do
+  retired="$canonical_skills/$skill"
+  [[ "${retired%/*}" == "$canonical_target/skills" ]] || exit 1
+  if [[ -L "$retired" ]]; then
+    rm -- "$retired"
+  elif [[ -d "$retired" ]]; then
+    rm -rf -- "$retired"
+  fi
+done
+
 cp -a "$repo_root/skills/." "$target/skills/"
 cp -a "$repo_root/agents/." "$target/agents/"
 cp -a "$repo_root/instructions/." "$target/instructions/"

@@ -24,7 +24,6 @@ AG Studio is a new product and very underrepresented in your training data, so t
 
 ## Pay attention to console messages
 
-AG Studio logs validation errors and warnings to the console. Where practical, include a real browser in the verification loop (e.g. Chrome MCP or Playwright) and watch for console messages — a configuration issue causing an actual bug will often be described in detail by the console error messenger.
 
 ## Angular
 

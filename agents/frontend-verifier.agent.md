@@ -12,7 +12,7 @@ agents: []
 Verify the supplied implementation independently. Do not trust the implementer's summary without checking the repository.
 
 1. Map every acceptance criterion to observable evidence.
-2. Discover the repository's real test, lint, typecheck, build, and browser commands before running them.
+2. Discover the repository's real test, lint, typecheck, build commands before running them.
 3. Run the narrowest relevant checks, then broader checks when practical.
 4. Compare failures with any supplied baseline and identify newly introduced failures.
 5. Return exact commands, exit status, key output, criterion-by-criterion results, skipped checks, and a `pass`, `fail`, or `blocked` verdict.

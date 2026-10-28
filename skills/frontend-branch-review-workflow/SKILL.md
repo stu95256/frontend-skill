@@ -177,8 +177,6 @@ Conditional skills:
 | `useEffect`, subscriptions, browser APIs, timers, derived state, async effects | `react-useeffect` | 2 | Stale closures, cleanup, synchronization, unnecessary effects. |
 | React performance, memoization, expensive renders, bundle/runtime concerns | `vercel-react-best-practices` | 2 | Avoidable rerenders and frontend runtime performance. |
 | UI, layout, visual hierarchy, copy, interaction states, responsive behavior | `web-design-guidelines` | 2 | UI/UX quality, affordance, responsive behavior. |
-| Accessibility, keyboard, ARIA, semantic HTML, focus | `accessibility-compliance` | 2 | WCAG/accessibility risks and remediation. |
-| Accessibility audit evidence and WCAG 2.2 verification | `accessibility` | 2 | Evidence-led keyboard, screen-reader, semantics, and contrast checks. |
 | Tailwind tokens, theme scales, variants, reusable utility composition | `tailwind-design-system` | 2 | Token consistency and maintainable utilities. |
 | Tailwind v4, shadcn-style components, CSS variables | `shadcn` | 2 | Tailwind v4/shadcn compatibility and tokens. |
 | Ant Design components, Table/Form/Modal, theme tokens | `ant-design` | 2 | antd API correctness, tokens, accessibility/performance. |
@@ -186,9 +184,6 @@ Conditional skills:
 | React Hook Form, Zod, validation, field errors | `react-hook-form-zod` | 2 | Form state, validation, error UX. |
 | i18n keys, interpolation, locale formatting, react-i18next | `internationalization-i18n` | 2 | Translation completeness and formatting safety. |
 | React Router routes/navigation/loaders/actions/framework config | `react-router` | 2 | Detect installed version and mode before reviewing route behavior. |
-| Playwright config/specs/selectors/fixtures or E2E-visible selector changes | `playwright-best-practices` | 2 | Selector and browser automation risk; no unit-test advice. |
-| Reproducible browser interaction or DOM/screenshot verification | `playwright-cli` | 2 | Runtime browser evidence with replayable commands. |
-| Browser-visible runtime behavior | `webapp-testing` | 2 | Runtime/browser verification risk; no unit-test advice. |
 
 Selection rules:
 

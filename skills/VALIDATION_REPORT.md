@@ -1,127 +1,89 @@
 # VS Code Chat Catalog Validation Report
 
-Generated: 2026-09-06
+Generated: 2026-10-28
 
 ## Result
 
-**PASS**
+**PASS — source catalog, format checks and focused executable verification.**
 
-Validated repository state:
+- 61 Agent Skills: 30 core and 31 on demand.
+- 14 custom agents: five coordinators and nine protected workers.
+- Two instruction files.
+- Four stable Skill names now use different primary sources: TDD, RHF, i18n and frontend design.
+- Excluded specialist packages and their selection rules are absent. Dedicated supporting checklists were removed; ordinary native controls, labels and component states remain in general frontend examples.
 
-- 67 Agent Skills under `skills/*/SKILL.md`
-- 14 custom agents under `agents/*.agent.md`
-- 2 personal instruction files under `instructions/*.instructions.md`
-- 5 user-facing agents and 9 hidden worker agents
-- no legacy runtime tree, legacy tool identifiers, or `.workflow.md` files
+## Catalog and format
 
-## Executed checks
-
-### Repository validator
-
-```bash
-python scripts/validate_skill_catalog.py
-```
-
-Observed result:
+The current repository validator reports:
 
 ```text
-VS Code Chat catalog validation passed: 67 skills, 14 custom agents, 2 instruction files, no legacy runtime artifacts
+VS Code Chat catalog validation passed: 61 skills, 14 custom agents, 2 instruction files, no legacy runtime artifacts
 ```
 
-The validator checks Skill names/frontmatter, flat metadata, manifest parity, custom-agent names/tool sets/allowlists/handoffs, worker protection, relative links, instruction frontmatter, expected workflow mappings, and legacy runtime markers.
+All 61 packages passed the official Agent Skills reference validator from agentskills/agentskills commit `69ef37e9424c0a7ea9dd2293b559e43ec8176379`, using strictyaml 1.7.3. All 61 passed the native skill-creator quick validator.
 
-### Agent Skills reference validator
+Windows checks used Python 3.11.15 with UTF-8 mode; upstream validators default to the platform encoding otherwise. Real Markdown links outside fenced examples were checked throughout the Skills tree: zero missing local targets.
 
-```bash
-uvx --from skills-ref agentskills validate skills/<skill-name>
-```
+Primary and retained sources, fixed SHAs and licenses are recorded in [the manifest](SKILLS_MANIFEST.md). New upstream licenses are included beside the adapted Skills.
 
-Executed for every Skill directory.
-
-```text
-agentskills validated=67 failed=0
-```
-
-### Python and shell syntax
-
-```bash
-python -m compileall -q scripts skills
-bash -n scripts/install-vscode-chat.sh
-git diff --check
-```
-
-All completed with exit code 0.
-
-### Conversion regression tests
+## Regression tests
 
 ```bash
 python -m unittest -v tests/test_vscode_conversion.py
 ```
 
-Observed result:
+**Seven tests passed; none skipped** in the final run, using Python 3.11.15 and Git Bash with its path explicitly configured.
 
-```text
-Ran 5 tests
-OK
-```
+Coverage includes:
 
-The suite covers catalog validation, exact installer counts, five ordered staged-commit candidates, tracked and untracked SDD review packages, and Skill Creator train/holdout isolation plus report generation.
+- Catalog consistency and rejected references to excluded specialist Skills.
+- Installing exactly 61 Skills, 14 agents and two instructions, pruning excluded legacy directories and preserving an unrelated customization.
+- Ordered staged commit-message candidates.
+- Resumable Skill Creator evaluation and holdout isolation.
+- Tracked/untracked review packages and rejected empty/unrelated committed ranges.
+- Same-basename plan isolation, normalized plan identity and preserved ignore rules.
 
-### Installer smoke test
+Installer and Bash filesystem checks ran outside the host sandbox because sandboxed Git Bash path operations are denied. All installation destinations were isolated temporary folders; the actual personal catalog was not modified.
 
-Installed into a temporary target and counted the copied runtime assets:
+## Actual form template
 
-```text
-installed skills=67 agents=14 instructions=2
-```
+The [server-backed form](react-hook-form-zod/templates/server-backed-form.tsx) compiled with strict TypeScript 5.9.3, React/React DOM 19.2.0, RHF 7.84.0, Zod 4.3.6, resolvers 5.2.2 and React types 19.0.0.
 
-The temporary target was removed after verification.
+A jsdom 26.1.0 harness exercised that compiled template and verified:
 
-### Migration coverage
+- Dirty edits survive a same-record background refresh while untouched fields update.
+- Empty and malformed numeric input cannot submit.
+- Parsed output carries a number rather than the input string.
+- Submission stays pending until saving finishes.
+- The persisted server response becomes the clean baseline.
+- Cancel restores that baseline.
+- A keyed record change does not keep the previous record's edits.
 
-Compared the former staging catalog directory names from `HEAD` with the current catalog. Every former skill is represented; the only intentional slug migration is:
+The initial harness exposed inherited keepDirtyValues behavior on save/Cancel resets. The template explicitly overrides preservation in those resets; the same checks then passed. This correction is documented in [form lifecycle](react-hook-form-zod/references/form-lifecycle.md).
 
-```text
-using-superpowers -> using-vscode-chat
-```
+## i18next CLI
 
-The two formerly legacy-runtime-only skills, `frontend-task-preflight` and `frontend-heavy-staged-review-workflow`, are now first-class catalog entries.
+The fixed upstream package identifies i18next-cli **1.80.5**, requiring Node 22+. The isolated fixture used that CLI on Node 22.23.2.
 
-### Converted workflow helper tests
+Verified the version-matched prompt command, dry-run source SHA preservation, instrumentation, extraction and lint. Status rejected two untranslated keys; after supplying the two local fixture translations, lint and status passed with 2/2 complete.
 
-The durable subagent workflow helpers were exercised in a temporary Git repository with both tracked and untracked edits:
+SWC's native loader requires a protected user cache. These commands ran outside the sandbox using the normal cache, without weakening its checks. No translation service, credentials or external project were used. This is a CLI fixture check, not validation of an entire application runtime or translation quality.
 
-```text
-sdd helpers: tracked and untracked WORKTREE review passed
-```
+## Other focused checks
 
-The Skill Creator's resumable train/holdout lifecycle was exercised through `init`, `score`, `prompt`, `apply`, and `best`; its model-facing steps remain inside the VS Code custom agents so they inherit the active BYOK model.
+- The static Skill scanner processed all 61 packages. Pattern hits remained in dummy test passwords, the scanner's own detection examples and the source-retrieval warning example. The four newly adapted packages had no findings. Static patterns do not establish blanket security.
+- The unchanged shadcn coverage helper rejected missing coverage and accepted complete coverage.
+- Source Python syntax and installer/bundle Bash syntax were checked; changed files have no whitespace errors.
+- TDD and design instructions were reviewed for self-contained references, user scope and retained workflow contracts. No model A/B or visual behavior result is claimed.
 
-## Independent review disposition
+## Transport packages
 
-### VS Code Chat subagent re-audit
+The portable tar.gz and 7z are rebuilt from canonical source. Export checks require exactly 61 Skill entrypoints, no excluded directories, successful validation of the extracted catalog, a valid 7z integrity test and a matching Base64 decode/SHA-256 round trip.
 
-Rechecked against the current VS Code Subagents and Custom Agents documentation:
+The transfer archive and adjacent checksum represent this 61-Skill release.
 
-- five coordinator agents declare `tools: [agent, ...]`, use exact `agents` allowlists, and reference `#tool:agent/runSubagent` in their bodies;
-- nine workers use `user-invocable: false`, leave model invocation enabled, have no `agent` tool, and cannot create nested subagents;
-- all allowlisted names resolve case-sensitively to installed `.agent.md` definitions;
-- worker calls are one-shot and stateless; retry/fix instructions require a fresh invocation with the complete packet;
-- no orchestration Skill uses `context: fork`, so the workflows do not depend on nested subagents while `chat.subagents.allowInvocationsFromSubagents` remains disabled;
-- no worker pins a model, so VS Code follows its documented model priority and inherits the active BYOK model unless the parent explicitly requests another available model.
+## Remaining limits
 
-An independent review identified stale personal-skill paths, obsolete runtime names, stale README totals, missing checklists, nonportable nested metadata, and lost helper behavior in the first conversion pass. These were corrected: the SDD recovery/review helpers were restored and adapted, and Skill Creator evaluation was rebuilt around hidden BYOK subagents plus a resumable local scoring ledger. All validation was then rerun.
+VS Code discovery, handoff UI and real BYOK worker invocation still require verification in the target Ubuntu profile. Formatting, CLI fixtures and DOM tests do not establish model selection quality or prove rendered visual appearance.
 
-The final subagent audit uses VS Code's documented subagent-only worker pattern: `user-invocable: false` with model invocation left enabled. Coordinator `agents` allowlists are validated for exact names and each worker is referenced by at least one coordinator.
-
-## Remaining environment verification
-
-This repository was converted and mechanically exercised on the available Windows development host. The final discovery and live subagent checks must be run in the target Ubuntu VS Code profile after installation:
-
-1. Run **Chat: Open Customizations**.
-2. Inspect Chat Diagnostics.
-3. Select **Frontend Task Preflight** and verify its handoff.
-4. Stage a small test diff, select **Frontend Review**, and request staged mode.
-5. Confirm that at least two independent `Frontend Reviewer` subagent calls appear.
-
-See [`../docs/VS_CODE_CHAT_SETUP.zh-TW.md`](../docs/VS_CODE_CHAT_SETUP.zh-TW.md).
+See [the update report](../docs/SKILL_REPLACEMENT_RESEARCH.zh-TW.md) and [Ubuntu setup](../docs/VS_CODE_CHAT_SETUP.zh-TW.md).

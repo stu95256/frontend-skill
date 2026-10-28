@@ -10,7 +10,6 @@
 | 來源 | URL | 本次觀察 |
 |---|---|---|
 | Awesome Frontend Agent Skills | https://github.com/finfin/awesome-frontend-skills | 這次最重要的前端索引；已看到 React、TypeScript、Tailwind、React Router、shadcn、Testing、Web Quality 等分類，且多數附 `npx skills add` 指令。 |
-| Awesome Claude Skills | https://github.com/travisvn/awesome-claude-skills | 綜合索引；前端相關主要集中在 Anthropic 官方 `frontend-design`、`webapp-testing`、`web-artifacts-builder` 與 shadcn/ui。 |
 | shadcn/ui Skills 文件 | https://ui.shadcn.com/docs/skills | 官方 shadcn skill / workflow，描述可讓 AI assistant 取得 shadcn/ui components、patterns、best practices。 |
 | SkillsMP | https://skillsmp.com/ | 可查到 `ag-grid-patterns`、`react-hook-form` 等 marketplace 條目；適合補找非官方或小眾 skill。 |
 | MCPMarket Skills | https://mcpmarket.com/tools/skills | 查詢時部分頁面遇到 429 Too Many Requests；搜尋結果仍顯示 React Hook Form、i18n、Ant Design Vue 等條目，之後可再查。 |
@@ -32,7 +31,6 @@
 | TypeScript | `typescript-advanced-types` | https://github.com/wshobson/agents | Generics、conditional types、mapped types、template literal types、utility types；適合複雜 reusable type utility。 | `npx skills add wshobson/agents --skill typescript-advanced-types` |
 | TypeScript | `typescript-pro` | https://github.com/Jeffallan/claude-skills | Advanced TypeScript type systems、custom type guards、utility types、branded types、discriminated unions、monorepo / tRPC 類型安全。 | `npx skills add Jeffallan/claude-skills --skill typescript-pro` |
 | TypeScript | `typescript-unit-testing` | https://github.com/bmad-labs/skills | TypeScript unit testing；原 skill 偏 NestJS/Jest，但 AAA、mocking、coverage、flaky/open handles debugging 仍可參考。 | `npx skills add bmad-labs/skills --skill typescript-unit-testing` |
-| TypeScript | `typescript-e2e-testing` | https://github.com/bmad-labs/skills | TypeScript E2E / integration testing；原 skill 偏 backend infra，但 Given-When-Then、test isolation、flaky debugging 可參考。 | `npx skills add bmad-labs/skills --skill typescript-e2e-testing` |
 | TypeScript / Code review | `typescript-code-reviewer` | 本專案 `skills/typescript-code-reviewer`，研究來源見 `skills/typescript-code-reviewer/references/research-sources.md` | TypeScript / TSX 專用 reviewer workflow；檢查 strict tsconfig、`any`/`unknown`、unsafe assertions、async/error、React hooks/props、XSS、runtime validation、tests。 | 已下載/建立於 `skills/typescript-code-reviewer/`；可複製到 `.claude/skills/`、`.opencode/skills/`、`.agents/skills/`。 |
 | Tailwind / shadcn | `tailwind-design-system` | https://github.com/wshobson/agents | Tailwind CSS v4、design tokens、component libraries、responsive patterns；適合建立設計系統。 | `npx skills add wshobson/agents --skill tailwind-design-system` |
 | Tailwind / shadcn | `shadcn` | https://github.com/secondsky/claude-skills | Tailwind v4 + shadcn/ui + Vite + React production setup；含 `@theme inline`、CSS variables、dark mode、v3→v4 migration gotchas。 | `/plugin install shadcn@claude-skills` 或 `npx skills add secondsky/claude-skills --skill shadcn` |
@@ -51,11 +49,7 @@
 | react-i18next / i18n | `i18n` slash commands | https://github.com/i18n-agent/i18n-skills | Claude Code slash commands；可 audit hardcoded strings、split sentence、plural、unused keys、missing `t()` 等。不是標準 SKILL.md，但非常適合 i18n QA。 | `cp -r commands/*.md ~/.claude/commands/` |
 | react-hook-form | `react-hook-form-zod` | https://github.com/secondsky/claude-skills | React Hook Form + Zod；form schemas、field arrays、multi-step forms、resolver issues、nested validation、shadcn form。 | `/plugin install react-hook-form-zod@claude-skills` 或 `npx skills add secondsky/claude-skills --skill react-hook-form-zod` |
 | react-hook-form | `react-hook-form` | https://github.com/claude-dev-suite/claude-dev-suite | React Hook Form + Zod validation；form setup、validation schema、field components、error handling、submission、shadcn/ui integration。 | `npx skills add claude-dev-suite/claude-dev-suite --skill react-hook-form` |
-| Testing / Browser | `webapp-testing` | https://github.com/anthropics/skills | Anthropic 官方 Playwright local web app testing；可驗證 frontend functionality、UI behavior、screenshots、browser logs。 | `npx skills add anthropics/skills --skill webapp-testing` |
-| Testing / Browser | `playwright-best-practices` | https://github.com/currents-dev/playwright-best-practices-skill | Playwright E2E、component、API、visual regression、a11y、CI、fixtures、mocking、auth、flaky debugging。 | `npx skills add currents-dev/playwright-best-practices-skill` |
-| Testing / Browser | `playwright-expert` | https://github.com/Jeffallan/claude-skills | Playwright E2E test infrastructure、page objects、fixtures、reporters、CI、API mocking、visual regression、flaky tests。 | `npx skills add Jeffallan/claude-skills --skill playwright-expert` |
 | Testing / Unit | `vitest` | https://github.com/secondsky/claude-skills | Vitest for TypeScript/JavaScript；unit/integration tests、native ESM、Vite-powered testing、mocking。 | `/plugin install vitest@claude-skills` 或 `npx skills add secondsky/claude-skills --skill vitest` |
-| Web Quality | `web-quality` | https://github.com/addyosmani/web-quality-skills | Lighthouse、Core Web Vitals、performance、accessibility WCAG、SEO、best practices；支援 React/Vue/Angular/Svelte/Next/Nuxt/Astro。 | `npx skills add addyosmani/web-quality-skills` |
 | UI Review | `web-design-guidelines` | https://github.com/vercel-labs/agent-skills | Vercel Web Interface Guidelines；適合 review UI、accessibility、UX、design audit。 | `npx skills add vercel-labs/agent-skills --skill web-design-guidelines` |
 | Code Review | `code-review-skill` | https://github.com/awesome-skills/code-review-skill | 包含 React 19、TypeScript、CSS、architecture、performance 的 review guide；適合作為 merge 前檢查。 | `git clone https://github.com/awesome-skills/code-review-skill ~/.claude/skills/code-review-skill` |
 
@@ -74,10 +68,7 @@
 
 ### B. 品質保證組合
 
-1. `webapp-testing`：本地前端功能、console、browser logs、screenshots
-2. `playwright-best-practices` 或 `playwright-expert`：建立 / review E2E 測試
 3. `vitest`：單元測試與 integration tests
-4. `web-quality`：Lighthouse / Core Web Vitals / a11y / SEO
 5. `web-design-guidelines`：UI / UX / accessibility review
 6. `code-review-skill`：React / TypeScript / CSS / architecture / performance code review
 
@@ -86,7 +77,6 @@
 如果之後要實際下載或安裝，建議先從這 10 個開始：
 
 1. `anthropics/skills --skill frontend-design`
-2. `anthropics/skills --skill webapp-testing`
 3. `vercel-labs/agent-skills --skill vercel-react-best-practices`
 4. `softaworks/agent-toolkit --skill react-dev`
 5. `softaworks/agent-toolkit --skill react-useeffect`
@@ -110,7 +100,6 @@ AG Grid 因為目前找到的來源較少，建議獨立整理成專案自有 sk
 - react-hook-form：`react-hook-form-zod`
 - i18n：`internationalization-i18n`
 - AG Grid：`ag-dev`
-- Testing / Quality：`webapp-testing`、`playwright-best-practices`、`vitest`、`browser-testing-with-devtools`、`frontend-ui-engineering`、`accessibility-compliance`
 - Code review：`code-review-and-quality`、`typescript-code-reviewer`
 
 完整來源、commit 與原始路徑請看 `skills/SKILLS_MANIFEST.md`；驗證結果請看 `skills/VALIDATION_REPORT.md`。

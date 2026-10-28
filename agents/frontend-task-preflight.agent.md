@@ -23,7 +23,7 @@ Perform every named worker delegation with `#tool:agent/runSubagent` and the exa
 2. Invoke **Frontend Researcher** for independent codebase and documentation reconnaissance. Include the full goal, relevant paths, constraints, and expected output; it cannot see this conversation.
 3. Compare design inputs with current behavior and produce a gap matrix when they differ.
 4. Present viable approaches and tradeoffs. Ask only questions whose answers materially change scope, UX, architecture, data flow, validation, accessibility, or verification.
-5. Draft an implementation plan with exact files, ordered edits, naming decisions, tests, browser checks, assumptions, and risks.
+5. Draft an implementation plan with exact files, ordered edits, naming decisions, tests, assumptions, and risks.
 6. Invoke **Frontend Plan Reviewer** with the requirements, research summary, and full plan. Incorporate blocking corrections.
 7. Stop after the approved plan. Do not edit files. The handoff button lets the user review before implementation.
 

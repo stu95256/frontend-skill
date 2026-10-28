@@ -84,7 +84,7 @@ Use `--tagsFilter` with an expression:
 ```bash
 vitest --tagsFilter "frontend"
 vitest --tagsFilter "db && !flaky"
-vitest --tagsFilter "(unit || e2e) && !slow"
+vitest --tagsFilter "(unit || integration) && !slow"
 vitest --tagsFilter "api/*"            # wildcard
 vitest --list-tags                     # list defined tags (=json for JSON)
 ```

@@ -12,7 +12,7 @@ SKILLS = ROOT / "skills"
 AGENTS = ROOT / "agents"
 INSTRUCTIONS = ROOT / "instructions"
 AGENT_USAGE_GUIDE = ROOT / "docs" / "AGENT_USAGE_GUIDE.zh-TW.md"
-EXPECTED_SKILL_COUNT = 67
+EXPECTED_SKILL_COUNT = 61
 EXPECTED_AGENT_COUNT = 14
 EXPECTED_INSTRUCTION_COUNT = 2
 
@@ -75,6 +75,14 @@ ALLOWED_AGENT_FRONTMATTER = {
 ALLOWED_AGENT_TOOLS = {"agent", "read", "search", "edit", "execute", "web"}
 
 FORBIDDEN_RUNTIME_PATTERNS = {
+    "removed specialist skill reference": re.compile(
+        r"accessibility-compliance|`accessibility`(?=[,、.]| \|)|"
+        r"skills/accessibility/|skills/accessibility-compliance/|"
+        r"fixing-motion-performance|animation-performance"
+    ),
+    "removed browser testing skill": re.compile(
+        r"\b(?:webapp-testing|playwright-cli|playwright-best-practices|browser-testing-with-devtools)\b"
+    ),
     "legacy Kilo path": re.compile(r"(?i)(?:\.kilo(?:code)?/|~/.kilo|\bkilo code\b)"),
     "Kilo-only subagent API": re.compile(
         r"(?i)\b(?:delegate_task|new_task|attempt_completion|ask_followup_question|switch_mode|apply_diff|write_to_file)\b"
@@ -88,6 +96,14 @@ FOREIGN_SKILL_TOOL_PATTERN = re.compile(
 )
 
 OBSOLETE_SKILLS = {
+    "accessibility",
+    "accessibility-compliance",
+    "fixing-motion-performance",
+    "animation-performance",
+    "webapp-testing",
+    "playwright-cli",
+    "playwright-best-practices",
+    "browser-testing-with-devtools",
     "using-superpowers",
     "react-router-declarative-mode",
     "react-router-data-mode",

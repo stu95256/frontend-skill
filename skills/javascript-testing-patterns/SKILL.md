@@ -1,6 +1,6 @@
 ---
 name: javascript-testing-patterns
-description: Implement comprehensive testing strategies using Jest, Vitest, and Testing Library for unit tests, integration tests, and end-to-end testing with mocking, fixtures, and test-driven development. Use when writing JavaScript/TypeScript tests, setting up test infrastructure, or implementing TDD/BDD workflows.
+description: Implement comprehensive testing strategies using Jest, Vitest, and Testing Library for unit tests, integration tests with mocking, fixtures, and test-driven development. Use when writing JavaScript/TypeScript tests, setting up test infrastructure, or implementing TDD/BDD workflows.
 ---
 
 # JavaScript Testing Patterns
@@ -12,7 +12,6 @@ Comprehensive guide for implementing robust testing strategies in JavaScript/Typ
 - Setting up test infrastructure for new projects
 - Writing unit tests for functions and classes
 - Creating integration tests for APIs and services
-- Implementing end-to-end tests for user flows
 - Mocking external dependencies and APIs
 - Testing React, Vue, or other frontend components
 - Implementing test-driven development (TDD)

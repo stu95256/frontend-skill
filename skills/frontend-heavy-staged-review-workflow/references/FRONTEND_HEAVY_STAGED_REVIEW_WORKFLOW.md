@@ -134,8 +134,6 @@ Conditional skills:
 | `useEffect`, subscriptions, timers, async effects, browser APIs | `react-useeffect` | `reviewers_per_skill` | Stale closures, cleanup, synchronization bugs, unnecessary effects. |
 | React performance, memoization, expensive renders, runtime/bundle concerns | `vercel-react-best-practices` | `reviewers_per_skill` | Avoidable re-renders, composition, client/runtime performance. |
 | UI, layout, visual hierarchy, copy, interaction states, responsive behavior | `web-design-guidelines` | `reviewers_per_skill` | UX quality, polish, affordance, responsive behavior. |
-| Accessibility, keyboard, ARIA, semantic HTML, focus management | `accessibility-compliance` | `reviewers_per_skill` | WCAG/accessibility risks and concrete remediation. |
-| Accessibility audit evidence and WCAG 2.2 verification | `accessibility` | `reviewers_per_skill` | Evidence-led keyboard, screen-reader, semantics, and contrast checks. |
 | Tailwind classes, design tokens, variants, theme scales | `tailwind-design-system` | `reviewers_per_skill` | Token consistency, maintainable utility composition. |
 | Tailwind v4, shadcn-style components, CSS variables | `shadcn` | `reviewers_per_skill` | Tailwind v4/shadcn compatibility, tokens, component styling. |
 | Ant Design components, Table/Form/Modal, theme tokens | `ant-design` | `reviewers_per_skill` | antd API correctness, theme/token usage, a11y/performance. |
@@ -143,9 +141,6 @@ Conditional skills:
 | forms, validation, React Hook Form, Zod, field errors | `react-hook-form-zod` | `reviewers_per_skill` | Form state, schema validation, error UX, controlled/uncontrolled risks. |
 | i18n files, translation keys, interpolation, locale formatting | `internationalization-i18n` | `reviewers_per_skill` | Missing translations, interpolation safety, date/number formatting. |
 | React Router routes/navigation/loaders/actions/framework config | `react-router` | `reviewers_per_skill` | Detect installed version and mode before applying official guidance. |
-| Playwright config/specs/selectors/fixtures or E2E-visible selector changes | `playwright-best-practices` | `reviewers_per_skill` | E2E selector stability and browser automation risk; no unit-test advice. |
-| Reproducible browser interaction or DOM/screenshot verification | `playwright-cli` | `reviewers_per_skill` | Runtime browser evidence with replayable commands. |
-| Browser-visible runtime behavior changed | `webapp-testing` | `reviewers_per_skill` | Runtime/browser verification risks; no unit-test advice. |
 
 Selection rules:
 

@@ -39,13 +39,12 @@ Response includes:
 
 ### Step 2: Inspect Implementation
 
-**Browser DevTools:**
-1. Inspect element
-2. Check computed styles
-3. Verify dimensions
-4. Compare colors (use color picker)
-5. Check typography
-6. Test interactive states
+**Source inspection:**
+1. Locate the component and its style declarations.
+2. Compare declared dimensions and spacing with the design.
+3. Compare color and typography tokens.
+4. Inspect variants and interaction-state code.
+5. Mark rendered behavior unverified unless supplied evidence establishes it.
 
 ### Step 3: Document Discrepancies
 
@@ -301,7 +300,6 @@ Users see inconsistent branding. Button appears less prominent than designed.
 - ✅ Check responsive breakpoints
 - ✅ Document exact values (not "close enough")
 - ✅ Screenshot both design and implementation
-- ✅ Test in multiple browsers
 
 **DON'T:**
 - ❌ Assume "it looks right"
@@ -333,12 +331,12 @@ Per component:
 
 | Element | What to Check | Tool |
 |---------|---------------|------|
-| Colors | Hex values exact | Browser color picker |
-| Spacing | Padding/margin px | DevTools computed styles |
-| Typography | Font, size, weight | DevTools font panel |
-| Layout | Width, height, position | DevTools box model |
+| Colors | Hex values exact | Color token definitions |
+| Spacing | Padding/margin px | Style declarations |
+| Typography | Font, size, weight | Typography tokens |
+| Layout | Width, height, position | Layout declarations |
 | States | Hover, active, focus | Manual interaction |
-| Responsive | Breakpoint behavior | DevTools device mode |
+| Responsive | Breakpoint behavior | Media-query definitions |
 
 ---
 

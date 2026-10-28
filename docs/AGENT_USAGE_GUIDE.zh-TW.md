@@ -62,7 +62,7 @@ docs/tasks/TASK-123.md
 - [ ] 可驗證條件 2
 
 # Verification
-<!-- 期望執行的 test、lint、typecheck、build、browser checks -->
+<!-- 期望執行的 test、lint、typecheck、build -->
 
 # Output
 <!-- 希望得到計畫、實作、finding report 或 Skill package -->
@@ -173,7 +173,6 @@ docs/tasks/TASK-123.md
 - `npm run lint`
 - `npm run typecheck`
 - `npm test -- ...`
-- Browser check：...
 
 ## Git authorization
 - 允許修改檔案：是

@@ -11,7 +11,6 @@ To build a complex frontend artifact for browser preview or attachment in VS Cod
 2. Develop your artifact by editing the generated code
 3. Bundle all code into a single HTML file using `scripts/bundle-artifact.sh`
 4. Display artifact to user
-5. (Optional) Test the artifact
 
 **Stack**: React 18 + TypeScript + Vite + Parcel (bundling) + Tailwind CSS + shadcn/ui
 
@@ -62,12 +61,6 @@ This creates `bundle.html`, a self-contained artifact with all JavaScript, CSS, 
 ### Step 4: Share Artifact with User
 
 Finally, share the bundled HTML file in conversation with the user so they can view it as an artifact.
-
-### Step 5: Testing/Visualizing the Artifact (Optional)
-
-Note: This is a completely optional step. Only perform if necessary or requested.
-
-To test/visualize the artifact, use available tools (including other Skills or built-in tools like Playwright or Puppeteer). In general, avoid testing the artifact upfront as it adds latency between the request and when the finished artifact can be seen. Test later, after presenting the artifact, if requested or if issues arise.
 
 ## Reference
 

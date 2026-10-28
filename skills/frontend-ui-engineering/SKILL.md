@@ -1,6 +1,6 @@
 ---
 name: frontend-ui-engineering
-description: Builds production-quality, accessible, responsive user-facing UIs. Use when building or modifying interfaces and pages, creating components, implementing layouts, meeting WCAG accessibility requirements, managing state, or when the output needs to look and feel production-quality rather than AI-generated.
+description: Build and modify production frontend interfaces, components, layouts and UI states using the existing design system and project conventions.
 ---
 
 # Frontend UI Engineering
@@ -79,7 +79,7 @@ export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
 ```tsx
 // Container: handles data
 export function TaskListContainer() {
-  const { tasks, isLoading, error } = useTasks();
+  const { tasks, isLoading, error, refetch } = useTasks();
 
   if (isLoading) return <TaskListSkeleton />;
   if (error) return <ErrorState message="Failed to load tasks" retry={refetch} />;
@@ -114,6 +114,17 @@ Global store (Zustand, Redux)    → Complex client state shared app-wide
 **Avoid prop drilling deeper than 3 levels.** If you're passing props through components that don't use them, introduce context or restructure the component tree.
 
 ## Design System Adherence
+
+### Reference-led UI quality
+
+When the product needs a distinct visual direction, collect evidence before choosing a layout:
+
+1. Search a trusted reference catalogue or use references supplied by the product team.
+2. Study two or three relevant screens. Record decisions about hierarchy, density, navigation, controls, responsive behavior, and interaction states.
+3. Turn those decisions into a short design contract before implementation. Name the screen's job, primary action, required states, responsive rules, and patterns to reject.
+4. Rebuild the useful structure in the product's own components, tokens, content, and visual language. Never copy another product's branding, proprietary text, imagery, or exact layout.
+
+Use references as evidence, not as templates. If references are unavailable, document the assumptions and verify the result against the product's existing design system.
 
 ### Avoid the AI Aesthetic
 
@@ -161,63 +172,6 @@ Don't skip heading levels. Don't use heading styles for non-heading content.
 - Use semantic color tokens: `text-primary`, `bg-surface`, `border-default` — not raw hex values
 - Ensure sufficient contrast (4.5:1 for normal text, 3:1 for large text)
 - Don't rely solely on color to convey information (use icons, text, or patterns too)
-
-## Accessibility (WCAG 2.1 AA)
-
-Every component must meet these standards:
-
-### Keyboard Navigation
-
-```tsx
-// Every interactive element must be keyboard accessible
-<button onClick={handleClick}>Click me</button>        // ✓ Focusable by default
-<div onClick={handleClick}>Click me</div>               // ✗ Not focusable
-<div role="button" tabIndex={0} onClick={handleClick}    // ✓ But prefer <button>
-     onKeyDown={e => {
-       if (e.key === 'Enter') handleClick();
-       if (e.key === ' ') e.preventDefault();
-     }}
-     onKeyUp={e => {
-       if (e.key === ' ') handleClick();
-     }}>
-  Click me
-</div>
-```
-
-### ARIA Labels
-
-```tsx
-// Label interactive elements that lack visible text
-<button aria-label="Close dialog"><XIcon /></button>
-
-// Label form inputs
-<label htmlFor="email">Email</label>
-<input id="email" type="email" />
-
-// Or use aria-label when no visible label exists
-<input aria-label="Search tasks" type="search" />
-```
-
-### Focus Management
-
-```tsx
-// Move focus when content changes
-function Dialog({ isOpen, onClose }: DialogProps) {
-  const closeRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (isOpen) closeRef.current?.focus();
-  }, [isOpen]);
-
-  // Trap focus inside dialog when open
-  return (
-    <dialog open={isOpen}>
-      <button ref={closeRef} onClick={onClose}>Close</button>
-      {/* dialog content */}
-    </dialog>
-  );
-}
-```
 
 ### Meaningful Empty and Error States
 
@@ -292,15 +246,10 @@ function useToggleTask() {
 }
 ```
 
-## See Also
-
-For detailed accessibility requirements and testing tools, see the [accessibility checklist](references/accessibility-checklist.md).
-
 ## Common Rationalizations
 
 | Rationalization | Reality |
 |---|---|
-| "Accessibility is a nice-to-have" | It's a legal requirement in many jurisdictions and an engineering quality standard. |
 | "We'll make it responsive later" | Retrofitting responsive design is 3x harder than building it from the start. |
 | "The design isn't final, so I'll skip styling" | Use the design system defaults. Unstyled UI creates a broken first impression for reviewers. |
 | "This is just a prototype" | Prototypes become production code. Build the foundation right. |
@@ -323,6 +272,6 @@ After building UI:
 - [ ] All interactive elements are keyboard accessible (Tab through the page)
 - [ ] Screen reader can convey the page's content and structure
 - [ ] Responsive: works at 320px, 768px, 1024px, 1440px
-- [ ] Loading, error, and empty states all handled
+- [ ] Loading, empty, error, success, and permission states handled when applicable
 - [ ] Follows the project's design system (spacing, colors, typography)
-- [ ] No accessibility warnings in dev tools or axe-core
+- [ ] The rendered result passes a final UI-specific finish-gate review

@@ -18,11 +18,9 @@
 | Claude 官方 Superpowers Plugin | https://claude.com/plugins/superpowers | 官方 plugin 頁面描述 Superpowers 會教 Claude brainstorming、subagent development with code review、debugging、TDD、skill authoring。 |
 | SkillsMP | https://skillsmp.com/ | Marketplace，頁面標示有大量 agent skills；熱門片段中看到 `brainstorming.md` 來自 `obra/superpowers`，以及 `vercel-react-best-practices.md`。 |
 | Claude Skills Library | https://claudeskills.club/ | Marketplace / directory；分類數量包含 Developer Tools、Code Generation、Architecture Design、Testing and QA、Code Review、Project Management、Debugging 等。 |
-| LobeHub Skills | https://lobehub.com/skills | Marketplace；可查 Claude / Codex / ChatGPT SKILL.md。頁面片段顯示 `webapp-testing` 等官方 / GitHub skills。 |
 | MCPMarket Skills | https://mcpmarket.com/tools/skills | 本次請求時遇到 429 Too Many Requests；之後可再查 leaderboard。 |
 | SkillsMD | https://skillsmd.dev/ | Open Agent Skills Registry；主打 browse / install / share reusable skills，並依 usage 排名。 |
 | Skill Leaderboard | https://www.skillleaderboard.com/ | 以 GitHub data signals 排名 agent skills；可用來追蹤最快成長或大量使用的 skill。 |
-| SkillRegistry | https://skillregistry.io/ | AI skills / agent tools directory；頁面片段中可看到 `skill-creator`、`agent-browser` 等項目。 |
 | Skills Playground | https://skillsplayground.com/ | Claude Code marketplace / MCP server list；頁面片段中可看到 `Using Superpowers`、`Requesting Code Review` 等在熱門列表中。 |
 | AgenticSkills | https://agenticskills.io/ | Agent skills + MCP directory；頁面片段中可看到 `Using Superpowers`、`Skill Creator` 等高評級 / 高使用量項目。 |
 | Firecrawl Blog: Best Claude Code Skills | https://www.firecrawl.dev/blog/best-claude-code-skills | 推薦 Firecrawl、Karpathy guidelines、Frontend Design、Superpowers、Vercel Web Design Guidelines、Vercel React Best Practices、Document Skills、Webapp Testing、Trail of Bits Security、Skill Creator 等。 |
@@ -88,7 +86,6 @@
 | Skill | 推薦原因 |
 |---|---|
 | `skill-creator` | 建立、修改、優化 skills；之後本專案要整理 AG Grid / Antd / i18n / form skill 時很有用。 |
-| `webapp-testing` | 用 Playwright 測 local web app，可驗證前端功能、console、UI、browser logs。 |
 | `frontend-design` | 建立更有設計感、非 AI 預設感的前端介面。 |
 | `web-artifacts-builder` | React、Tailwind、shadcn/ui 等複雜 HTML artifacts 建構流程。 |
 | `docx` / `pdf` / `pptx` / `xlsx` | 文件處理通用技能，非前端但在日常工作很實用。 |
@@ -122,7 +119,6 @@
 | `git-workflow-and-versioning` | commit、branch、conflict、parallel streams 的 git 工作流。 |
 | `context-engineering` | 新 session、切換任務、agent 輸出品質下降時整理 context。 |
 | `frontend-ui-engineering` | 建構 production-quality UI；與本專案前端能力目標高度相關。 |
-| `browser-testing-with-devtools` | 需要真瀏覽器 DOM、console、network、performance、visual 驗證時使用。 |
 
 ## Vercel Agent Skills
 
@@ -181,10 +177,8 @@
 
 | Repository / 網站 | 推薦原因 |
 |---|---|
-| https://github.com/Jeffallan/claude-skills | Full-stack developer skills；包含 `react-expert`、`typescript-pro`、`code-reviewer`、`debugging-wizard`、`playwright-expert` 等。 |
 | https://github.com/softaworks/agent-toolkit | 多種通用 agent toolkit；包含 `react-dev`、`react-useeffect`、`openapi-typescript`、QA、文件、溝通與專案流程 skills。 |
 | https://github.com/wshobson/agents | 大型 multi-harness agentic plugin marketplace；skills 分散在 `plugins/*/skills`，包含 UI design、frontend/mobile、TypeScript、parallel debugging、team coordination。 |
-| https://github.com/bmad-labs/skills | TypeScript clean code、unit testing、E2E testing、UI/UX、RCA、multi-repo git ops 等。 |
 | https://github.com/awesome-skills/code-review-skill | 專門 code review；含 React、TypeScript、CSS、architecture、performance。 |
 | https://github.com/millionco/react-doctor | React 專案品質 / 效能 / 安全 / 架構診斷；偏前端但可作為通用 QA 流程的一部分。 |
 | https://github.com/heilcheng/awesome-agent-skills | Agent Skill Index；強調 real-world skills 與多 agent 相容性。 |
@@ -208,7 +202,6 @@
    - `verification-before-completion`
 2. `anthropics/skills`
    - `skill-creator`
-   - `webapp-testing`
    - `frontend-design`
 3. `addyosmani/agent-skills`
    - `source-driven-development`
@@ -222,9 +215,7 @@
 本專案目標是提升 AI 寫前端的能力，因此通用 skill 之外，建議一起研究：
 
 1. `anthropics/skills/frontend-design`
-2. `anthropics/skills/webapp-testing`
 3. `addyosmani/agent-skills/frontend-ui-engineering`
-4. `addyosmani/agent-skills/browser-testing-with-devtools`
 5. `vercel-labs/agent-skills/vercel-react-best-practices`
 6. `vercel-labs/agent-skills/web-design-guidelines`
 7. `vercel-labs/agent-skills/vercel-composition-patterns`
@@ -253,9 +244,6 @@
 2026-09-06 現行 VS Code Chat catalog 已整理為 67 個可移植 Agent Skill，其中通用 workflow 重點包含：
 
 - Superpowers 來源並已轉為 VS Code Chat：`using-vscode-chat`、`brainstorming`、`writing-plans`、`executing-plans`、`test-driven-development`、`systematic-debugging`、`requesting-code-review`、`verification-before-completion` 等 14 個。
-- Anthropic 官方：`skill-creator`、`frontend-design`、`webapp-testing`、`web-artifacts-builder`。
-- Addy Osmani engineering workflow：`using-agent-skills`、`spec-driven-development`、`planning-and-task-breakdown`、`source-driven-development`、`incremental-implementation`、`code-review-and-quality`、`security-and-hardening`、`performance-optimization`、`frontend-ui-engineering`、`browser-testing-with-devtools` 等。
-- 前端與品質補強：Vercel、Softaworks、wshobson、React Router、Ant Design、secondsky、Playwright、AG Grid、code review skills。
 
 完整來源、commit 與原始路徑請看 `skills/SKILLS_MANIFEST.md`；驗證結果請看 `skills/VALIDATION_REPORT.md`。
 
@@ -270,7 +258,6 @@ agent skills leaderboard
 Claude skills marketplace popular
 Claude Code skills TDD debugging code review
 SKILL.md test-driven-development systematic-debugging code-review
-Anthropic official skills skill-creator webapp-testing
 Vercel agent skills react best practices web design guidelines
 Trail of Bits Claude skills security
 Firecrawl Claude Code skill
@@ -282,4 +269,3 @@ Firecrawl Claude Code skill
 2. GitHub stars 可以作為初步參考，但仍要讀 `SKILL.md` 內容，確認是否符合本專案需要。
 3. 有些熱門資源是 `CLAUDE.md`、prompt、plugin、MCP server，不一定是標準 `SKILL.md`，需要分開紀錄。
 4. 之後如果要實際下載，建議先建立 `downloads/` 或 `external/` 目錄，並紀錄來源、授權、下載日期與 commit SHA。
-5. 對本專案最有價值的不是「下載最多 skill」，而是整理出能穩定提升前端品質的工作流程：設計 → 計畫 → TDD → 實作 → 瀏覽器驗證 → code review → 完成前驗證。

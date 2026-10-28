@@ -23,9 +23,9 @@ Do not require nested subagents. Workers do not dispatch workers. Omit `model` u
 Use the bundled Ubuntu helpers:
 
 ```bash
-workspace=$(~/.copilot/skills/subagent-driven-development/scripts/sdd-workspace docs/plans/feature.md)
-~/.copilot/skills/subagent-driven-development/scripts/task-brief docs/plans/feature.md 1
-~/.copilot/skills/subagent-driven-development/scripts/review-package docs/plans/feature.md BASE WORKTREE
+workspace=$(bash ~/.copilot/skills/subagent-driven-development/scripts/sdd-workspace docs/plans/feature.md)
+bash ~/.copilot/skills/subagent-driven-development/scripts/task-brief docs/plans/feature.md 1
+bash ~/.copilot/skills/subagent-driven-development/scripts/review-package docs/plans/feature.md BASE WORKTREE
 ```
 
 Artifacts live under `.copilot-workflows/sdd/<plan-name>/`, which self-ignores through a local `.gitignore`.
@@ -76,7 +76,7 @@ If files changed, require the durable report path and real command output. Commi
 After implementation:
 
 1. Save `git status --short` and the current snapshot in the ledger.
-2. Run `scripts/review-package` with `PLAN BASE WORKTREE` for uncommitted work, or pass an explicit head revision for an authorized committed task.
+2. Run `bash scripts/review-package` with `PLAN BASE WORKTREE` for uncommitted work, or pass an explicit head revision for an authorized committed task.
 3. Update the ledger to `reviewing` and record the exact package path.
 
 The immutable package prevents later changes from silently altering what the reviewer saw.
@@ -95,7 +95,7 @@ For blocking findings:
 2. Invoke a **new** `Frontend Implementer` with the original packet, current report/package, all findings, and current repository state.
 3. Generate a new fix-only review package from the prior reviewed snapshot.
 4. Invoke a **new** `Frontend Reviewer` with [re-review-prompt.md](re-review-prompt.md).
-5. Stop after two unsuccessful fix rounds and return the unresolved findings to the user.
+5. Stop after three unsuccessful fix rounds and return the unresolved findings to the user.
 
 Never route findings back to the original worker; VS Code subagent invocations are stateless.
 

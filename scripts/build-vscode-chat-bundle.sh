@@ -34,7 +34,10 @@ for path in \
   scripts/install-vscode-chat.sh \
   scripts/validate_skill_catalog.py \
   tests/test_vscode_conversion.py \
+  README.md \
+  SKILL_SOURCES.md \
   requirements-dev.txt \
+  docs/SKILL_REPLACEMENT_RESEARCH.zh-TW.md \
   docs/AGENT_USAGE_GUIDE.zh-TW.md \
   docs/VM_COPY_GUIDE.zh-TW.md \
   docs/VS_CODE_CHAT_SETUP.zh-TW.md; do
@@ -48,7 +51,9 @@ output_dir="$(dirname "$output")"
 mkdir -p "$output_dir"
 output="$(cd "$output_dir" && pwd -P)/$(basename "$output")"
 
-temp_root="$(mktemp -d)"
+temp_parent="$(cd "${TMPDIR:-/tmp}" && pwd -P)"
+temp_root="$(mktemp -d "$temp_parent/frontend-skill-bundle.XXXXXX")"
+[[ "${temp_root%/*}" == "$temp_parent" && "$temp_root" != "$temp_parent" ]] || exit 1
 trap 'rm -rf "$temp_root"' EXIT
 bundle_root="${temp_root}/frontend-skill-vscode-chat"
 mkdir -p "${bundle_root}/scripts" "${bundle_root}/tests" "${bundle_root}/docs"
@@ -58,8 +63,12 @@ cp -a "${repo_root}/agents" "${bundle_root}/agents"
 cp -a "${repo_root}/instructions" "${bundle_root}/instructions"
 cp "${repo_root}/scripts/install-vscode-chat.sh" "${bundle_root}/scripts/"
 cp "${repo_root}/scripts/validate_skill_catalog.py" "${bundle_root}/scripts/"
+cp "${repo_root}/scripts/build-vscode-chat-bundle.sh" "${bundle_root}/scripts/"
 cp "${repo_root}/tests/test_vscode_conversion.py" "${bundle_root}/tests/"
 cp "${repo_root}/requirements-dev.txt" "${bundle_root}/"
+cp "${repo_root}/README.md" "${bundle_root}/"
+cp "${repo_root}/SKILL_SOURCES.md" "${bundle_root}/"
+cp "${repo_root}/docs/SKILL_REPLACEMENT_RESEARCH.zh-TW.md" "${bundle_root}/docs/"
 cp "${repo_root}/docs/AGENT_USAGE_GUIDE.zh-TW.md" "${bundle_root}/docs/"
 cp "${repo_root}/docs/VM_COPY_GUIDE.zh-TW.md" "${bundle_root}/docs/"
 cp "${repo_root}/docs/VS_CODE_CHAT_SETUP.zh-TW.md" "${bundle_root}/docs/"

@@ -97,7 +97,7 @@ Add conditional skills only when staged paths or diff evidence support them:
 
 - `typescript-code-reviewer` for TypeScript/TSX type changes, `any`/`unknown`, assertions, async/error handling, React hooks or props.
 - `secpriv-code-review` for auth, permissions, user data, persistence, XSS/HTML injection, secrets, third-party scripts, analytics, privacy, or dangerous browser APIs.
-- Stack-specific skills when directly triggered: `react-dev`, `react-useeffect`, `vercel-react-best-practices`, `web-design-guidelines`, `accessibility-compliance`, `accessibility`, `tailwind-design-system`, `shadcn`, `ant-design`, `ag-dev`, `ag-update`, `react-hook-form-zod`, `internationalization-i18n`, `react-router`, `vitest`, `playwright-best-practices`, `playwright-cli`, `webapp-testing`.
+- Stack-specific skills when directly triggered: `react-dev`, `react-useeffect`, `vercel-react-best-practices`, `web-design-guidelines`, `tailwind-design-system`, `shadcn`, `ant-design`, `ag-dev`, `ag-update`, `react-hook-form-zod`, `internationalization-i18n`, `react-router`, `vitest`.
 
 If too many skills match, rank by direct staged evidence, core quality/security/type safety, explicit user request, then weak inference. Keep dropped/deferred skill decisions internal unless they affect verdict/confidence.
 

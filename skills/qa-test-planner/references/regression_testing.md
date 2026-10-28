@@ -247,7 +247,6 @@ User Management
 - Smoke tests
 - API tests
 - Data validation
-- Cross-browser checks
 
 **Keep Manual:**
 - Exploratory testing

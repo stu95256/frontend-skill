@@ -165,6 +165,8 @@ test.for([
 })
 ```
 
+> **v5:** titles are formatted with `pretty-format`, and a string interpolated through a `$` placeholder is **no longer quoted** (`case $id` → `case a1`, not `case 'a1'`). Interpolated-value length is capped by `taskTitleValueFormatTruncate` (default 40).
+
 ## Test Context
 
 First argument provides context utilities:
@@ -207,7 +209,7 @@ test('query', async ({ db }) => {
 })
 ```
 
-See [features-context](features-context.md) for fixture scopes, `test.override`, and the Playwright-compatible object syntax.
+See [features-context](features-context.md) for fixture scopes, `test.override`, and the object fixture syntax.
 
 ## Retry Configuration
 

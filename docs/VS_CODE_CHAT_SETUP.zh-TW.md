@@ -19,7 +19,7 @@ bash scripts/install-vscode-chat.sh --dry-run
 bash scripts/install-vscode-chat.sh
 ```
 
-安裝器只會合併本專案提供的檔案，不會清除 `~/.copilot` 中其他自訂內容，也不會修改 VS Code 設定或 BYOK credentials。
+安裝器會合併本專案提供的檔案，並清理本次目錄移除的四個舊項目；其他個人自訂內容、VS Code 設定與 BYOK credentials 都會保留。
 
 ## VS Code 設定
 

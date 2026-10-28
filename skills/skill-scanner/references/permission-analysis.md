@@ -9,7 +9,7 @@ Framework for evaluating tool permissions granted to agent skills.
 | **Tier 1 — Read-Only** | `Read`, `Grep`, `Glob` | Low | Cannot modify anything; safe for analysis skills |
 | **Tier 2 — Execution** | `Bash` | Medium | Can run arbitrary commands; should have clear justification |
 | **Tier 3 — Modification** | `Write`, `Edit`, `NotebookEdit` | High | Can modify files; verify the skill needs to create/edit files |
-| **Tier 4 — Network** | `WebFetch`, `WebSearch` | High | Can access external URLs; verify domains are necessary |
+| **Tier 4 — Network** | `web extraction`, `web search` | High | Can access external URLs; verify domains are necessary |
 | **Tier 5 — Delegation** | `Task` | High | Can spawn subagents; increases attack surface |
 | **Tier 6 — Unrestricted** | `*` (wildcard) | Critical | Full access to all tools; almost never justified |
 
@@ -31,8 +31,8 @@ For each tool in `allowed-tools`, verify:
 | `Bash` | Running bundled scripts (`uv run`), git/gh CLI, build tools | No scripts or CLI commands in instructions |
 | `Write` | Skill creates new files (reports, configs) | Skill only reads and analyzes |
 | `Edit` | Skill modifies existing files | Skill only reads and analyzes |
-| `WebFetch` | Skill fetches external documentation or APIs | No URLs referenced in instructions |
-| `WebSearch` | Skill needs to search the web | No search-dependent logic |
+| `web extraction` | Skill fetches external documentation or APIs | No URLs referenced in instructions |
+| `web search` | Skill needs to search the web | No search-dependent logic |
 | `Task` | Skill delegates to subagents for parallel work | Could run sequentially without delegation |
 
 ## Common Permission Profiles
@@ -55,9 +55,9 @@ Expected tool sets by skill type:
 - **Examples**: agents-md, doc-coauthoring
 
 ### External-Facing Skills
-- **Expected**: `Read, Grep, Glob, Bash, WebFetch`
-- **WebFetch justification**: Fetching documentation, API specs
-- **Flag if**: WebFetch is present but no URLs appear in skill instructions
+- **Expected**: `Read, Grep, Glob, Bash, web extraction`
+- **web extraction justification**: Fetching documentation, API specs
+- **Flag if**: web extraction is present but no URLs appear in skill instructions
 
 ### Full-Access Skills
 - **Expected**: Almost never
@@ -72,7 +72,7 @@ Combinations and patterns that warrant scrutiny:
 |---------|---------|
 | `Bash` + no scripts in skill directory | Why does it need shell access? |
 | `Write` or `Edit` + skill described as "analysis" or "review" | Analysis skills shouldn't modify files |
-| `WebFetch` + no URLs in instructions | What is it fetching? |
+| `web extraction` + no URLs in instructions | What is it fetching? |
 | `Task` + `Bash` + `Write` | Can spawn subagents with write access — high risk |
 | `*` (unrestricted) | Maximum attack surface; almost never appropriate |
 | Tools granted but never referenced in instructions | Overly permissive; violates least privilege |

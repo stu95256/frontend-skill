@@ -11,7 +11,7 @@ agents: []
 
 Independently validate the supplied plan. Treat the coordinator prompt as the complete context.
 
-Check requirement coverage, codebase fit, task ordering, file ownership, naming, accessibility, failure paths, tests, browser verification, rollback, and scope. Use read-only commands only.
+Check requirement coverage, codebase fit, task ordering, file ownership, naming, accessibility, failure paths, tests, rollback, and scope. Use read-only commands only.
 
 Return:
 

@@ -17,12 +17,12 @@ Preferred VS Code entry point: select the **Frontend Debug** custom agent. It ow
 
 1. Treat the provided paths and symptoms as a debug packet.
 2. Read the specified files and nearby usage before fixing.
-3. Gather evidence: error messages, reproduction, stack trace, browser console/network/DOM, tests, typecheck, git diff, or source lines.
+3. Gather evidence: error messages, reproduction, stack trace, tests, typecheck, git diff, or source lines.
 4. Trace data/control/render flow until you can explain why the problem happens.
 5. Select exact personal skills from `~/.copilot/skills/<skill-name>/SKILL.md` based on the root cause area.
 6. Write a minimal fix plan before edits.
 7. Fix the root cause, not only the symptom.
-8. Verify with commands or browser/manual reproduction that match the original problem.
+8. Verify with commands or targeted reproduction that match the original problem.
 9. Return a debug report with inspected files, evidence, root cause, skills used, changes, verification, and remaining risks.
 
 ## When to use
@@ -70,7 +70,7 @@ Use the narrowest reliable evidence source:
 
 - TypeScript: targeted typecheck or relevant compiler error.
 - Tests: original failing command.
-- Browser: console/network/DOM/reproduction steps.
+- Runtime: supplied logs, error output, and reproducible inputs.
 - Source: exact path/line evidence and nearby working pattern.
 - Git: recent diffs/log when regression timing matters.
 
@@ -106,15 +106,10 @@ Always include `systematic-debugging` conceptually for bugs. Add exact local ski
 | React Hook Form / Zod | `react-hook-form-zod` |
 | i18n | `internationalization-i18n` |
 | Tailwind / responsive / tokens | `tailwind-design-system`, `shadcn`, `responsive-design` |
-| A11y/focus/keyboard | `accessibility-compliance`, `accessibility` |
-| Browser-visible behavior | `playwright-cli`, `webapp-testing` |
-| DevTools-specific console/network/performance diagnosis | `browser-testing-with-devtools` |
-| Playwright trace/E2E | `playwright-best-practices` |
 | Post-fix React diagnostic scan | `react-doctor` (after the root-cause fix, not instead of debugging) |
 | Performance/rendering | `performance-optimization`, `vercel-react-best-practices` |
 | Security/privacy | `security-and-hardening`, `secpriv-code-review` |
 
-Browser fallback rule: use `playwright-cli` first for repeatable browser interaction. If the CLI cannot start, browser installation is blocked, or the target remains inaccessible, fall back to `browser-testing-with-devtools`. Record the failure reason, URL, fallback used, and DOM/screenshot/console/network evidence; never claim behavior that was not observed.
 
 Do not cite a skill unless `~/.copilot/skills/<skill-name>/SKILL.md` exists or Copilot diagnostics resolves it from another supported location.
 
@@ -144,7 +139,6 @@ Run verification that matches the original bug. Examples:
 - `npm run typecheck`
 - `npm run lint`
 - targeted test command
-- Playwright / browser reproduction
 - manual checklist when no automated route exists
 
 ### 8. Final report

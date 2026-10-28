@@ -19,7 +19,7 @@ A unified skill exploits this overlap. On the 128-case benchmark, SecPriv-Sonnet
 
 ## Methodology (5 phases)
 
-Defined in full in [`SKILL.md`](SKILL.md).
+Defined in full in [`SKILL.md`](../SKILL.md).
 
 | Phase | Purpose |
 |-------|---------|
@@ -150,12 +150,12 @@ A BibTeX entry will be added here once the paper is published.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). All contributors must sign Meta's CLA.
+See [CONTRIBUTING.md](https://github.com/facebookresearch/secpriv-skill/blob/70e1269a988cb401ac838164b3db9434ffa9f4ea/CONTRIBUTING.md). All contributors must sign Meta's CLA.
 
 ## Security
 
-To report a security issue, see [SECURITY.md](SECURITY.md). Please do not file public GitHub issues for security reports.
+To report a security issue, see [SECURITY.md](https://github.com/facebookresearch/secpriv-skill/blob/70e1269a988cb401ac838164b3db9434ffa9f4ea/SECURITY.md). Please do not file public GitHub issues for security reports.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT — see [LICENSE](https://github.com/facebookresearch/secpriv-skill/blob/70e1269a988cb401ac838164b3db9434ffa9f4ea/LICENSE).

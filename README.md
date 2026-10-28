@@ -4,14 +4,14 @@ A curated VS Code Chat / GitHub Copilot BYOK customization catalog for React and
 
 ## Catalog at a glance
 
-- **67** Agent Skills under `skills/`
+- **61** Agent Skills under `skills/`
 - **14** custom agents under `agents/`: five user-facing agents and nine hidden subagent workers
 - **2** cross-project instruction files under `instructions/`
 - Upstream source, pinned commit, path, and license tracked in [`skills/SKILLS_MANIFEST.md`](./skills/SKILLS_MANIFEST.md)
 - Update families and safe migration procedure tracked in [`SKILL_SOURCES.md`](./SKILL_SOURCES.md)
 - Machine-checkable catalog validation in [`scripts/validate_skill_catalog.py`](./scripts/validate_skill_catalog.py)
 
-The catalog targets React, TypeScript, Tailwind/shadcn, AG Grid React, Ant Design, react-i18next, React Router, React Hook Form/Zod, Vitest, and Playwright.
+The catalog targets React, TypeScript, Tailwind/shadcn, AG Grid React, Ant Design, react-i18next, React Router, React Hook Form/Zod, and Vitest.
 
 ## Default routing
 
@@ -20,10 +20,10 @@ The catalog targets React, TypeScript, Tailwind/shadcn, AG Grid React, Ant Desig
 | React Router | `react-router` — detects installed mode/version and reads the matching official docs |
 | AG Grid feature work | `ag-dev`; use `ag-update` only for dependency upgrades |
 | shadcn/Tailwind v4 components | `shadcn`; use `tailwind-design-system` for general tokens/utilities |
+| React Hook Form lifecycle | `react-hook-form-zod` — subscription scope, reset and parsed input/output |
+| Localization automation | `internationalization-i18n` — project-pinned i18next CLI and retained runtime patterns |
+| Design direction and UI polish | `frontend-design` — surface modes adapted from Impeccable |
 | Unit/integration tests | `vitest`, optionally `javascript-testing-patterns` |
-| Browser interaction/evidence | `playwright-cli`; use `browser-testing-with-devtools` for DevTools-specific diagnosis |
-| Playwright test authoring/review | `playwright-best-practices` |
-| Accessibility implementation | `accessibility-compliance`; use `accessibility` for evidence-led WCAG 2.2 audits |
 | OpenAPI-generated types | `openapi-typescript` deterministic CLI pipeline |
 | React completion diagnostics | `react-doctor` after root-cause work, never as a debugging substitute |
 | Third-party skill intake | `skill-scanner` before installation or update |
@@ -72,7 +72,7 @@ bash scripts/install-vscode-chat.sh --dry-run
 bash scripts/install-vscode-chat.sh
 ```
 
-The installer merges `skills/`, `agents/`, and `instructions/` into `~/.copilot` without deleting unrelated personal customizations or changing VS Code/BYOK settings. See the [Ubuntu setup and diagnostics guide](./docs/VS_CODE_CHAT_SETUP.zh-TW.md).
+The installer merges `skills/`, `agents/`, and `instructions/` into `~/.copilot`, retires the excluded specialist entries removed in the 2026-10-28 migration, and preserves unrelated personal customizations and VS Code/BYOK settings. See the [Ubuntu setup and diagnostics guide](./docs/VS_CODE_CHAT_SETUP.zh-TW.md).
 
 To move the catalog into a VM as one file, build the portable archive:
 
@@ -89,6 +89,7 @@ Repository folders are canonical source only; VS Code does not discover this roo
 - [Source and update policy](./SKILL_SOURCES.md)
 - [Per-skill manifest](./skills/SKILLS_MANIFEST.md)
 - [Validation report](./skills/VALIDATION_REPORT.md)
+- [2026-10-28 catalog update report](./docs/SKILL_REPLACEMENT_RESEARCH.zh-TW.md)
 - [Ubuntu VS Code Chat setup](./docs/VS_CODE_CHAT_SETUP.zh-TW.md)
 - [Ubuntu VM copy-and-install guide](./docs/VM_COPY_GUIDE.zh-TW.md)
 - [Custom Agents 中文使用與輸入格式](./docs/AGENT_USAGE_GUIDE.zh-TW.md)

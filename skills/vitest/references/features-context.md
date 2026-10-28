@@ -64,16 +64,16 @@ const test = baseTest
   .extend('baseUrl', { injected: true }, () => 'http://localhost:3000') // overridable via config
 ```
 
-## Object Syntax (Playwright-compatible)
+## Object Syntax
 
 Uses the `use()` callback; types must be declared manually:
 
 ```ts
-const test = baseTest.extend<{ page: Page; baseUrl: string }>({
-  page: async ({}, use) => {
-    const page = await browser.newPage()
-    await use(page)        // test runs here
-    await page.close()     // cleanup after
+const test = baseTest.extend<{ cache: Map<string, string>; baseUrl: string }>({
+  cache: async ({}, use) => {
+    const cache = new Map<string, string>()
+    await use(cache)
+    cache.clear()
   },
   baseUrl: 'http://localhost:3000',
 })

@@ -29,14 +29,11 @@
 | Figma Code Connect | https://developers.figma.com/docs/code-connect/ | 可建立 Figma component 與 code component 的對應；適合檢查設計稿與實作是否有 mapping。 |
 | Figma variables | https://help.figma.com/hc/en-us/articles/15339657135383-Guide-to-variables-in-Figma | 變數 / tokens 應對照 Tailwind theme、AntD token、專案 design tokens。 |
 | Design Tokens CG | https://www.designtokens.org/tr/drafts/format/ | Token naming / format 可作為跨 Figma 與程式碼的對照參考。 |
-| WCAG Quick Reference | https://www.w3.org/WAI/WCAG22/quickref/ | UI planning 階段就要列入 accessibility 驗證，不應最後補救。 |
 | WAI-ARIA APG | https://www.w3.org/WAI/ARIA/apg/ | 複雜互動元件需確認 keyboard 與 ARIA pattern。 |
 | Tailwind responsive design | https://tailwindcss.com/docs/responsive-design | Responsive plan 要定義 breakpoint 與 layout 行為，而非只照某個截圖尺寸。 |
 | Tailwind theme | https://tailwindcss.com/docs/theme | 樣式應優先映射到 theme token，避免任意 magic values。 |
 | Ant Design theme | https://ant.design/docs/react/customize-theme | AntD UI 應先查 component/token 能否支援，不要直接硬刻 CSS。 |
-| AG Grid accessibility | https://www.ag-grid.com/react-data-grid/accessibility/ | 表格任務要先確認 keyboard、ARIA、screen reader、large data 行為。 |
 | AG Grid theming | https://www.ag-grid.com/react-data-grid/theming/ | 表格視覺需對照 AG Grid theme，而非只改局部樣式。 |
-| React Hook Form accessibility | https://react-hook-form.com/advanced-usage#AccessibilityA11y | 表單任務要規劃 validation、aria-invalid、role alert、error message mapping。 |
 | react-i18next | https://react.i18next.com/ | 文案與錯誤訊息需在計畫階段納入 i18n key、插值、長字串影響。 |
 
 ---
@@ -208,7 +205,6 @@ Local skill matrix：
 | 需求要正式化成 spec | `spec-driven-development` | Step 0.5 / Step 5 / Step 7 |
 | 需要讀 source 才能確認方向 | `source-driven-development`、`context-engineering` | Step 2 code reconnaissance |
 | 技術可行性不確定，需要 throwaway experiment | `spike`、`spec-driven-development`、`source-driven-development` | Step 0.5 / Step 6；實驗成果只作決策證據，不直接成為 production implementation |
-| 動態網站、互動式文件或一般 web search / extraction 被阻擋，需要真實瀏覽器 | `playwright-cli` | Step 6 external research；用可重播 CLI session 做 DOM snapshot / screenshot 查證 |
 | 要把已確認方向拆成工作 | `planning-and-task-breakdown`、`writing-plans` | Step 8 implementation plan |
 | 後續要交給 sub-agent 實作 | `subagent-driven-development` | Implementation phase handoff |
 | Bug、行為異常、測試失敗 | `systematic-debugging` | Step 0.5 / Step 2，先找 root cause 再 plan |
@@ -222,10 +218,8 @@ Local skill matrix：
 | i18n / react-i18next / copy / locale formatting | `internationalization-i18n` | Step 2 i18n key reconnaissance / Step 8 i18n plan |
 | Tailwind / design tokens / design system | `tailwind-design-system`、`design-system-patterns` | Step 3 design/token mapping |
 | Responsive layout | `responsive-design` | Step 3 responsive analysis / Step 8 responsive plan |
-| Accessibility / keyboard / ARIA / contrast | `accessibility-compliance`、`accessibility`、`web-design-guidelines` | Step 3 / Step 8 / Step 9；實作規則加 evidence-led WCAG 2.2 audit |
 | Production UI quality | `frontend-design`、`frontend-ui-engineering`、`web-design-guidelines` | Step 3 / Step 7 / Step 8 |
 | Unit / integration tests | `vitest`、`javascript-testing-patterns` | Step 8 test plan |
-| E2E / visual / browser QA | `playwright-best-practices`、`playwright-cli`、`webapp-testing`、`browser-testing-with-devtools` | Step 8 QA plan / implementation verification；CLI 為一般 browser 操作，DevTools MCP 僅用於專項診斷 |
 | QA test cases / regression checklist | `qa-test-planner` | Step 8 / Step 9 |
 | React 功能完成後做診斷掃描 | `react-doctor` | Step 9 completion diagnostic；不能取代 root-cause debugging |
 | 新增或更新第三方 skill 前做安全掃描 | `skill-scanner` | Skill intake gate；檢查 prompt injection、scripts、permissions、secrets、supply chain |
@@ -253,7 +247,7 @@ Check:
 2. Which exact local skills should be used by code reconnaissance?
 3. Which exact local skills should be used by design/Figma analysis?
 4. Which exact local skills should be reserved for implementation or review phase?
-5. If external web research is needed, is `playwright-cli` included and available?
+5. If external research is needed, which official text sources and extraction tools are available?
 6. Are any referenced skills missing from `~/.copilot/skills/<name>/SKILL.md` and Copilot diagnostics?
 
 Return:
@@ -283,7 +277,7 @@ Return:
 - `responsive-design`: because ...
 
 **Use during web research:**
-- `playwright-cli`: when a page is dynamic, interactive, authenticated, or blocked to normal extraction; use a replayable CLI browser session.
+- Use official documentation and source extraction for external research.
 
 **Use during planning:**
 - `planning-and-task-breakdown`: because ...
@@ -330,7 +324,7 @@ Relevant local skills to check:
 - Routing: `react-router`
 - UI libraries: `ant-design`, `antd`, `ag-dev`
 - Forms/i18n: `react-hook-form-zod`, `internationalization-i18n`
-- Styling/design system: `tailwind-design-system`, `design-system-patterns`, `responsive-design`, `accessibility-compliance`
+- Styling/design system: `tailwind-design-system`, `design-system-patterns`, `responsive-design`
 
 Investigate:
 1. Read the known files and summarize what they do.
@@ -397,7 +391,7 @@ Relevant local skills to check:
 - UI/design quality: `frontend-design`, `frontend-ui-engineering`, `web-design-guidelines`
 - Design system/tokens: `design-system-patterns`, `shadcn`, `tailwind-design-system`
 - Component libraries: `ant-design`, `antd`, `ag-dev`
-- Responsive/a11y: `responsive-design`, `accessibility-compliance`
+- Responsive: `responsive-design`
 - Forms/i18n if visible in the design: `react-hook-form-zod`, `internationalization-i18n`
 
 Analyze:
@@ -483,12 +477,8 @@ Gap 分類：
 先有 code/Figma 上下文，再做外部 research，避免泛泛搜尋。
 
 網路查詢規則：
-- 一般靜態官方文件先用可引用的搜尋／擷取工具；只有頁面需要互動、動態渲染、登入狀態，或一般 extraction 被阻擋時，才載入 `playwright-cli`。
-- `playwright-cli` 是可重播的真實瀏覽器 fallback，不取代較便宜且可直接引用的文字搜尋工具。
-- 若 Playwright CLI 無法啟動、瀏覽器安裝受阻或目標頁面仍不可用，才 fallback 到 `browser-testing-with-devtools`；記錄失敗原因、URL、使用的 fallback、DOM/screenshot/console/network 證據，且不得把未覆蓋行為宣稱為已驗證。
-- 查文字、表格、連結、欄位值時，優先用 DOM / accessibility snapshot；只有 DOM 不足、內容在 canvas/image、或需要驗證視覺狀態時才用 screenshot。
-- UI 外觀、版面、modal、dropdown、可見性、spacing、顏色、overflow 等問題，優先用 screenshot，再用 DOM 補 exact text / attributes。
-- 同一時間只控制一個 Playwright CLI browser/session；不同網站或任務 sequentially 處理，避免 context 混淆。
+- 使用可引用的文字搜尋、官方文件或原始碼擷取工具。
+- 來源無法取得時記錄 URL、缺少的資訊與對計畫的影響；不得把未取得的資料當成證據。
 
 搜尋優先順序：
 1. 官方文件：React、TypeScript、Tailwind、AntD、AG Grid、react-hook-form、react-i18next、React Router。
@@ -508,17 +498,17 @@ Project stack:
 React, TypeScript, Tailwind, AG Grid React, Ant Design, react-i18next, react-router-dom, react-hook-form.
 
 Relevant local skills to cross-check before web research:
-- Conditional browser lookup workflow (dynamic, interactive, authenticated, or extraction-blocked pages only): `playwright-cli`
+
 - React / TypeScript: `react-dev`, `typescript-advanced-types`
 - Tailwind / design system: `tailwind-design-system`, `design-system-patterns`
 - Ant Design: `ant-design`, `antd`
 - AG Grid: `ag-dev`
 - Forms/i18n/router/API types: `react-hook-form-zod`, `internationalization-i18n`, `react-router`, `openapi-typescript`
-- Testing/a11y: `vitest`, `playwright-best-practices`, `playwright-cli`, `webapp-testing`, `accessibility-compliance`, `accessibility`
+- Testing: `vitest`
 
 Research rules:
-1. Prefer official static sources through normal search/extraction; load `playwright-cli` only for dynamic, interactive, authenticated, or blocked pages.
-2. With Playwright CLI, prefer DOM/accessibility snapshots for text/data extraction and screenshots for visual state.
+1. Prefer official text sources through normal search/extraction.
+2. Record retrieval limitations and unresolved questions.
 3. Prefer official docs.
 4. Include URLs.
 5. State version caveats if visible.
@@ -536,7 +526,7 @@ Return concise Traditional Chinese summary with source table, access method, and
 
 | Question | Source | Access method / skill used | Finding | Planning implication |
 |---|---|---|---|---|
-| ... | https://... | Playwright CLI browser session | ... | ... |
+| ... | https://... | Official documentation extraction | ... | ... |
 ```
 
 ### Step 7：提出 approaches
@@ -722,14 +712,14 @@ Relevant local skills to check against the plan:
 - Problem framing/spec: `brainstorming`, `spec-driven-development`, `planning-and-task-breakdown`
 - Frontend implementation: `react-dev`, `frontend-ui-engineering`, `frontend-design`
 - Stack-specific: `ant-design`, `antd`, `ag-dev`, `react-hook-form-zod`, `internationalization-i18n`, `react-router`, `openapi-typescript`
-- Quality gates: `typescript-code-reviewer`, `accessibility-compliance`, `accessibility`, `responsive-design`, `vitest`, `playwright-best-practices`, `playwright-cli`, `webapp-testing`, `qa-test-planner`, `react-doctor`, `verification-before-completion`
-- External research / blocked web lookup: `playwright-cli`
+- Quality gates: `typescript-code-reviewer`, `responsive-design`, `vitest`, `qa-test-planner`, `react-doctor`, `verification-before-completion`
+
 
 Review for:
 1. Missing requirements or misunderstood goal.
 2. Figma-vs-code gaps that were not resolved.
 3. Missing files, tests, states, responsive, a11y, i18n.
-4. If research requires dynamic, interactive, authenticated, or extraction-blocked browser access, missing `playwright-cli` usage (or documented DevTools fallback) and missing access-method evidence.
+4. If an external source is inaccessible, missing retrieval limitations or an unresolved-question record.
 5. Missing local skill usage for relevant stack areas.
 6. Vague tasks or placeholders.
 7. Risky assumptions that need user confirmation.
@@ -772,8 +762,8 @@ Gate：若 reviewer 是 `REQUEST_CHANGES`，先修 plan，再交給使用者。
 | Sub-agent | 何時使用 | Tool scope | 任務 | 回傳格式 |
 |---|---|---|---|---|
 | Code reconnaissance | 相關檔案多、需要查附近用法 | read/search only | 讀指定檔案、找相似用法、找 tests/types/routes | File refs、patterns、risks、questions |
-| Design/Figma analysis | 有 Figma/截圖/樣式落差 | read/vision/browser if available | 萃取 layout、states、tokens、responsive、a11y | Requirement table、gap candidates |
-| Web research | 動態／互動／登入頁面，或一般 extraction 被阻擋 | web/browser；需要時套用 `playwright-cli` | 優先查官方 docs；CLI 用 DOM snapshot / screenshot 查證 | Source table + access method |
+| Design/Figma analysis | 有 Figma/截圖/樣式落差 | read/vision if available | 萃取 layout、states、tokens、responsive、a11y | Requirement table、gap candidates |
+| Web research | 需要核對版本、API 或官方決策依據 | web/search | 優先官方文字文件與原始碼，記錄擷取限制 | Source table + access method |
 | Skill selector | 任務橫跨多技術或後續要寫 skill | file/search | 建議本任務該載入/後續該用哪些 skills | Skill list with reasons |
 | Plan reviewer | Plan 複雜、風險高、Figma-code gap 多 | file/read only | 找漏項、模糊 task、未解決決策 | PASS / REQUEST_CHANGES |
 
@@ -836,7 +826,7 @@ Gate：若 reviewer 是 `REQUEST_CHANGES`，先修 plan，再交給使用者。
 - [ ] 已列出會影響 plan 的 unknowns。
 - [ ] 已和使用者討論 blocking details 或明確列出 assumptions；如需提問，問題已用中文表達，且必要的 code identifiers / paths / commands 保持原文。
 - [ ] 已判斷應使用哪些 skills，以及哪些留到 implementation phase。
-- [ ] 已查必要的官方 / 網路文件並記錄 URL、access method；若使用 `playwright-cli`，已保存可重播的 DOM snapshot / screenshot 查證方式。
+- [ ] 已查必要的官方 / 網路文件並記錄 URL、access method 與擷取限制。
 - [ ] 已提出方案與 tradeoffs，並取得使用者方向確認。
 - [ ] 已寫出 implementation plan，含 exact paths、task breakdown、verification，以及生成 code 的命名規則 / naming plan。
 - [ ] 已完成 plan self-review。

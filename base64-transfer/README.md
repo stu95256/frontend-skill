@@ -51,6 +51,16 @@ frontend-skill.7z: OK
 7z x frontend-skill.7z
 ```
 
+此傳輸包包含 `frontend-skill-vscode-chat/`，與目前可攜式安裝包使用相同內容。解壓後執行：
+
+```bash
+cd frontend-skill-vscode-chat
+bash scripts/install-vscode-chat.sh --dry-run
+bash scripts/install-vscode-chat.sh
+```
+
+2026-10-28 更新後的目錄包含 61 個 Skills、14 個 Agents 與 2 份 instructions。安裝器會清理本次退役的目錄項目，並保留其他個人自訂內容。
+
 ## 流程摘要
 
 ```text

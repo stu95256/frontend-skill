@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import importlib.util
 import shutil
 import subprocess
 import sys
@@ -14,23 +15,53 @@ SDD = ROOT / "skills" / "subagent-driven-development" / "scripts"
 
 
 def run(*args: str, cwd: Path = ROOT) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(args, cwd=cwd, text=True, capture_output=True, check=True)
+    result = subprocess.run(args, cwd=cwd, text=True, encoding="utf-8", capture_output=True)
+    if result.returncode:
+        raise AssertionError(f"{args[0]} exited {result.returncode}:\n{result.stderr}")
+    return result
 
 
 class VSCodeConversionTests(unittest.TestCase):
+    def test_validator_rejects_removed_skill_references(self) -> None:
+        spec = importlib.util.spec_from_file_location("catalog_validator", ROOT / "scripts" / "validate_skill_catalog.py")
+        assert spec is not None and spec.loader is not None
+        validator = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(validator)
+        with tempfile.TemporaryDirectory() as temp:
+            validator.ROOT = Path(temp)
+            skill = Path(temp) / "skills" / "example"
+            skill.mkdir(parents=True)
+            for removed in ("playwright-cli", "accessibility", "accessibility-compliance", "fixing-motion-performance", "animation-performance"):
+                with self.subTest(removed=removed):
+                    (skill / "SKILL.md").write_text(f"Route this task to `{removed}`.\n", encoding="utf-8")
+                    errors: list[str] = []
+                    validator.validate_runtime_terms(Path(temp) / "skills", errors)
+                    self.assertEqual(1, len(errors))
+
     def test_catalog_validator(self) -> None:
         result = run(sys.executable, "scripts/validate_skill_catalog.py")
-        self.assertIn("67 skills, 14 custom agents, 2 instruction files", result.stdout)
+        self.assertIn("61 skills, 14 custom agents, 2 instruction files", result.stdout)
 
     @unittest.skipUnless(shutil.which("bash"), "bash is required")
     def test_installer_copies_exact_runtime_counts(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             target = Path(temp) / ".copilot"
-            run("bash", str(ROOT / "scripts" / "install-vscode-chat.sh"), "--target", target.as_posix())
+            retired = ("webapp-testing", "playwright-cli", "playwright-best-practices", "browser-testing-with-devtools", "accessibility", "accessibility-compliance", "fixing-motion-performance", "animation-performance")
+            for name in retired:
+                old = target / "skills" / name
+                old.mkdir(parents=True)
+                (old / "SKILL.md").write_text("old catalog entry\n", encoding="utf-8")
+            custom = target / "skills" / "personal-customization"
+            custom.mkdir()
+            (custom / "keep.txt").write_text("keep\n", encoding="utf-8")
+            run("bash", (ROOT / "scripts" / "install-vscode-chat.sh").as_posix(), "--target", target.as_posix())
             skills = sum((path / "SKILL.md").is_file() for path in (target / "skills").iterdir() if path.is_dir())
             agents = len(list((target / "agents").glob("*.agent.md")))
             instructions = len(list((target / "instructions").glob("*.instructions.md")))
-            self.assertEqual((67, 14, 2), (skills, agents, instructions))
+            self.assertEqual((61, 14, 2), (skills, agents, instructions))
+            self.assertTrue((custom / "keep.txt").is_file())
+            for name in retired:
+                self.assertFalse((target / "skills" / name).exists())
 
     def test_staged_commit_message_returns_ordered_candidates(self) -> None:
         text = (ROOT / "skills" / "frontend-staged-commit-message" / "SKILL.md").read_text(encoding="utf-8")
@@ -140,9 +171,9 @@ class VSCodeConversionTests(unittest.TestCase):
             (repo / "app.txt").write_text("after\n", encoding="utf-8")
             (repo / "new.txt").write_text("new content\n", encoding="utf-8")
 
-            run("bash", str(SDD / "sdd-workspace"), "plan.md", cwd=repo)
-            run("bash", str(SDD / "task-brief"), "plan.md", "1", cwd=repo)
-            run("bash", str(SDD / "review-package"), "plan.md", base, "WORKTREE", cwd=repo)
+            run("bash", (SDD / "sdd-workspace").as_posix(), "plan.md", cwd=repo)
+            run("bash", (SDD / "task-brief").as_posix(), "plan.md", "1", cwd=repo)
+            run("bash", (SDD / "review-package").as_posix(), "plan.md", base, "WORKTREE", cwd=repo)
 
             workspace = repo / ".copilot-workflows" / "sdd" / "plan"
             self.assertTrue((workspace / "task-1-brief.md").is_file())
@@ -151,6 +182,37 @@ class VSCodeConversionTests(unittest.TestCase):
             review = packages[0].read_text(encoding="utf-8")
             self.assertIn("+after", review)
             self.assertIn("+new content", review)
+
+            empty_range = subprocess.run(
+                ["bash", (SDD / "review-package").as_posix(), "plan.md", base, base],
+                cwd=repo, capture_output=True,
+            )
+            self.assertEqual(3, empty_range.returncode, empty_range.stderr.decode("utf-8"))
+            unrelated = run("git", "commit-tree", "HEAD^{tree}", "-m", "unrelated root", cwd=repo).stdout.strip()
+            unrelated_range = subprocess.run(
+                ["bash", (SDD / "review-package").as_posix(), "plan.md", base, unrelated],
+                cwd=repo, capture_output=True,
+            )
+            self.assertEqual(3, unrelated_range.returncode, unrelated_range.stderr.decode("utf-8"))
+
+    @unittest.skipUnless(shutil.which("bash") and shutil.which("git"), "bash and git are required")
+    def test_sdd_workspace_disambiguates_plan_names(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            repo = Path(temp)
+            run("git", "init", "-q", cwd=repo)
+            base = repo / ".copilot-workflows" / "sdd"
+            base.mkdir(parents=True)
+            ignore = base / ".gitignore"
+            ignore.write_text("# keep local policy\n*.tmp\n", encoding="utf-8")
+            for parent in ("alpha", "beta"):
+                (repo / parent).mkdir()
+                (repo / parent / "plan.md").write_text("# Plan\n", encoding="utf-8")
+            helper = (SDD / "sdd-workspace").as_posix()
+            first = run("bash", helper, "alpha/plan.md", cwd=repo).stdout.strip()
+            second = run("bash", helper, "beta/plan.md", cwd=repo).stdout.strip()
+            self.assertNotEqual(first, second)
+            self.assertEqual(first, run("bash", helper, "alpha/../alpha/plan.md", cwd=repo).stdout.strip())
+            self.assertEqual("# keep local policy\n*.tmp\n", ignore.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

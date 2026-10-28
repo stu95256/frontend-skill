@@ -20,7 +20,6 @@
 | `verification-before-completion` | `obra/superpowers` | 宣稱完成前必須跑驗證。 |
 | `security-and-hardening` | `addyosmani/agent-skills` | 安全 hardening；作為 security reviewer 的補充。 |
 | `web-design-guidelines` | `vercel-labs/agent-skills` | UI / UX / accessibility review。 |
-| `playwright-best-practices` | `currents-dev/playwright-best-practices-skill` | E2E、component、visual、a11y、security、CI 等 Playwright review/測試準則。 |
 
 結論：目前一般 code review、TypeScript review、UI/test review 已經足夠；本次新增主要補兩個缺口：
 
@@ -111,7 +110,6 @@
 - `code-review-and-quality`
 - `typescript-code-reviewer`
 - `web-design-guidelines`（如果有 UI/UX 變更）
-- `playwright-best-practices` 或 `webapp-testing`（如果有 browser behavior / E2E 風險）
 
 ### merge / release 前的平行 sub-agent audit
 
@@ -121,7 +119,6 @@
   - `secpriv-code-review`：security + privacy。
   - `code-review-and-quality`：general correctness、architecture、performance。
   - `web-design-guidelines`：UI / accessibility。
-  - `playwright-best-practices`：E2E / browser runtime / flakiness。
   - `verification-before-completion`：最後驗證與 evidence gate。
 
 ## 後續可再研究

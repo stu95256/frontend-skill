@@ -124,25 +124,6 @@ vitest --update
 
 In CI (`process.env.CI`), Vitest **never writes** snapshots: mismatches, missing snapshots, and **obsolete snapshots** (entries no longer matching any test) all fail the run.
 
-## Visual & ARIA Snapshots (Browser Mode)
-
-```ts
-import { expect, test } from 'vitest'
-import { page } from 'vitest/browser' // v4: import from 'vitest/browser'
-
-test('button looks correct', async () => {
-  await expect(page.getByRole('button')).toMatchScreenshot('primary-button')
-})
-
-// ARIA snapshot — assert the accessibility tree (4.1+, experimental)
-test('nav structure', async () => {
-  await expect.element(page.getByRole('navigation')).toMatchAriaInlineSnapshot(`
-    - navigation "Main":
-      - link "Home"
-  `)
-})
-```
-
 ## Custom Snapshot Matchers (4.1+)
 
 Build matchers on the composable `Snapshots` helpers from `vitest` (replaces importing from `jest-snapshot`):
@@ -249,5 +230,4 @@ defineConfig({
 Source references:
 - https://vitest.dev/guide/snapshot.html
 - https://vitest.dev/api/expect.html#tomatchsnapshot
-- https://vitest.dev/guide/browser/aria-snapshots
 -->

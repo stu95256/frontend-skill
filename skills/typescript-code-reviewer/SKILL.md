@@ -27,7 +27,7 @@ Do not use this skill for:
 
 - Pure CSS/design-only review with no TypeScript changes.
 - Deep type-level library design where the main task is creating complex types rather than reviewing product code; use `typescript-advanced-types` first.
-- End-to-end test authoring from scratch; use `playwright-best-practices` or `vitest` first, then this skill for review.
+- Unit/integration test authoring from scratch; use `vitest` first, then this skill for review.
 
 ## Review Inputs
 
@@ -35,7 +35,7 @@ Gather only the context needed to review safely:
 
 1. Diff or files to review: `git diff`, `git diff --cached`, PR patch, or selected file paths.
 2. TypeScript configuration: `tsconfig.json`, inherited configs, and package manager scripts.
-3. Lint/test setup: `package.json`, ESLint config, Vitest/Jest/Playwright config if present.
+3. Lint/test setup: `package.json`, ESLint config, Vitest/Jest config if present.
 4. Runtime boundaries: API responses, URL/search params, localStorage/sessionStorage, FormData, JSON parsing, `postMessage`, third-party scripts, generated types.
 5. UI context for TSX: component responsibilities, props/state ownership, hooks, forms, routing mode, design-system conventions.
 

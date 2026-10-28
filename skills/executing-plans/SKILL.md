@@ -20,7 +20,7 @@ Execute an approved plan in dependency order and prove each acceptance criterion
    - run the specified targeted verification;
    - record changed files and actual results;
    - mark it complete only when its criteria pass.
-5. Use `subagent-driven-development` when `agent/runSubagent` and the required worker agents are available. Keep dependent tasks sequential and use fresh invocations for every repair.
+5. Preserve the user's selected execution method. Inline execution completes the plan in the current session with one independent final review when available. Use `subagent-driven-development` when independent per-task implementation/review is requested and the required workers are available. Keep dependent tasks sequential and use fresh invocations for every repair.
 6. After all tasks, review the full diff and run relevant integration tests, lint, typecheck, build, and runtime checks.
 7. Report completed tasks, exact verification results, skipped checks, coordinator rulings, and remaining risks.
 
@@ -31,3 +31,5 @@ Stop for an irreversible or destructive operation, a security-sensitive action, 
 ## Verification
 
 The plan is complete only when every task and acceptance criterion is accounted for and the final integrated workspace passes the relevant checks.
+
+Before a review of committed changes, verify that the head descends from the recorded base and that the range is nonempty. A clean result from an empty or unrelated range is not verification. Preserve uncommitted review support when the user has not authorized commits.

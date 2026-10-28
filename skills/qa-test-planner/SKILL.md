@@ -411,7 +411,7 @@ Response includes:
 2. **Compare Implementation**
 ```
 TC: Primary Button Visual Validation
-1. Inspect primary button in browser dev tools
+1. Inspect the primary button component and its style tokens
 2. Compare against Figma specs:
    - Dimensions: 120x40px
    - Border-radius: 8px
@@ -434,12 +434,12 @@ Figma link: [specific component]
 
 | Element | What to Check | Tool |
 |---------|---------------|------|
-| Colors | Hex values exact | Browser color picker |
-| Spacing | Padding/margin px | DevTools computed styles |
-| Typography | Font, size, weight | DevTools font panel |
-| Layout | Width, height, position | DevTools box model |
+| Colors | Hex values exact | Color token definitions |
+| Spacing | Padding/margin px | Style declarations |
+| Typography | Font, size, weight | Typography tokens |
+| Layout | Width, height, position | Layout declarations |
 | States | Hover, active, focus | Manual interaction |
-| Responsive | Breakpoint behavior | DevTools device mode |
+| Responsive | Breakpoint behavior | Media-query definitions |
 
 ### Example Queries
 ```
@@ -673,7 +673,6 @@ Verify users can successfully login with valid credentials
 ### Preconditions
 - User account exists (test@example.com / Test123!)
 - User is not already logged in
-- Browser cookies cleared
 
 ### Test Steps
 1. Navigate to https://app.example.com/login

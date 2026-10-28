@@ -90,8 +90,6 @@ Conditional skills:
 | `useEffect`, subscriptions, browser APIs, timers, derived state, async side effects | `react-useeffect` | 2 | Avoid unnecessary effects, stale closures, cleanup, synchronization bugs. |
 | React performance, memoization, expensive renders, server/client boundary, bundle/runtime concerns | `vercel-react-best-practices` | 2 | React/Next/Vite performance patterns and avoidable re-renders. |
 | UI, layout, visual hierarchy, copy, UX, interaction states, responsive behavior | `web-design-guidelines` | 2 | UI quality, affordance, polish, responsive behavior. |
-| Accessibility, keyboard interaction, ARIA, semantic HTML, focus management | `accessibility-compliance` | 2 | WCAG/accessibility risks and concrete remediation. |
-| Accessibility audit evidence, WCAG 2.2 checks, keyboard/screen-reader verification | `accessibility` | 2 | Evidence-led accessibility audit and reproducible verification. |
 | Tailwind design tokens, theme scales, variants, reusable utility composition | `tailwind-design-system` | 2 | Token consistency, class composition, design-system maintainability. |
 | Tailwind v4 config, shadcn-style components, CSS variables, design tokens in shadcn patterns | `shadcn` | 2 | Tailwind v4 / shadcn compatibility, token usage, component styling. |
 | Ant Design components, ProComponents, Table/Form/Modal APIs, theme tokens | `ant-design` | 2 | antd component API, theme/token usage, accessibility/performance. |
@@ -99,9 +97,6 @@ Conditional skills:
 | forms, validation schemas, React Hook Form, Zod, field errors | `react-hook-form-zod` | 2 | Form state, schema validation, error UX, controlled/uncontrolled issues. |
 | i18n files, translation keys, interpolation, locale formatting, react-i18next usage | `internationalization-i18n` | 2 | Missing translations, interpolation safety, date/number formatting. |
 | React Router routes/navigation/loaders/actions/framework config | `react-router` | 2 | Detect the installed version and mode, then review with the matching official guidance. |
-| Playwright config/specs/selectors/fixtures were staged or the diff changes E2E-visible selectors | `playwright-best-practices` | 2 | E2E selector stability and browser automation risk. Do not ask for unit tests. |
-| Reproducible browser interaction or DOM/screenshot verification is needed | `playwright-cli` | 2 | Browser evidence using snapshots first and screenshots for visual state. |
-| Browser-visible runtime behavior changed but no Playwright-specific files were staged | `webapp-testing` | 2 | Runtime/browser behavior risk and manual/browser verification ideas. Do not ask for unit tests. |
 
 Do not select a skill unless `~/.copilot/skills/<skill-name>/SKILL.md` exists or Copilot's skill diagnostics confirms it is loaded from another supported location. Do not write generic labels like "React skill" or ambiguous rows like "A or B" in the dispatch plan. If two skills both match, select both and run two subagents for each.
 

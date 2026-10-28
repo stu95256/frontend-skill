@@ -25,6 +25,8 @@ if [ "$head" = "WORKTREE" ]; then
   head_label="worktree"
 else
   git rev-parse --verify --quiet "$head" >/dev/null || { echo "bad HEAD: $head" >&2; exit 2; }
+  git merge-base --is-ancestor "$base" "$head" || { echo "HEAD is not a descendant of BASE: ${base}..${head}" >&2; exit 3; }
+  [ "$(git rev-list --count "${base}..${head}")" -gt 0 ] || { echo "empty commit range: ${base}..${head}" >&2; exit 3; }
   range="${base}..${head}"
   head_label=$(git rev-parse --short "$head")
 fi
@@ -32,7 +34,7 @@ fi
 if [ $# -eq 4 ]; then
   out=$4
 else
-  dir=$("$(cd "$(dirname "$0")" && pwd)/sdd-workspace" "$plan")
+  dir=$("${BASH:-bash}" "$(cd "$(dirname "$0")" && pwd)/sdd-workspace" "$plan")
   out="$dir/review-$(git rev-parse --short "$base")..${head_label}.diff"
 fi
 

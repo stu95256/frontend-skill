@@ -16,9 +16,6 @@
 | Claude Code subagents | https://docs.anthropic.com/en/docs/claude-code/sub-agents | 複雜 debug 可委派 read-only investigation sub-agent，但主 agent 必須整合證據與負責修正。 |
 | Building effective agents | https://www.anthropic.com/engineering/building-effective-agents | Workflow 適合可預測流程；用 prompt chaining / evaluator-optimizer 思維設中間 gate，避免沒有證據就進入下一步。 |
 | Superpowers systematic-debugging | https://raw.githubusercontent.com/obra/superpowers/main/skills/systematic-debugging/SKILL.md | 核心原則：No fixes without root cause investigation；先讀錯誤、重現、查近期變更、追資料流，再修 root cause。 |
-| Chrome DevTools JavaScript debugging | https://developer.chrome.com/docs/devtools/javascript/ | Debug 基本流程：reproduce the bug、pause with breakpoints、step through code、inspect values、fix and verify。 |
-| Chrome DevTools Console logging | https://developer.chrome.com/docs/devtools/console/log | Console / warning / error 是 evidence；需要記錄實際訊息與觸發步驟，不可只憑印象修。 |
-| Playwright trace viewer | https://playwright.dev/docs/trace-viewer | 對 browser / E2E 問題，可用 trace、screenshots、DOM snapshots、network/action timeline 回放問題。 |
 | React Developer Tools | https://react.dev/learn/react-developer-tools | React 問題可用 component tree / props / state / hook 狀態輔助確認 render 與 state flow。 |
 
 ---
@@ -35,7 +32,7 @@
    - 若問題跨多檔，建立 data/control flow map。
 
 3. **每個重要判斷都要有 evidence。**
-   - Evidence 可以是 error message、stack trace、reproduction command、console output、test failure、git diff、source line、附近 working example、官方文件、browser observation。
+   - Evidence 可以是 error message、stack trace、reproduction command、console output、test failure、git diff、source line、附近 working example、官方文件。
    - 最終報告要保留 debug log，不只說「已修好」。
 
 4. **依問題類型選 skill，而不是固定套同一套技能。**
@@ -44,7 +41,7 @@
 
 5. **修正要最小化且可驗證。**
    - 一次只修 root cause，不順手重構。
-   - 修完要跑與問題對應的 verification：typecheck、lint、test、targeted reproduction、browser check 或 manual checklist。
+   - 修完要跑與問題對應的 verification：typecheck、lint、unit/integration test 或 targeted reproduction。
 
 6. **debug workflow 需要紀錄開始、過程、完成。**
    - Intake、evidence、hypothesis、selected skills、fix plan、changed files、verification result、remaining risk 都要可回放。
@@ -71,11 +68,11 @@
 | Gate | 何時發生 | 通過條件 | 未通過時 |
 |---|---|---|---|
 | Intake Gate | Step 0 後 | 至少知道問題描述與一個檔案 / symbol / route / component / error 訊息 | 若完全無法定位，先問 1-3 個 blocking questions；否則標假設後搜尋。 |
-| Evidence Gate | Step 2 後 | 有錯誤訊息、重現方式、測試失敗、browser observation 或可解釋的 source evidence | 補查 logs、跑 command、讀更多檔、派 read-only investigator。 |
+| Evidence Gate | Step 2 後 | 有錯誤訊息、重現方式、測試失敗 或可解釋的 source evidence | 補查 logs、跑 command、讀更多檔、派 read-only investigator。 |
 | Root Cause Gate | Step 4 後 | 能清楚說出「因為 X，在 Y 條件下導致 Z」並指到 source lines / call path | 不修；回 Step 1-3 追資料流或查 working example。 |
 | Skill Gate | Step 5 後 | 列出 exact local skills、選用原因、對應問題類型；所有 skill path 存在 | 移除不存在的 skill；用可用替代 skill 或記錄 missing gap。 |
 | Fix Gate | Step 6 後 | 最小修正方案只針對 root cause；列出要改的 exact files | 若需要架構決策或 scope 擴大，先向使用者回報。 |
-| Verification Gate | Step 8 後 | 有 command / browser / manual evidence 證明問題改善，且無明顯 regression | 若失敗，最多回到 hypothesis loop；不要疊加隨機修法。 |
+| Verification Gate | Step 8 後 | 有 command / test evidence 證明問題改善，且無明顯 regression | 若失敗，最多回到 hypothesis loop；不要疊加隨機修法。 |
 | Completion Gate | Step 9 後 | Debug record 完整，包含 changed files、verification、剩餘風險 | 補紀錄或揭露未完成項目。 |
 
 ---
@@ -167,7 +164,6 @@ search_files("route-id-or-path", path="src")
 優先順序：
 
 1. 如果有 test command / typecheck / lint 可重現，先跑最小 command。
-2. 如果是 browser-visible 問題，用 Playwright / DevTools / screenshot / console / network 收 evidence。
 3. 如果無法重現，仍要從 source trace 與附近 working pattern 建立可檢驗假設，但要標記未完全重現。
 
 Evidence record：
@@ -248,15 +244,10 @@ What would disprove this:
 | React Hook Form / validation / submit | `react-hook-form-zod` | Form state、schema、errors、controlled/uncontrolled。 |
 | i18n / react-i18next / missing text | `internationalization-i18n` | namespace/key/interpolation/locale formatting。 |
 | Tailwind / responsive / design tokens | `tailwind-design-system`、`shadcn`、`responsive-design` | class/token/responsive 修正。 |
-| Accessibility / keyboard / focus | `accessibility-compliance`、`accessibility` | 實作規則加 evidence-led WCAG 2.2 驗證。 |
-| Browser-visible runtime issue | `playwright-cli`、`webapp-testing` | 可重播 browser interaction、DOM snapshot、必要時 screenshot。 |
-| DevTools console/network/performance diagnosis | `browser-testing-with-devtools` | Chrome DevTools MCP 專項診斷。 |
-| Playwright trace / E2E reproduction | `playwright-best-practices` | Trace viewer、selector/action/debug pattern。 |
 | React 修正完成後的診斷補充 | `react-doctor` | 在 root-cause fix 後掃描；不能取代 debug 方法。 |
 | Performance / excessive renders / expensive UI | `performance-optimization`、`vercel-react-best-practices` | 前端效能與 render behavior。 |
 | Security / privacy bug | `security-and-hardening`、`secpriv-code-review` | 安全與 privacy 修正。 |
 
-Browser fallback：一般可重播互動先用 `playwright-cli`。若 CLI 無法啟動、browser 安裝受阻或目標仍不可存取，才 fallback 到 `browser-testing-with-devtools`；記錄失敗原因、URL、fallback、DOM/screenshot/console/network 證據，且不得把未觀察的行為宣稱為已驗證。
 
 Skill selection record：
 
@@ -290,7 +281,6 @@ Skill selection record：
 - `npm run typecheck`
 - `npm run lint`
 - `npm test -- ...`
-- browser reproduction steps / Playwright command
 
 **Out of scope:**
 - unrelated refactor
@@ -319,7 +309,6 @@ Skill selection record：
 | TypeScript error | targeted typecheck 或全專案 typecheck。 |
 | lint / formatting | targeted lint 或全專案 lint。 |
 | test failure | 原本 failing test command 需通過。 |
-| browser runtime | 原重現步驟需不再出錯；記錄 console/network/DOM result。 |
 | form / table / route / i18n | 對應 user flow 或 component behavior 需驗證。 |
 | visual/responsive | 指定 breakpoint / state 需檢查；若只能人工，列 manual checklist。 |
 
@@ -405,7 +394,7 @@ Return: files inspected, evidence, likely root cause, disconfirming evidence, re
 6. AntD Form / Table 問題沒查 controlled props、`name`、`rowKey`、`valuePropName`。
 7. AG Grid 問題沒查 row identity、columnDefs memoization、grid API lifecycle。
 8. i18n 問題只改顯示文字，沒查 namespace / interpolation / fallback。
-9. 修完只說「應該可以」，沒有跑 command 或記錄 manual/browser verification。
+9. 修完只說「應該可以」，沒有跑 command 或記錄 targeted verification。
 10. 修正失敗後繼續疊加第二、第三個猜測，沒有回 root cause gate。
 
 ---

@@ -9,6 +9,8 @@ Where the content of the page is not obvious from the slug, additional context a
 3. Determine the appropriate version as full semver e.g. 35.2.1
 4. Build a docs URL from a slug: `https://www.ag-grid.com/archive/{major.minor.patch}/{framework}-data-grid/{slug}/`
 
+The website has bot protection. To avoid it: always use your built-in web fetch tool, not e.g. curl or node scripts; if a JS challenge is served, allow it to complete and you will then be able to access the docs page; if you get a 403 response, look at the response content for potential workarounds, e.g. appending `.md` to the URL for individual docs content pages.
+
 If a page 404s, the slug is not wrong — this list covers the latest version, and the feature it names most likely did not exist in the version you are building the URL for. Check the same slug on the current docs (drop `/archive/{version}` from the URL) to see what the feature is and which version introduced it, then work with the APIs the project's version actually has.
 
 ---
@@ -144,6 +146,10 @@ If a page 404s, the slug is not wrong — this list covers the latest version, a
 - `floating-filters`
 - Custom Floating Filters `component-floating-filter`
 - `filter-advanced`
+- Columns & Filter Options `filter-advanced-columns`
+- `filter-advanced-input-builder`
+- `filter-advanced-custom-filter-options`
+- Filter Model / API `filter-advanced-api`
 - `filter-external`
 - `filter-quick`
 - `row-selection`
@@ -178,8 +184,13 @@ If a page 404s, the slug is not wrong — this list covers the latest version, a
 - Updating Data `data-update-single-row-cell`
 - Updating Data `data-update-transactions`
 - Updating Data `data-update-high-frequency`
+- Overlays & Loading `overlays-overview`
+- Overlays & Loading `overlays-provided`
+- Overlays & Loading `overlays-active`
+- Overlays & Loading `loading-rows`
 - `keyboard-navigation`
 - `touch`
+- `input-fields`
 - Accessibility (ARIA) `accessibility`
 - RTL Text Direction `rtl`
 - `aligned-grids`
@@ -236,12 +247,10 @@ If a page 404s, the slug is not wrong — this list covers the latest version, a
 - Tool Panels: Custom Panel `component-tool-panel`
 - Quick Access Toolbar `toolbar`
 - `column-menu`
+- `column-chooser`
 - `context-menu`
 - `component-menu-item`
 - `status-bar`
-- `overlays-overview`
-- `overlays-provided`
-- `overlays-active`
 - `row-models`
 - `server-side-model`
 - `server-side-model-api-reference`
@@ -253,7 +262,7 @@ If a page 404s, the slug is not wrong — this list covers the latest version, a
 - `server-side-model-pivoting`
 - `server-side-model-pagination`
 - `server-side-model-selection`
-- Server-Side Row Model `component-loading-cell-renderer`
+- `server-side-model-loading-rows`
 - `server-side-model-changing-columns`
 - Updating Data `server-side-model-updating`
 - Updating Data `server-side-model-updating-refresh`
@@ -267,7 +276,6 @@ If a page 404s, the slug is not wrong — this list covers the latest version, a
 - Viewport Row Model `viewport`
 - `csv-export`
 - `excel-export`
-- API Reference `excel-export-api`
 - `excel-export-styles`
 - `excel-export-formulas`
 - `excel-export-extra-content`
@@ -284,10 +292,24 @@ If a page 404s, the slug is not wrong — this list covers the latest version, a
 - `excel-export-master-detail`
 - `excel-export-page-setup`
 - `excel-export-data-protection`
+- API Reference `excel-export-api`
+- `excel-import`
+- `pdf-export`
+- `pdf-export-styles`
+- `pdf-export-languages`
+- `pdf-export-extra-content`
+- `pdf-export-customising-content`
+- `pdf-export-images`
+- `pdf-export-watermarks`
+- `pdf-export-rows`
+- `pdf-export-columns`
+- `pdf-export-hyperlinks`
+- `pdf-export-master-detail`
+- `pdf-export-page-setup`
+- API Reference `pdf-export-api`
 - `clipboard`
 - `drag-and-drop`
 - `printing`
-- `excel-import`
 - `grid-state`
 - Grid Context `context`
 - `grid-lifecycle`

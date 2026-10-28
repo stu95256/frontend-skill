@@ -46,7 +46,6 @@ if (process.env.NODE_ENV !== "production") {
 
 Docs: `dev-validation`
 
-2. Where practical, include a real browser in the verification loop, e.g. using Chrome MCP or Playwright, and look out for console messages.
 
 ## Angular
 

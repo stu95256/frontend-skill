@@ -28,6 +28,7 @@ Use **Chat: Open Customizations** and Chat Diagnostics to confirm that VS Code l
 6. Leave nested subagents disabled unless a specific bounded recursive workflow requires them.
 7. Do not hard-code a model in shared agents by default; let workers inherit the currently selected BYOK model unless a tested model route is intentional.
 8. Verify changes with actual tools and report real outputs rather than plausible results.
+9. Re-read the specific supporting reference when its step is reached, especially after context compaction. Keep task scope, retry limits, and verification gates in durable artifacts instead of assuming earlier instructions remain in context.
 
 ## Related Skill
 
