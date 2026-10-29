@@ -59,7 +59,9 @@ bash scripts/install-vscode-chat.sh --dry-run
 bash scripts/install-vscode-chat.sh
 ```
 
-2026-10-29 更新後的目錄包含 59 個 Skills、10 個 Agents 與 2 份 instructions。安裝器會清理本次退役的目錄項目，並保留其他個人自訂內容。
+2026-10-29 更新後的目錄包含 59 個 Skills、10 個 Agents 與 2 份 instructions，並附有最新版 [Custom Agents 中文使用指南](../docs/AGENT_USAGE_GUIDE.zh-TW.md)。解壓後可在 `docs/AGENT_USAGE_GUIDE.zh-TW.md` 查看使用方式；Agent picker 中的三個入口為 **Frontend Implementation**、**Frontend Review**、**VS Code Skill Creator**，其餘七個為隱藏 workers。安裝器會清理本次退役的目錄項目，並保留其他個人自訂內容。
+
+此壓縮檔從目前 Repository 的來源重新封裝，與 `scripts/build-vscode-chat-bundle.sh` 產生的可攜式安裝包逐檔一致。每次更新壓縮檔後，都必須重新產生 `transfer.txt` 與 `frontend-skill.7z.sha256.txt`，並確認 Base64 還原後的 SHA-256 與原始壓縮檔相同。
 
 ## 流程摘要
 

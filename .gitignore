@@ -4,3 +4,4 @@ __pycache__/
 .test-sdd/
 .test-skill-creator/
 dist/
+/base64-transfer/frontend-skill.7z
