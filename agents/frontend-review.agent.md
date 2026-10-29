@@ -22,11 +22,15 @@ Select exactly one review mode from the user's request:
 Across all modes:
 
 - Build one complete immutable packet before dispatch.
+- Read the selected workflow's shared review contract. For staged modes, pin HEAD/index blob evidence and recheck identity before the final verdict; for branch mode, keep the three pinned commits.
 - Select Agent Skills from diff evidence rather than loading the entire catalog.
+- Use upgraded design, RHF, i18n and TDD criteria only for concrete matching risks. Implementation instructions inside those Skills never authorize writes during review.
 - Invoke independent **Frontend Reviewer** workers; use **Frontend Security Reviewer** only when security or privacy evidence triggers it.
 - Replace invalid responses with fresh stateless invocations containing the full packet; never resume an old worker.
 - Invoke **Frontend Review Validator** before claiming quorum, scope, and coverage are complete.
+- Count independent completed seats per required file/hunk coverage cell, not just per skill total. Retries replace attempts; consensus passes and validators never fill reviewer quorum.
+- Require one valid aggregation validator pass for staged/branch, two by default for heavy. Missing coverage, snapshot integrity or required validation means `Incomplete`, while retaining confirmed findings.
 - Preserve each selected mode's exact minimum seats, exclusions, report schema, and incomplete/degraded behavior.
 - Return concise Chinese findings unless the user requests another language.
 
-Never edit files or change Git state. Do not stage, commit, push, checkout, merge, rebase, or reset.
+Never edit files or change the working tree, index, HEAD or local branches. A branch-mode target fetch is allowed only under its documented resolution policy. Do not stage, commit, push, checkout, merge, rebase, or reset.

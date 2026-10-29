@@ -2,6 +2,8 @@
 
 Research date: 2026-05-29
 
+Historical source notes; operational rules were revised on 2026-10-29 in the [shared review contract](review-contract.md). The contract is authoritative for snapshot identity, current routing, coverage cells and validation. The external sources below were not re-researched in that follow-up.
+
 ## Goal
 
 Create a frontend-focused review workflow for already staged changes (`git diff --cached`) that uses many independent sub-agents, requires at least two sub-agents for every selected review skill, records each reviewer result, and produces a consolidated report with path, severity, and recommended fix.
@@ -34,14 +36,14 @@ Unit test recommendations are intentionally excluded by user requirement.
 
 3. **Frontend-specific conditional routing**
    - Core review skills always run.
-   - React, hooks, UI, accessibility, forms, data grid, i18n, routing, Tailwind, Ant Design, and browser behavior skills are selected only when staged files indicate relevance.
+   - React, hooks, design, forms, data grid, i18n, routing, Tailwind and Ant Design criteria are selected only for concrete risks in the captured diff. Excluded specialist workflows are not routed.
 
 4. **Structured records**
-   - Each sub-agent returns a JSON-like object with reviewer id, skill, verdict, findings, and notes.
+   - Each sub-agent returns strict JSON with reviewer id, snapshot/scope, skill, actual coverage, verdict, findings, and notes.
    - The coordinator builds a reviewer ledger before summarizing findings.
 
-5. **No unit tests**
-   - Reviewers must not recommend unit tests, missing unit test coverage, or unit test rewrites.
+5. **No unit-test-only advice**
+   - Reviewers must not recommend adding unit tests or increasing coverage. Actual defects in changed assertions/mocks that conceal a behavior error remain reviewable.
    - If a reviewer returns a unit-test-only finding, the coordinator drops it.
 
 6. **Final report shape**

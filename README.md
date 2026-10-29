@@ -38,6 +38,7 @@ These workflows combine an Agent Skill for reusable policy with a VS Code custom
 - [`frontend-staged-commit-message`](./skills/frontend-staged-commit-message/) — explains the staged intent and type choice, then returns at least five one-line English subjects ordered from simple to detailed, without staging, editing, committing, or pushing.
 - [`frontend-task-preflight`](./skills/frontend-task-preflight/) + **Frontend Task Preflight** — read-only research and an implementation-plan handoff.
 - [`frontend-staged-review-workflow`](./skills/frontend-staged-review-workflow/), [`frontend-heavy-staged-review-workflow`](./skills/frontend-heavy-staged-review-workflow/), and [`frontend-branch-review-workflow`](./skills/frontend-branch-review-workflow/) share the **Frontend Review** coordinator while retaining separate scope and quorum policies.
+- Their [shared review contract](./skills/frontend-staged-review-workflow/references/review-contract.md) pins evidence, routes the upgraded design/form/i18n/TDD Skills and requires independent coverage per changed scope plus aggregation validation.
 
 All coordinator and worker definitions live in [`agents/`](./agents/). Worker agents are hidden from the picker and explicitly allowlisted by coordinators. Subagent invocations are treated as stateless; retries receive a complete task packet instead of relying on follow-up messages.
 

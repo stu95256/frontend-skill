@@ -2,6 +2,20 @@
 
 Generated: 2026-10-28
 
+## Review workflow follow-up — 2026-10-29
+
+The three review workflows now share a [review contract](frontend-staged-review-workflow/references/review-contract.md), while retaining staged/branch minimum two seats and heavy default five seats plus two validators. Entry points, prompts, reports, coordinator/workers and the [Chinese usage guide](../docs/AGENT_USAGE_GUIDE.zh-TW.md) were aligned. Shared workers retain the separate single-task Implementation/Debug contract.
+
+Verified in this follow-up:
+
+- Catalog validator: PASS, still 61 Skills / 14 agents / two instructions.
+- Native quick validation of the three revised workflow packages: PASS.
+- All seven existing regression tests: PASS, none skipped (11.148 seconds); installer destinations were isolated temporary folders, with Git Bash available explicitly.
+- An isolated Git fixture verified unborn-HEAD cached diffs, unchanged index identity under worktree edits, staged blob isolation, identity change after restaging, retained old blob content, pinned branch file context and branch diffs excluding later worktree edits.
+- Local Markdown targets in changed documentation/templates and editor diagnostics: no missing targets/errors in the checked files. Whitespace checks passed.
+
+These are instruction/format checks and Git primitive checks, not a live multi-agent review experiment. Actual reviewer routing, per-hunk coverage claims, retry behavior and validator enforcement still need VS Code/BYOK execution. No model-quality improvement or visual verification is claimed. The earlier upgrade checks below remain the record for the unchanged specialist packages.
+
 ## Result
 
 **PASS — source catalog, format checks and focused executable verification.**

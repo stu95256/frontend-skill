@@ -116,7 +116,7 @@ docs/tasks/TASK-123.md
 
 ## Required plan quality
 - 列出精確檔案與修改順序
-- 包含 naming、accessibility、error handling 與 verification
+- 包含 naming、互動狀態、error handling 與 verification
 - 若設計與現況不同，產生 gap matrix
 - 只有真正阻塞的問題才詢問我
 
@@ -252,9 +252,52 @@ docs/tasks/TASK-123.md
 
 使用時必須明確指定一種 mode。
 
+### 這次 SKILL 升級後的流程
+
+三種 mode 共用[審查契約](../skills/frontend-staged-review-workflow/references/review-contract.md)，各自保留 Git 範圍與 reviewer 數量。Agent 會自行讀取契約，使用者不需要額外附加。
+
+```mermaid
+flowchart TD
+    A[指定 mode 與 Git 範圍] --> B[固定快照與相依設定]
+    B --> C[依變更證據選 SKILL 與風險]
+    C --> D[建立每個檔案及 hunk 的覆蓋表]
+    D --> E[獨立 reviewer 分批審查]
+    E --> F[核對 schema、快照與實際覆蓋]
+    F --> G[合併 finding 並判定影響]
+    G --> H[Validator 檢查覆蓋及結論]
+    H --> I{必要門檻完整?}
+    I -->|是| J[回報快照、結論與 findings]
+    I -->|否| K[Incomplete 並保留已確認 findings]
+```
+
+| 項目 | Staged | Heavy staged | Branch |
+|---|---|---|---|
+| 審查內容 | 固定的 cached diff 與 index blobs | 同 staged | 固定 merge-base → source 的 committed diff |
+| 每個選定 SKILL／風險範圍 | 至少兩個獨立完成的 reviewer | 預設五個；明確設定可調整，最低兩個 | 至少兩個獨立完成的 reviewer |
+| Aggregation validator | 一次有效 pass | 預設兩次有效 pass | 一次有效 pass |
+| 審查中版本改變 | HEAD／index 改變則 Incomplete，另開新回合 | 同 staged | 繼續審查已固定 SHA，明確回報版本 |
+
+人數與覆蓋必須同時達標。例如 A 只看表單、B 只看翻譯，不代表兩個檔案都被審查兩次。大型 diff 會分組，每組仍須達到該 mode 的獨立審查門檻。重試取代舊 attempt；看過其他 reviewer 結論的仲裁 pass 不補入獨立人數。
+
+### 升級後的 SKILL 選用
+
+基礎審查固定使用 `code-review-and-quality`；其他 SKILL 需要實際變更與具體風險，不會因為有 TSX 檔案就全部啟用。重疊規則若已被選定 SKILL 涵蓋，會記錄原因並避免重複派工。
+
+| 變更證據 | 使用 SKILL | 新版審查重點 |
+|---|---|---|
+| 表單的 values、reset、subscription、submit 或 Zod schema | [react-hook-form-zod](../skills/react-hook-form-zod/SKILL.md) | dirty 欄位與背景刷新、儲存／取消後的基準、切換資料身分、數字空值與 input/output 型別、非同步送出 |
+| 翻譯 key、locale、格式或初始化 | [internationalization-i18n](../skills/internationalization-i18n/SKILL.md) | 保留現有框架及訊息格式，檢查 namespace、插值、複數、初始化與 server/client 邊界；CLI status 不代表譯文品質 |
+| 頁面層級、密度、版型或明確設計 critique | [frontend-design](../skills/frontend-design/SKILL.md) | 依 Persuade／Operate／Read／Experience 判斷；尊重既有 token、內容與核准設計，不以個人美感要求重做 |
+| 互動、文案、響應式行為 | [web-design-guidelines](../skills/web-design-guidelines/SKILL.md) | 針對實際變更及專案慣例，與設計 SKILL 有不同問題時才同時派工 |
+| 已修改行為測試，或明確要求檢查 TDD 品質 | [test-driven-development](../skills/test-driven-development/SKILL.md) | 從公開介面觀察行為、獨立推導預期值，找出掩蓋錯誤的 assertion／mock；不要求一律新增測試或追求覆蓋率 |
+
+SKILL 內的實作步驟在 review 中只作為判斷準則，不會觸發改檔、instrument、extract、安裝套件或寫入工作目錄的驗證。這次不加入已排除的瀏覽器測試、無障礙專項或動畫效能流程。沒有對應畫面證據時，不會宣稱已驗證實際視覺效果。
+
 ### Staged mode
 
 只 review `git diff --cached`。未 staged、untracked 與 branch history 都不在範圍。
+
+Agent 會固定 HEAD、index manifest 與 blob IDs；需要完整檔案時，讀取固定的 index blob，不把尚未 staged 的內容混入。最終結論附上審查快照識別。
 
 ```markdown
 請使用 Frontend Review 的 staged mode。
@@ -266,11 +309,12 @@ docs/tasks/TASK-123.md
 ## Focus
 - correctness
 - maintainability
-- accessibility（如適用）
+- 表單／翻譯／互動生命週期（有對應變更時）
 - security/privacy（如適用）
 
 ## Output
-只回報具體 findings，附檔案與行號；不要修改檔案，不要提出只有新增 unit test 的建議。
+回報審查快照、結論與具體 findings，附檔案與行號。
+不要修改檔案，不要提出只有新增 unit test 的建議；已修改測試中的實際錯誤仍須審查。
 ```
 
 ### Heavy staged mode
@@ -288,6 +332,10 @@ docs/tasks/TASK-123.md
 
 ## Required emphasis
 - <特別需要深查的 component／風險>
+
+## Review budget
+- 使用預設每個風險範圍五個有效 reviewer、兩個 aggregation validator
+- 大型 diff 可分組；每組仍維持門檻
 
 ## Output
 維持完整 reviewer quorum 與 validator passes；若無法達成，標示 Incomplete，不要降低標準後宣稱完成。
@@ -320,6 +368,16 @@ docs/tasks/TASK-123.md
 ```
 
 Review Agent 永遠是 read-only；不要要求它順便修正。需要修正時，把 findings 交給 `Frontend Implementation` 或 `Frontend Debug`。
+
+### 如何判讀結果及接續修正
+
+- `Approve`：指定快照內沒有具體 findings，且範圍、覆蓋、人數與必要 validator 全部達標；不代表未執行的測試或視覺檢查已通過。
+- `Request changes`：完成審查，存在具體且阻擋合併的 critical／high 問題。
+- `Comment`：完成審查，存在其他具體問題。
+- `Incomplete`：快照、上下文、覆蓋、人數或必要 validator 有缺口；仍列出已確認問題，不把「沒有發現」當作通過。
+- `Degraded`：使用者明確接受未達完整標準的結果；必須揭露缺口，不能改標 `Approve`。
+
+修正交接至少保留：審查快照／branch SHAs、finding、觸發條件、影響及預期行為。Implementation 或 Debug 依授權修正並執行相應驗證；之後以新快照重新 review，核對原問題及修正引入的影響，不沿用舊快照的通過結論。Review 本身不會自動開始修正或 commit。
 
 ---
 
