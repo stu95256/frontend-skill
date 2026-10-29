@@ -51,14 +51,19 @@ fi
 mkdir -p "$target/skills" "$target/agents" "$target/instructions"
 
 # Retire only the catalog entries removed by this migration. Never follow a
-# redirected skills directory when pruning, and preserve unrelated customizations.
+# redirected runtime directory when pruning, and preserve unrelated customizations.
 canonical_target=$(cd "$target" && pwd -P)
 canonical_skills=$(cd "$target/skills" && pwd -P)
+canonical_agents=$(cd "$target/agents" && pwd -P)
 [[ "$canonical_skills" == "$canonical_target/skills" ]] || {
   printf 'Refusing to prune a redirected skills directory: %s\n' "$target/skills" >&2
   exit 1
 }
-retired_skills=(webapp-testing playwright-cli playwright-best-practices browser-testing-with-devtools accessibility accessibility-compliance fixing-motion-performance animation-performance)
+[[ "$canonical_agents" == "$canonical_target/agents" ]] || {
+  printf 'Refusing to prune a redirected agents directory: %s\n' "$target/agents" >&2
+  exit 1
+}
+retired_skills=(webapp-testing playwright-cli playwright-best-practices browser-testing-with-devtools accessibility accessibility-compliance fixing-motion-performance animation-performance frontend-debug-workflow frontend-task-preflight)
 for skill in "${retired_skills[@]}"; do
   retired="$canonical_skills/$skill"
   [[ "${retired%/*}" == "$canonical_target/skills" ]] || exit 1
@@ -66,6 +71,15 @@ for skill in "${retired_skills[@]}"; do
     rm -- "$retired"
   elif [[ -d "$retired" ]]; then
     rm -rf -- "$retired"
+  fi
+done
+
+retired_agents=(frontend-debug.agent.md frontend-task-preflight.agent.md frontend-researcher.agent.md frontend-plan-reviewer.agent.md)
+for agent in "${retired_agents[@]}"; do
+  retired="$canonical_agents/$agent"
+  [[ "${retired%/*}" == "$canonical_target/agents" ]] || exit 1
+  if [[ -L "$retired" || -f "$retired" ]]; then
+    rm -- "$retired"
   fi
 done
 

@@ -31,7 +31,7 @@ class VSCodeConversionTests(unittest.TestCase):
             validator.ROOT = Path(temp)
             skill = Path(temp) / "skills" / "example"
             skill.mkdir(parents=True)
-            for removed in ("playwright-cli", "accessibility", "accessibility-compliance", "fixing-motion-performance", "animation-performance"):
+            for removed in ("playwright-cli", "accessibility", "accessibility-compliance", "fixing-motion-performance", "animation-performance", "frontend-debug-workflow", "frontend-task-preflight", "Frontend Debug", "Frontend Task Preflight", "Frontend Researcher", "Frontend Plan Reviewer"):
                 with self.subTest(removed=removed):
                     (skill / "SKILL.md").write_text(f"Route this task to `{removed}`.\n", encoding="utf-8")
                     errors: list[str] = []
@@ -40,17 +40,24 @@ class VSCodeConversionTests(unittest.TestCase):
 
     def test_catalog_validator(self) -> None:
         result = run(sys.executable, "scripts/validate_skill_catalog.py")
-        self.assertIn("61 skills, 14 custom agents, 2 instruction files", result.stdout)
+        self.assertIn("59 skills, 10 custom agents, 2 instruction files", result.stdout)
 
     @unittest.skipUnless(shutil.which("bash"), "bash is required")
     def test_installer_copies_exact_runtime_counts(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             target = Path(temp) / ".copilot"
-            retired = ("webapp-testing", "playwright-cli", "playwright-best-practices", "browser-testing-with-devtools", "accessibility", "accessibility-compliance", "fixing-motion-performance", "animation-performance")
+            retired = ("webapp-testing", "playwright-cli", "playwright-best-practices", "browser-testing-with-devtools", "accessibility", "accessibility-compliance", "fixing-motion-performance", "animation-performance", "frontend-debug-workflow", "frontend-task-preflight")
             for name in retired:
                 old = target / "skills" / name
                 old.mkdir(parents=True)
                 (old / "SKILL.md").write_text("old catalog entry\n", encoding="utf-8")
+            retired_agents = ("frontend-debug.agent.md", "frontend-task-preflight.agent.md", "frontend-researcher.agent.md", "frontend-plan-reviewer.agent.md")
+            agent_dir = target / "agents"
+            agent_dir.mkdir()
+            for name in retired_agents:
+                (agent_dir / name).write_text("old catalog agent\n", encoding="utf-8")
+            custom_agent = agent_dir / "personal-customization.agent.md"
+            custom_agent.write_text("personal agent\n", encoding="utf-8")
             custom = target / "skills" / "personal-customization"
             custom.mkdir()
             (custom / "keep.txt").write_text("keep\n", encoding="utf-8")
@@ -58,10 +65,13 @@ class VSCodeConversionTests(unittest.TestCase):
             skills = sum((path / "SKILL.md").is_file() for path in (target / "skills").iterdir() if path.is_dir())
             agents = len(list((target / "agents").glob("*.agent.md")))
             instructions = len(list((target / "instructions").glob("*.instructions.md")))
-            self.assertEqual((61, 14, 2), (skills, agents, instructions))
+            self.assertEqual((59, 11, 2), (skills, agents, instructions))
             self.assertTrue((custom / "keep.txt").is_file())
+            self.assertEqual("personal agent\n", custom_agent.read_text(encoding="utf-8"))
             for name in retired:
                 self.assertFalse((target / "skills" / name).exists())
+            for name in retired_agents:
+                self.assertFalse((agent_dir / name).exists())
 
     def test_staged_commit_message_returns_ordered_candidates(self) -> None:
         text = (ROOT / "skills" / "frontend-staged-commit-message" / "SKILL.md").read_text(encoding="utf-8")

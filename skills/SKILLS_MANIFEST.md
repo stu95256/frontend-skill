@@ -1,10 +1,10 @@
 # Skills Manifest
 
-Generated: 2026-10-28
+Generated: 2026-10-29
 
-- VS Code Chat personal catalog: **61** skills.
-- Default core: **30** skills; **31** on demand.
-- Six project-curated workflow skills pair with custom coordinator agents.
+- VS Code Chat personal catalog: **59** skills.
+- Default core: **30** skills; **29** on demand.
+- Four project-curated workflow Skills cover three review modes and staged commit messages; review modes share one coordinator.
 - Upstream revisions are fixed commits; local revisions record VS Code portability and catalog scope adaptations.
 - Repository updates do not imply changes to every retained Skill directory.
 
@@ -25,9 +25,7 @@ Generated: 2026-10-28
 | workflow | `executing-plans` | core | adapted from https://github.com/obra/superpowers | `local-2026-10-28; upstream 2ce8aa15d05bd57213e6f746f953aafb7ded7a8b` | `skills/executing-plans` | MIT | Use when a written implementation plan must be executed and verified in the current workspace. |
 | workflow | `finishing-a-development-branch` | core | https://github.com/obra/superpowers | `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b` | `skills/finishing-a-development-branch` | MIT | Use when implementation is complete, all tests pass, and you need to decide how to integrate the work |
 | frontend-branch-review-workflow | `frontend-branch-review-workflow` | on-demand | project-curated | `local-2026-10-29` | `skills/frontend-branch-review-workflow` | MIT | Frozen evidence, upgraded risk-based Skill routing, independent per-hunk coverage and required aggregation validation. |
-| frontend-debug-workflow | `frontend-debug-workflow` | on-demand | project-curated | `local-2026-10-28` | `skills/frontend-debug-workflow` | MIT | Use when the user gives frontend code paths plus a bug, runtime symptom, console error, TypeScript error, failing test, or broken UI behavior and… |
 | frontend-review-workflow | `frontend-heavy-staged-review-workflow` | on-demand | project-curated | `local-2026-10-29` | `skills/frontend-heavy-staged-review-workflow` | MIT | Frozen evidence, upgraded risk-based Skill routing, independent per-hunk coverage and required aggregation validation. |
-| frontend-planning-workflow | `frontend-task-preflight` | on-demand | project-curated | `local-2026-10-28` | `skills/frontend-task-preflight` | Local project documentation | Use before implementing frontend tasks, especially React, TypeScript, Tailwind, AG Grid React, Ant Design, react-i18next, react-router-dom, react… |
 | official | `frontend-design` | core | adapted from https://github.com/pbakaus/impeccable; retained Anthropic design guidance | `local-2026-10-28; upstream 8409a564d1baee90b2dde4f7a8f06288838e3921; retained dbd4588f9e1033efb41dad4bef2f7947c8993d44` | `.github/skills/impeccable; retained skills/frontend-design` | Apache-2.0 | Design or refine frontend interfaces with visual direction matched to their task. Use for new pages, redesigns, dashboards, reading surfaces, cri… |
 | frontend-commit-message | `frontend-staged-commit-message` | on-demand | project-curated | `local-2026-10-28` | `skills/frontend-staged-commit-message` | MIT | Use when explaining and generating at least five English commit-subject candidates from already staged frontend changes. Reads only `git diff --c… |
 | frontend-review-workflow | `frontend-staged-review-workflow` | on-demand | project-curated | `local-2026-10-29` | `skills/frontend-staged-review-workflow` | MIT | Frozen evidence, upgraded risk-based Skill routing, independent per-hunk coverage and required aggregation validation. |

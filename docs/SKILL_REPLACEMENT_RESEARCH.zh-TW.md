@@ -6,7 +6,7 @@
 
 依使用者最新指定，停止評估無障礙實作及動畫效能專項，移除既有兩個無障礙專用套件、專用參考文件與工作流選擇規則。先前已排除的頁面自動化測試套件維持排除。
 
-目前為 **61 個 Skills（30 core／31 on demand）、14 個 Custom Agents、2 份 instructions**。沒有新增 Skill 名稱；四個既有 Skill 已改採其他主要來源，原名稱保留，既有代理可繼續選用。
+跨來源更新完成時為 61 個 Skills、14 個 Agents。2026-10-29 依後續指示移除兩個專用工作流及其專用 Agent 後，目前為 **59 個 Skills（30 core／29 on demand）、10 個 Custom Agents、2 份 instructions**。沒有新增 Skill 名稱；四個既有 Skill 已改採其他主要來源，原名稱保留，既有代理可繼續選用。
 
 一般元件的原生控制項、標籤、錯誤訊息與狀態處理仍是前端範例的一部分；它們不會觸發專用無障礙稽核或額外派工。
 
@@ -39,7 +39,7 @@
 | axross 專項套件 | 不複製進目錄 | 查核的固定快照未見明確授權檔 |
 | Trail of Bits 深度差異審查 | 未併入預設工作流 | 原流程的 Git 範圍、輸出與派工契約不同，並非一般前端審查的直接替代 |
 
-React Router、shadcn、AG Grid、Ant Design、Vercel React、Vitest、React Doctor 與本地審查／除錯流程保留前一輪已更新版本。沒有找到範圍相當且足以取代它們的其他來源，因此不為增加更新數量而替換。
+React Router、shadcn、AG Grid、Ant Design、Vercel React、Vitest、React Doctor 與本地審查流程保留已更新版本。沒有找到範圍相當且足以取代它們的其他來源，因此不為增加更新數量而替換。
 
 ## 來源與授權
 

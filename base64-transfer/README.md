@@ -59,7 +59,7 @@ bash scripts/install-vscode-chat.sh --dry-run
 bash scripts/install-vscode-chat.sh
 ```
 
-2026-10-28 更新後的目錄包含 61 個 Skills、14 個 Agents 與 2 份 instructions。安裝器會清理本次退役的目錄項目，並保留其他個人自訂內容。
+2026-10-29 更新後的目錄包含 59 個 Skills、10 個 Agents 與 2 份 instructions。安裝器會清理本次退役的目錄項目，並保留其他個人自訂內容。
 
 ## 流程摘要
 

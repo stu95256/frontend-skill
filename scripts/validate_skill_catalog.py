@@ -12,13 +12,11 @@ SKILLS = ROOT / "skills"
 AGENTS = ROOT / "agents"
 INSTRUCTIONS = ROOT / "instructions"
 AGENT_USAGE_GUIDE = ROOT / "docs" / "AGENT_USAGE_GUIDE.zh-TW.md"
-EXPECTED_SKILL_COUNT = 61
-EXPECTED_AGENT_COUNT = 14
+EXPECTED_SKILL_COUNT = 59
+EXPECTED_AGENT_COUNT = 10
 EXPECTED_INSTRUCTION_COUNT = 2
 
 REQUIRED_WORKFLOW_SKILLS = {
-    "frontend-task-preflight",
-    "frontend-debug-workflow",
     "frontend-staged-review-workflow",
     "frontend-heavy-staged-review-workflow",
     "frontend-branch-review-workflow",
@@ -26,16 +24,12 @@ REQUIRED_WORKFLOW_SKILLS = {
 }
 
 REQUIRED_COORDINATORS = {
-    "Frontend Task Preflight",
     "Frontend Implementation",
-    "Frontend Debug",
     "Frontend Review",
     "VS Code Skill Creator",
 }
 
 REQUIRED_WORKERS = {
-    "Frontend Researcher",
-    "Frontend Plan Reviewer",
     "Frontend Implementer",
     "Frontend Verifier",
     "Frontend Reviewer",
@@ -75,6 +69,10 @@ ALLOWED_AGENT_FRONTMATTER = {
 ALLOWED_AGENT_TOOLS = {"agent", "read", "search", "edit", "execute", "web"}
 
 FORBIDDEN_RUNTIME_PATTERNS = {
+    "removed workflow or agent reference": re.compile(
+        r"\b(?:frontend-debug-workflow|frontend-task-preflight)\b|"
+        r"Frontend (?:Task Preflight|Debug|Researcher|Plan Reviewer)\b"
+    ),
     "removed specialist skill reference": re.compile(
         r"accessibility-compliance|`accessibility`(?=[,、.]| \|)|"
         r"skills/accessibility/|skills/accessibility-compliance/|"
@@ -96,6 +94,8 @@ FOREIGN_SKILL_TOOL_PATTERN = re.compile(
 )
 
 OBSOLETE_SKILLS = {
+    "frontend-debug-workflow",
+    "frontend-task-preflight",
     "accessibility",
     "accessibility-compliance",
     "fixing-motion-performance",

@@ -42,13 +42,13 @@ Updated: 2026-10-28
 
 ## Project-curated and retained skills
 
-- The staged-review, branch-review, debug, and staged-commit-message workflows are project-curated because their pinned-SHA, staged-only, real-sub-agent, quorum, findings-only, and commit-output guarantees are more specific than generic upstream workflows.
+- The staged-review, heavy-staged-review, branch-review, and staged-commit-message workflows are project-curated because their pinned-SHA, staged-only, real-sub-agent, quorum, findings-only, and commit-output guarantees are more specific than generic upstream workflows.
 - `typescript-code-reviewer` remains project-curated; `secpriv-code-review`, `react-dev`, and `qa-test-planner` remain source-backed specialist skills with local portability adaptations recorded above.
 - `performance-optimization` keeps database/cache/query-plan coverage while frontend workflows also route React/runtime concerns to Vercel and source, build, and unit/integration evidence.
 
-## 2026-10-28 catalog adaptation
+## Current catalog adaptation — 2026-10-29
 
-- Retained catalog: 61 Skills, 14 custom agents, 2 instruction files.
+- Retained catalog: 59 Skills, 10 custom agents, 2 instruction files.
 - Shared upstream checklists are vendored inside their owning Skill so installation is self-contained.
 - Superpowers updates preserve stateless VS Code workers and local uncommitted review support; helper scripts adopt plan ownership, range guards, and explicit interpreter invocation.
 - Vitest references cover the installed major and Node/DOM unit/integration scope; beta examples require an explicit version check.

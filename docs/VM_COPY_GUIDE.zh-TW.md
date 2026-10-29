@@ -129,7 +129,7 @@ BYOK 模型必須支援 tool calling。Coordinator 需要 `agent/runSubagent` �
 3. 確認看到 Skills、Agents、Instructions。
 4. 在 Chat 的 Tools 選單確認 `agent/runSubagent` 已啟用。
 5. 開啟 Chat **Diagnostics**，確認沒有 invalid frontmatter、missing resource 或 duplicate name。
-6. 選擇 **Frontend Task Preflight** 做一次測試。
+6. 在測試 Repository 暫存小型 diff，選擇 **Frontend Review** 的 staged mode，確認獨立 reviewer 呼叫。
 
 檔案數量快速檢查：
 
@@ -142,8 +142,8 @@ find ~/.copilot/instructions -maxdepth 1 -name '*.instructions.md' | wc -l
 本 bundle 應至少安裝：
 
 ```text
-67 skills
-14 custom agents
+59 skills
+10 custom agents
 2 instruction files
 ```
 
@@ -162,7 +162,7 @@ python3 -m unittest -v tests/test_vscode_conversion.py
 預期 catalog validator 顯示：
 
 ```text
-VS Code Chat catalog validation passed: 67 skills, 14 custom agents, 2 instruction files, no legacy runtime artifacts
+VS Code Chat catalog validation passed: 59 skills, 10 custom agents, 2 instruction files, no legacy runtime artifacts
 ```
 
 ## 更新與移除

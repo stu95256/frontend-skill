@@ -19,7 +19,7 @@ bash scripts/install-vscode-chat.sh --dry-run
 bash scripts/install-vscode-chat.sh
 ```
 
-安裝器會合併本專案提供的檔案，並清理本次目錄移除的四個舊項目；其他個人自訂內容、VS Code 設定與 BYOK credentials 都會保留。
+安裝器會合併本專案提供的檔案，並清理本 catalog 明列退役的 Skill 目錄與 Agent 檔案；其他個人自訂內容、VS Code 設定與 BYOK credentials 都會保留。
 
 ## VS Code 設定
 
@@ -52,7 +52,7 @@ BYOK Provider 與模型設定仍屬於目前的 VS Code Profile；不要搬入 `
 2. 執行 **Chat: Open Customizations**，確認 Skills、Agents、Instructions 均出現。
 3. 在 Chat 視窗開啟 **Diagnostics**，確認沒有 invalid name、frontmatter 或 missing resource 錯誤。
 4. 在 Tools 選單啟用 `agent/runSubagent`。
-5. 選取 **Frontend Task Preflight**，確認完成後出現 **Implement Approved Plan** handoff。
+5. 確認 Agent picker 只有本 catalog 的 **Frontend Implementation**、**Frontend Review**、**VS Code Skill Creator** 三個入口（其他個人 Agent 不受影響）。
 6. 選取 **Frontend Review** 並要求 staged review；在測試 Repository 暫存小型 diff，確認主 Agent 顯示兩個以上獨立 `Frontend Reviewer` subagent calls。
 7. 執行 Repository validator：
 
@@ -66,9 +66,7 @@ python3 -m unittest -v tests/test_vscode_conversion.py
 
 | 需求 | Custom Agent |
 |---|---|
-| 實作前研究、方案與核准 | Frontend Task Preflight |
 | 執行已核准計畫 | Frontend Implementation |
-| Debug 並修正 | Frontend Debug |
 | Review `git diff --cached` | Frontend Review（staged mode） |
 | 高冗餘 staged review | Frontend Review（heavy staged mode） |
 | Review branch merge-base 到 source 的貢獻 | Frontend Review（branch mode） |

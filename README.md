@@ -4,8 +4,8 @@ A curated VS Code Chat / GitHub Copilot BYOK customization catalog for React and
 
 ## Catalog at a glance
 
-- **61** Agent Skills under `skills/`
-- **14** custom agents under `agents/`: five user-facing agents and nine hidden subagent workers
+- **59** Agent Skills under `skills/`
+- **10** custom agents under `agents/`: three user-facing agents and seven hidden subagent workers
 - **2** cross-project instruction files under `instructions/`
 - Upstream source, pinned commit, path, and license tracked in [`skills/SKILLS_MANIFEST.md`](./skills/SKILLS_MANIFEST.md)
 - Update families and safe migration procedure tracked in [`SKILL_SOURCES.md`](./SKILL_SOURCES.md)
@@ -34,9 +34,7 @@ These workflows combine an Agent Skill for reusable policy with a VS Code custom
 
 - [`frontend-staged-review-workflow`](./skills/frontend-staged-review-workflow/) — reviews `git diff --cached` only, dispatches at least two real sub-agents per selected skill, and excludes unit-test-only suggestions.
 - [`frontend-branch-review-workflow`](./skills/frontend-branch-review-workflow/) — pins source, target, and merge-base SHAs and reviews only committed merge-base-to-source changes.
-- [`frontend-debug-workflow`](./skills/frontend-debug-workflow/) — evidence-first root-cause workflow with stack-aware skill routing and explicit verification.
 - [`frontend-staged-commit-message`](./skills/frontend-staged-commit-message/) — explains the staged intent and type choice, then returns at least five one-line English subjects ordered from simple to detailed, without staging, editing, committing, or pushing.
-- [`frontend-task-preflight`](./skills/frontend-task-preflight/) + **Frontend Task Preflight** — read-only research and an implementation-plan handoff.
 - [`frontend-staged-review-workflow`](./skills/frontend-staged-review-workflow/), [`frontend-heavy-staged-review-workflow`](./skills/frontend-heavy-staged-review-workflow/), and [`frontend-branch-review-workflow`](./skills/frontend-branch-review-workflow/) share the **Frontend Review** coordinator while retaining separate scope and quorum policies.
 - Their [shared review contract](./skills/frontend-staged-review-workflow/references/review-contract.md) pins evidence, routes the upgraded design/form/i18n/TDD Skills and requires independent coverage per changed scope plus aggregation validation.
 
@@ -73,7 +71,7 @@ bash scripts/install-vscode-chat.sh --dry-run
 bash scripts/install-vscode-chat.sh
 ```
 
-The installer merges `skills/`, `agents/`, and `instructions/` into `~/.copilot`, retires the excluded specialist entries removed in the 2026-10-28 migration, and preserves unrelated personal customizations and VS Code/BYOK settings. See the [Ubuntu setup and diagnostics guide](./docs/VS_CODE_CHAT_SETUP.zh-TW.md).
+The installer merges `skills/`, `agents/`, and `instructions/` into `~/.copilot`, retires excluded specialist entries and the workflow/agent entries removed in the 2026-10-29 migration, and preserves unrelated personal customizations and VS Code/BYOK settings. See the [Ubuntu setup and diagnostics guide](./docs/VS_CODE_CHAT_SETUP.zh-TW.md).
 
 To move the catalog into a VM as one file, build the portable archive:
 
@@ -94,9 +92,7 @@ Repository folders are canonical source only; VS Code does not discover this roo
 - [Ubuntu VS Code Chat setup](./docs/VS_CODE_CHAT_SETUP.zh-TW.md)
 - [Ubuntu VM copy-and-install guide](./docs/VM_COPY_GUIDE.zh-TW.md)
 - [Custom Agents 中文使用與輸入格式](./docs/AGENT_USAGE_GUIDE.zh-TW.md)
-- [Frontend task preflight workflow](./skills/frontend-task-preflight/references/FRONTEND_TASK_PREFLIGHT_WORKFLOW.md)
 - [Branch review workflow](./skills/frontend-branch-review-workflow/references/FRONTEND_BRANCH_REVIEW_WORKFLOW.md)
-- [Debug workflow](./skills/frontend-debug-workflow/references/FRONTEND_DEBUG_WORKFLOW.md)
 - [Heavy staged review workflow](./skills/frontend-heavy-staged-review-workflow/references/FRONTEND_HEAVY_STAGED_REVIEW_WORKFLOW.md)
 
 

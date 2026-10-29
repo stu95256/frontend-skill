@@ -2,16 +2,12 @@
 
 ## User-facing agents
 
-- `Frontend Task Preflight`
 - `Frontend Implementation`
-- `Frontend Debug`
 - `Frontend Review` — selects staged, heavy staged, or branch review mode
 - `VS Code Skill Creator`
 
 ## Protected workers
 
-- `Frontend Researcher`
-- `Frontend Plan Reviewer`
 - `Frontend Implementer`
 - `Frontend Verifier`
 - `Frontend Reviewer`

@@ -1,103 +1,60 @@
 # VS Code Chat Catalog Validation Report
 
-Generated: 2026-10-28
+Generated: 2026-10-29
 
-## Review workflow follow-up — 2026-10-29
+## Current result
 
-The three review workflows now share a [review contract](frontend-staged-review-workflow/references/review-contract.md), while retaining staged/branch minimum two seats and heavy default five seats plus two validators. Entry points, prompts, reports, coordinator/workers and the [Chinese usage guide](../docs/AGENT_USAGE_GUIDE.zh-TW.md) were aligned. Shared workers retain the separate single-task Implementation/Debug contract.
+**PASS — catalog, Skill format and migration regression checks.**
 
-Verified in this follow-up:
-
-- Catalog validator: PASS, still 61 Skills / 14 agents / two instructions.
-- Native quick validation of the three revised workflow packages: PASS.
-- All seven existing regression tests: PASS, none skipped (11.148 seconds); installer destinations were isolated temporary folders, with Git Bash available explicitly.
-- An isolated Git fixture verified unborn-HEAD cached diffs, unchanged index identity under worktree edits, staged blob isolation, identity change after restaging, retained old blob content, pinned branch file context and branch diffs excluding later worktree edits.
-- Local Markdown targets in changed documentation/templates and editor diagnostics: no missing targets/errors in the checked files. Whitespace checks passed.
-
-These are instruction/format checks and Git primitive checks, not a live multi-agent review experiment. Actual reviewer routing, per-hunk coverage claims, retry behavior and validator enforcement still need VS Code/BYOK execution. No model-quality improvement or visual verification is claimed. The earlier upgrade checks below remain the record for the unchanged specialist packages.
-
-## Result
-
-**PASS — source catalog, format checks and focused executable verification.**
-
-- 61 Agent Skills: 30 core and 31 on demand.
-- 14 custom agents: five coordinators and nine protected workers.
+- 59 Agent Skills: 30 core and 29 on demand.
+- 10 custom agents: three coordinators and seven protected workers.
 - Two instruction files.
-- Four stable Skill names now use different primary sources: TDD, RHF, i18n and frontend design.
-- Excluded specialist packages and their selection rules are absent. Dedicated supporting checklists were removed; ordinary native controls, labels and component states remain in general frontend examples.
+- User-facing agents: Frontend Implementation, Frontend Review and VS Code Skill Creator.
+- The two retired workflow packages, their full references and four dedicated agent definitions were removed. Routing, usage examples, VM setup and manifests match the remaining catalog.
 
-## Catalog and format
-
-The current repository validator reports:
+The repository validator reports:
 
 ```text
-VS Code Chat catalog validation passed: 61 skills, 14 custom agents, 2 instruction files, no legacy runtime artifacts
+VS Code Chat catalog validation passed: 59 skills, 10 custom agents, 2 instruction files, no legacy runtime artifacts
 ```
 
-All 61 packages passed the official Agent Skills reference validator from agentskills/agentskills commit `69ef37e9424c0a7ea9dd2293b559e43ec8176379`, using strictyaml 1.7.3. All 61 passed the native skill-creator quick validator.
+## Current format and regression checks
 
-Windows checks used Python 3.11.15 with UTF-8 mode; upstream validators default to the platform encoding otherwise. Real Markdown links outside fenced examples were checked throughout the Skills tree: zero missing local targets.
+All 59 packages passed the official Agent Skills reference validator from agentskills/agentskills commit `69ef37e9424c0a7ea9dd2293b559e43ec8176379`. All 59 also passed the native skill-creator quick validator. Windows runs used Python 3.11.15 with UTF-8 mode.
 
-Primary and retained sources, fixed SHAs and licenses are recorded in [the manifest](SKILLS_MANIFEST.md). New upstream licenses are included beside the adapted Skills.
-
-## Regression tests
+All seven existing regression tests passed, none skipped, in 17.745 seconds:
 
 ```bash
 python -m unittest -v tests/test_vscode_conversion.py
 ```
 
-**Seven tests passed; none skipped** in the final run, using Python 3.11.15 and Git Bash with its path explicitly configured.
+The migration fixture starts with ten retired Skill directories, four retired Agent files and unrelated personal customizations. Installation removes the retired entries, installs the current 59 Skills / 10 catalog Agents / two instructions, and preserves the personal Skill content and additional personal Agent.
 
-Coverage includes:
+The negative-reference fixture rejects retired workflow/agent routes as well as excluded specialist routes. Existing tests also cover ordered commit subjects, resumable Skill Creator evaluation, holdout isolation, uncommitted review packages, rejected empty/unrelated ranges and same-basename plan isolation.
 
-- Catalog consistency and rejected references to excluded specialist Skills.
-- Installing exactly 61 Skills, 14 agents and two instructions, pruning excluded legacy directories and preserving an unrelated customization.
-- Ordered staged commit-message candidates.
-- Resumable Skill Creator evaluation and holdout isolation.
-- Tracked/untracked review packages and rejected empty/unrelated committed ranges.
-- Same-basename plan isolation, normalized plan identity and preserved ignore rules.
+Installer Bash syntax, editor diagnostics for the changed Python files and usage guide, local Markdown links and whitespace checks passed. Git Bash migration tests ran outside the host sandbox, only against isolated temporary targets. The actual personal catalog was not modified.
 
-Installer and Bash filesystem checks ran outside the host sandbox because sandboxed Git Bash path operations are denied. All installation destinations were isolated temporary folders; the actual personal catalog was not modified.
+## Review workflow retained
 
-## Actual form template
+The three review modes retain the [shared contract](frontend-staged-review-workflow/references/review-contract.md): immutable evidence, conditional upgraded Skill routing, independent per-hunk coverage and required aggregation validation. Staged/branch use at least two seats per selected risk scope; heavy defaults to five seats and two validators.
 
-The [server-backed form](react-hook-form-zod/templates/server-backed-form.tsx) compiled with strict TypeScript 5.9.3, React/React DOM 19.2.0, RHF 7.84.0, Zod 4.3.6, resolvers 5.2.2 and React types 19.0.0.
+The shared reviewer retains Implementation's separate single-task contract. The [usage guide](../docs/AGENT_USAGE_GUIDE.zh-TW.md) now documents only the three current user-facing agents.
 
-A jsdom 26.1.0 harness exercised that compiled template and verified:
+The prior isolated Git fixture verified unborn-HEAD cached diffs, worktree/index separation, restaging identity changes, immutable old blobs and pinned branch context. That fixture was run during the review update; it was not repeated for this catalog deletion.
 
-- Dirty edits survive a same-record background refresh while untouched fields update.
-- Empty and malformed numeric input cannot submit.
-- Parsed output carries a number rather than the input string.
-- Submission stays pending until saving finishes.
-- The persisted server response becomes the clean baseline.
-- Cancel restores that baseline.
-- A keyed record change does not keep the previous record's edits.
+## Retained specialist verification record
 
-The initial harness exposed inherited keepDirtyValues behavior on save/Cancel resets. The template explicitly overrides preservation in those resets; the same checks then passed. This correction is documented in [form lifecycle](react-hook-form-zod/references/form-lifecycle.md).
+The four cross-source replacements remain unchanged. Their earlier focused checks were completed on 2026-10-28:
 
-## i18next CLI
+- The actual server-backed form template compiled with strict TypeScript and passed DOM checks for dirty refresh, numeric parsing, awaited submission, saved baselines, Cancel and keyed record changes. Those checks exposed and verified the explicit reset preservation overrides.
+- The fixed i18next-cli 1.80.5 fixture verified prompt output, dry-run preservation, instrumentation, extraction, lint and translation status on Node 22.
+- The shadcn coverage helper's missing/complete cases passed.
+- Static scanning and source syntax checks were performed during the earlier upgrade; no new scanner result or model-quality comparison is claimed for this deletion.
 
-The fixed upstream package identifies i18next-cli **1.80.5**, requiring Node 22+. The isolated fixture used that CLI on Node 22.23.2.
+See [the cross-source update record](../docs/SKILL_REPLACEMENT_RESEARCH.zh-TW.md) and [source manifest](SKILLS_MANIFEST.md).
 
-Verified the version-matched prompt command, dry-run source SHA preservation, instrumentation, extraction and lint. Status rejected two untranslated keys; after supplying the two local fixture translations, lint and status passed with 2/2 complete.
+## Transport packages and limits
 
-SWC's native loader requires a protected user cache. These commands ran outside the sandbox using the normal cache, without weakening its checks. No translation service, credentials or external project were used. This is a CLI fixture check, not validation of an entire application runtime or translation quality.
+The portable tar.gz and a fresh 7z are rebuilt from canonical source. Export checks require 59 Skill entrypoints, 10 agent definitions, two instructions, no retired directories/agent files, successful extracted-catalog validation, exact archive inventory, 7z integrity and Base64/SHA-256 round-trip agreement.
 
-## Other focused checks
-
-- The static Skill scanner processed all 61 packages. Pattern hits remained in dummy test passwords, the scanner's own detection examples and the source-retrieval warning example. The four newly adapted packages had no findings. Static patterns do not establish blanket security.
-- The unchanged shadcn coverage helper rejected missing coverage and accepted complete coverage.
-- Source Python syntax and installer/bundle Bash syntax were checked; changed files have no whitespace errors.
-- TDD and design instructions were reviewed for self-contained references, user scope and retained workflow contracts. No model A/B or visual behavior result is claimed.
-
-## Transport packages
-
-The portable tar.gz and 7z are rebuilt from canonical source. Export checks require exactly 61 Skill entrypoints, no excluded directories, successful validation of the extracted catalog, a valid 7z integrity test and a matching Base64 decode/SHA-256 round trip.
-
-The transfer archive and adjacent checksum represent this 61-Skill release.
-
-## Remaining limits
-
-VS Code discovery, handoff UI and real BYOK worker invocation still require verification in the target Ubuntu profile. Formatting, CLI fixtures and DOM tests do not establish model selection quality or prove rendered visual appearance.
-
-See [the update report](../docs/SKILL_REPLACEMENT_RESEARCH.zh-TW.md) and [Ubuntu setup](../docs/VS_CODE_CHAT_SETUP.zh-TW.md).
+Actual VS Code discovery and BYOK worker execution still need verification in the target Ubuntu profile. Format/migration checks do not prove reviewer coverage behavior, rendered visual quality or model performance. See [Ubuntu setup](../docs/VS_CODE_CHAT_SETUP.zh-TW.md).
