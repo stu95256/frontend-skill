@@ -1,15 +1,23 @@
 ---
 name: code-review-and-quality
-description: Conducts multi-axis code review. Use before merging any change. Use when reviewing code written by yourself, another agent, or a human. Use when you need to assess code quality across multiple dimensions before it enters the main branch. Use when asked to review a diff or a pull request, even when the diff is pasted inline.
+description: Review a code change or pull request for concrete, evidence-backed regressions across correctness, maintainability, security and performance. Use for requested reviews or pre-merge assessment, including pasted diffs.
 ---
 
 # Code Review and Quality
 
 ## Overview
 
-Multi-dimensional code review with quality gates. Every change gets reviewed before merge — no exceptions. Review covers five axes: correctness, readability, architecture, security, and performance.
+Review covers five axes: correctness, readability, architecture, security, and performance. Checklists identify investigation candidates, not automatic findings. Review only the assigned scope and stay read-only.
 
 **The approval standard:** Approve a change when it definitely improves overall code health, even if it isn't perfect. Perfect code doesn't exist — the goal is continuous improvement. Don't block a change because it isn't exactly how you would have written it. If it improves the codebase and follows the project's conventions, approve it.
+
+## Finding threshold
+
+Report only discrete, actionable defects introduced or worsened by the change with meaningful impact. Establish expected behavior from an applicable requirement, caller, test, API contract or documented project rule; trace a reachable trigger to an actual wrong outcome and compare before/after behavior. Conditional defects count when their preconditions are supported. Maintainability findings need a concrete ownership/dependency consequence or an applicable documented rule, not a preferred abstraction.
+
+Before retaining a candidate, try to disprove it using surrounding callers, upstream validation, guards, intentional behavior and the actual dependency/config versions. Syntax, file size, a checklist item, reviewer agreement or confidence alone is not proof. Static evidence can establish a defect without execution. Do not invent requirements, numerical performance claims or rigor absent from the project. Pre-existing issues, missing tests alone and optional simplifications are not defect findings. Return no findings when none meet this threshold; missing essential context is an evidence limit, not a bug or approval.
+
+The coordinator's scope, finding gate, output schema and verification permissions govern this Skill. In the three Frontend Review workflows, follow the [shared contract](../frontend-staged-review-workflow/references/review-contract.md), including candidate evidence fields and validator checks; do not import those workflows' quorum/schema into single-task reviews. Read-only review never authorizes edits, mutation testing, installation or checks that write into the reviewed checkout. The [precision references](../frontend-staged-review-workflow/references/review-precision.md) explain the policy and behavioral evaluation approach.
 
 ## When to Use
 
@@ -41,12 +49,12 @@ Can another engineer (or agent) understand this code without the author explaini
 - Is the control flow straightforward (avoid nested ternaries, deep callbacks)?
 - Is the code organized logically (related code grouped, clear module boundaries)?
 - Are there any "clever" tricks that should be simplified?
-- **Could this be done in fewer lines?** (1000 lines where 100 suffice is a failure)
-- **Are abstractions earning their complexity?** (Don't generalize until the third use case)
+- Does complexity obscure an invariant or create a specific maintenance failure? Fewer lines alone is not evidence of improvement.
+- Do abstractions preserve actual domain and ownership contracts? A different abstraction is not automatically better.
 - Would comments help clarify non-obvious intent? (But don't comment obvious code.)
 - Are there dead code artifacts: no-op variables (`_unused`), backwards-compat shims, or `// removed` comments?
-- **Is a new conditional bolted onto an unrelated flow?** That's a design smell, not a nit — push the logic into its own helper, state, or policy instead of tangling an existing path.
-- **Do repeated conditionals on the same shape appear?** They signal a missing model or dispatcher. A "temporary" branch is usually permanent debt.
+- Does a new conditional violate a specific invariant or ownership boundary? Show that consequence before proposing extraction.
+- Do repeated conditionals actually diverge or break a contract? Repetition alone does not establish a missing model or dispatcher.
 
 ### 3. Architecture
 
@@ -57,8 +65,8 @@ Does the change fit the system's design?
 - Is there code duplication that should be shared?
 - Are dependencies flowing in the right direction (no circular dependencies)?
 - Is the abstraction level appropriate (not over-engineered, not too coupled)?
-- **Does this refactor reduce complexity or just relocate it?** Count the concepts a reader must hold to follow the change. If a "cleaner" version leaves that count unchanged, it isn't cleaner — prefer the restructuring that makes whole branches, modes, or layers disappear over one that re-centralizes the same logic. Prefer deleting an abstraction to polishing it.
-- **Is feature-specific logic leaking into a shared or general-purpose module?** Keep logic in its owning layer, reuse the existing canonical helper instead of a near-duplicate, and don't normalize architectural drift.
+- Does the refactor introduce a concrete regression in dependencies, ownership or behavior? Relocating logic without reducing line count or concepts is not itself a defect.
+- Does feature-specific logic violate the shared module's documented responsibility or affect a demonstrated consumer? Check the actual boundary and existing helpers before suggesting a move.
 - **Are type boundaries explicit?** Question gratuitous `any`/`unknown`/optional/casts and silent fallbacks that paper over an unclear invariant — making the boundary explicit often makes the surrounding control flow simpler.
 
 ### 4. Security
@@ -102,15 +110,15 @@ Prefer the remedy that removes moving pieces over one that spreads the same comp
 
 ## Change Sizing
 
-Small, focused changes are easier to review, faster to merge, and safer to deploy. Target these sizes:
+Small, focused changes are easier to review. These are planning heuristics, not finding or blocking thresholds:
 
 ```
 ~100 lines changed   → Good. Reviewable in one sitting.
 ~300 lines changed   → Acceptable if it's a single logical change.
-~1000 lines changed  → Too large. Split it.
+~1000 lines changed  → May require more review chunks or context.
 ```
 
-**Watch file size, not just diff size.** A small diff can still push a file past a healthy boundary — around 1000 *total* lines in a single file (distinct from the ~1000 *changed*-lines threshold above) is a common inspection signal, not a hard cap. When a change materially grows an already-large file, ask whether to extract helpers, subcomponents, or modules *first*, before piling more on. Decompose, then add.
+**Watch file size, not just diff size.** A large file can warrant closer inspection, but size alone does not demonstrate a defect or require decomposition. Trace actual coupling, ownership and changed behavior.
 
 **What counts as "one change":** A single self-contained modification that addresses one thing, includes related tests, and keeps the system functional after submission. One part of a feature — not the whole feature.
 
@@ -125,7 +133,7 @@ Small, focused changes are easier to review, faster to merge, and safer to deplo
 
 **When large changes are acceptable:** Complete file deletions and automated refactoring where the reviewer only needs to verify intent, not every line.
 
-**Separate refactoring from feature work.** A change that refactors existing code and adds new behavior is two changes — submit them separately. Small cleanups (variable renaming) can be included at reviewer discretion.
+Separate refactoring from feature work when that helps review or follows project policy. A mixed diff is not automatically a defect; report actual coverage limits instead of requiring a split merely by category.
 
 ## Change Descriptions
 
@@ -161,7 +169,7 @@ Tests reveal intent and coverage:
 - Would the tests catch a regression if the code changed?
 ```
 
-Answer the last question by experiment, not by reading. Invert one condition the change adds (drop a negation, swap `&&` for `||`), run the suite, then restore the file from a copy. A mutation that stays green is a finding: name the test case that is missing. For a project-wide mutation score, see `constraint-driven-development`.
+Use existing tests as evidence of intent, then inspect whether their assertions match the applicable contract. Do not edit code or run mutation testing during review. Missing tests or an undetected hypothetical mutation alone do not establish a product defect. Changed assertions or mocks can be findings when they demonstrably conceal an actual behavior error. Report unobserved checks as limits rather than claiming they passed or failed.
 
 ### Step 3: Review the Implementation
 
@@ -178,7 +186,7 @@ For each file changed:
 
 ### Step 4: Categorize Findings
 
-Label every comment with its severity so the author knows what's required vs optional:
+Use the coordinator's severity/schema when supplied. Otherwise label confirmed defects by demonstrated impact. The following labels may separate optional feedback only when the user explicitly requested broader critique; do not populate optional/nit sections in a defects-only review:
 
 | Prefix | Meaning | Author Action |
 |--------|---------|---------------|
@@ -190,7 +198,7 @@ Label every comment with its severity so the author knows what's required vs opt
 
 This prevents authors from treating all feedback as mandatory and wasting time on optional suggestions.
 
-**Lead with what matters.** Order findings by leverage: correctness and security first, then structural regressions and missed simplifications, then everything else. Don't bury a real issue under cosmetic nits — a few high-conviction comments beat a long list. If you have one structural problem and ten nits, the structural problem *is* the review.
+**Lead with what matters.** Order confirmed findings by impact: correctness and security first, then demonstrated structural/performance regressions. Omit cosmetic nits and unsupported simplifications. A short accurate review is preferable to filling every category.
 
 ### Step 5: Verify the Verification
 
@@ -206,7 +214,7 @@ Check the author's verification story:
 
 ## Multi-Model Review Pattern
 
-Use different models for different review perspectives:
+When the coordinator calls for independent reviews, different models may provide different perspectives:
 
 ```
 Model A writes the code
@@ -221,32 +229,24 @@ Model A addresses the feedback
 Human makes the final call
 ```
 
-This catches issues that a single model might miss — different models have different blind spots.
+Different models may have different blind spots, but agreement is not proof. Respect the coordinator's delegation limits; independently validate claims before publication rather than adding reviewers to resolve an unsupported assertion.
 
 **Example prompt for a review agent:**
 ```
 Review this code change for correctness, security, and adherence to
 our project conventions. The spec says [X]. The change should [Y].
-Flag any issues as Critical, Required, Optional, or Nit.
+Report only introduced defects supported by the applicable contract,
+reachable scenario, before/after evidence and checked protections.
+Return no findings if none qualify; disclose missing essential context.
 ```
 
 ## Dead Code Hygiene
 
 After any refactoring or implementation change, check for orphaned code:
 
-1. Identify code that is now unreachable or unused
-2. List it explicitly
-3. **Ask before deleting:** "Should I remove these now-unused elements: [list]?"
-
-Don't leave dead code lying around — it confuses future readers and agents. But don't silently delete things you're not sure about. When in doubt, ask.
-
-```
-DEAD CODE IDENTIFIED:
-- formatLegacyDate() in src/utils/date.ts — replaced by formatDate()
-- OldTaskCard component in src/components/ — replaced by TaskCard
-- LEGACY_API_URL constant in src/config.ts — no remaining references
-→ Safe to remove these?
-```
+1. Search real consumers, exports, dynamic registration and compatibility contracts before declaring something unused.
+2. Report only introduced dead code that meets the finding threshold; absence of a text reference alone does not prove that a public or dynamically used symbol is dead.
+3. Keep review read-only. Return a supported correction to the coordinator; do not ask to delete code or begin cleanup during review.
 
 ## Review Speed
 
@@ -255,7 +255,7 @@ Slow reviews block entire teams. The cost of context-switching to review is less
 - **Respond within one business day** — this is the maximum, not the target
 - **Ideal cadence:** Respond shortly after a review request arrives, unless deep in focused coding. A typical change should complete multiple review rounds in a single day
 - **Prioritize fast individual responses** over quick final approval. Quick feedback reduces frustration even if multiple rounds are needed
-- **Large changes:** Ask the author to split them rather than reviewing one massive changeset
+- **Large changes:** Review in complete chunks under the assigned coverage plan; disclose any scope that could not be inspected.
 
 ## Handling Disagreements
 
@@ -266,7 +266,7 @@ When resolving review disputes, apply this hierarchy:
 3. **Software design** must be evaluated on engineering principles, not personal preference
 4. **Codebase consistency** is acceptable if it doesn't degrade overall health
 
-**Don't accept "I'll clean it up later."** Experience shows deferred cleanup rarely happens. Require cleanup before submission unless it's a genuine emergency. If surrounding issues can't be addressed in this change, require filing a bug with self-assignment.
+Distinguish a confirmed introduced defect from pre-existing cleanup or a preferred design. Keep supported defects visible; do not expand the review into surrounding refactors or require unrelated issue filing.
 
 ## Honesty in Review
 
@@ -274,7 +274,7 @@ When reviewing code — whether written by you, another agent, or a human:
 
 - **Don't rubber-stamp.** "LGTM" without evidence of review helps no one.
 - **Don't soften real issues.** "This might be a minor concern" when it's a bug that will hit production is dishonest.
-- **Quantify problems when possible.** "This N+1 query will add ~50ms per item in the list" is better than "this could be slow."
+- **Quantify only with evidence.** Cite measurements or a demonstrable bound on repeated work; do not invent latency, traffic or data-volume assumptions.
 - **Push back on approaches with clear problems.** Sycophancy is a failure mode in reviews. If the implementation has issues, say so directly and propose alternatives.
 - **Accept override gracefully.** If the author has full context and disagrees, defer to their judgment. Comment on code, not people — reframe personal critiques to focus on the code itself.
 
@@ -295,7 +295,7 @@ Part of code review is dependency review:
 
 1. **Read the changelog, not just the version number.** Semver is a promise the maintainer may not have kept — a "patch" can carry a behavioral change. For a major bump, read the migration notes and find what breaks.
 2. **One dependency per change.** Upgrade and merge them individually (or in small related groups). When a bulk bump breaks the build, you've lost which package did it; a single-package change makes the cause obvious and the revert clean.
-3. **Let the tests decide.** The upgrade is verified by a green suite before *and* after, not by "it installed." If coverage around the dependency's behavior is thin, that gap is the real finding — add a test first.
+3. **Check compatibility evidence.** Compare pinned versions, relevant APIs, changelogs and observed check results. Thin coverage is an evidence limit, not by itself a regression. Passing tests do not disprove a reachable compatibility defect established from source.
 4. **Mind the transitive graph.** Most installed packages are ones nobody chose directly. Review the lockfile diff, not just `package.json`; a single direct bump can pull in dozens of indirect changes.
 5. **Keep the lockfile honest.** Commit it, review its diff, and never hand-edit it. The lockfile is the thing that actually pins what ships.
 
@@ -359,11 +359,11 @@ For triaging `npm audit` findings and supply-chain risk (typosquatting, compromi
 |---|---|
 | "It works, that's good enough" | Working code that's unreadable, insecure, or architecturally wrong creates debt that compounds. |
 | "I wrote it, so I know it's correct" | Authors are blind to their own assumptions. Every change benefits from another set of eyes. |
-| "We'll clean it up later" | Later never comes. The review is the quality gate — use it. Require cleanup before merge, not after. |
+| "We'll clean it up later" | Keep confirmed introduced defects visible; distinguish them from unrelated cleanup and optional redesign. |
 | "AI-generated code is probably fine" | AI code needs more scrutiny, not less. It's confident and plausible, even when wrong. |
 | "The tests pass, so it's good" | Tests are necessary but not sufficient. They don't catch architecture problems, security issues, or readability concerns. |
-| "The refactor makes it cleaner" | Relocating complexity isn't reducing it. If the reader still holds the same number of concepts, the structure didn't improve — look for the version where branches disappear. |
-| "It's only a small addition to this file" | Small diffs still push files past a healthy size and bolt branches onto unrelated flows. Judge the resulting structure, not the diff size. |
+| "The refactor makes it cleaner" | Check actual contracts, behavior and dependencies rather than accepting or rejecting an aesthetic claim. |
+| "It's only a small addition to this file" | Inspect the resulting behavior; neither small diff size nor a large file proves correctness or a defect. |
 | "It's just a version bump" | A bump is a behavior change you didn't write. Read the changelog; semver doesn't guarantee no breakage. |
 | "I'll upgrade everything in one PR to save time" | A bulk bump that breaks the build hides which package did it. One dependency per change keeps the cause and the revert clean. |
 
@@ -373,20 +373,18 @@ For triaging `npm audit` findings and supply-chain risk (typosquatting, compromi
 - Review that only checks if tests pass (ignoring other axes)
 - "LGTM" without evidence of actual review
 - Security-sensitive changes without security-focused review
-- Large PRs that are "too big to review properly" (split them)
-- No regression tests with bug fix PRs
+- A declared review scope with uninspected chunks or missing essential context
+- Changed tests that conceal a demonstrated behavior error
 - Review comments without severity labels — makes it unclear what's required vs optional
-- Accepting "I'll fix it later" — it never happens
-- A refactor that moves code around without reducing the number of concepts a reader must hold
-- A change that grows an already-large file instead of decomposing it
-- New conditionals scattered into unrelated code paths (a missing abstraction)
-- A bespoke helper that duplicates an existing canonical one, or feature logic placed in a shared module
+- Dismissing a confirmed introduced defect without addressing its evidence
+- A refactor that introduces a concrete ownership, dependency or behavior regression
+- A new conditional or helper that demonstrably violates an existing contract
 - A bulk "bump dependencies" PR with no changelog review and no per-package isolation
 - A lockfile change that's hand-edited, uncommitted, or merged without reviewing its diff
 
 ## Verification
 
-After review is complete:
+After review is complete, report which of these were actually observed. Unexecuted checks and missing evidence are limits, not automatic findings or claims of success:
 
 - [ ] All Critical issues are resolved
 - [ ] All Required (no-prefix) changes are resolved or explicitly deferred with justification
@@ -395,4 +393,4 @@ After review is complete:
 - [ ] The verification story is documented (what changed, how it was verified)
 - [ ] Dependency upgrades were reviewed against their changelog, isolated per package, and verified by a green suite with the lockfile diff reviewed
 
-**Presumptive blockers:** surface and propose the simpler design for each of these; escalate to Required only when the change actively makes structure worse: a refactor that relocates complexity instead of reducing it; a change that pushes a file past the size boundary with no decomposition; feature logic added to a shared module; a near-duplicate of an existing canonical helper; a silent fallback that hides an unclear invariant.
+**Structural findings:** require a specific introduced contract violation or meaningful dependency/ownership consequence, with before/after evidence and checked counterevidence. File size, repeated branches, a near-duplicate helper or a silent fallback are investigation signals, not presumptive blockers. Propose restructuring only after establishing the defect.

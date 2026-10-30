@@ -61,7 +61,7 @@ Use [the prompt](../templates/subagent-prompt.md). Validate JSON, snapshot, scop
 
 Deduplicate by root cause and affected behavior. Severity follows demonstrated impact and preconditions, not maximum claimed severity or majority vote. Keep credible single-reviewer findings.
 
-Run two independent **Frontend Review Validator** passes by default. Give both the raw outputs, coverage cells, dispatch/attempt ledger and draft aggregation. Neither is a primary reviewer. Resolve errors and validate the corrected draft; apply the shared limit of one fresh replacement per required validator pass. Required validator failure is a completion gap even when the reviewer count was reached.
+Run two independent **Frontend Review Validator** passes by default. Give both the raw outputs, coverage cells, dispatch/attempt ledger, draft aggregation and pinned before/after/caller/contract evidence for retained and credibly disputed/dropped candidates. Require `finding_checks` decisions under the shared gate; every final finding must be confirmed by both required passes on the corrected draft. Neither is a primary reviewer. Unresolved disagreements or missing decisive context are completion gaps, not majority votes. Resolve errors and validate the corrected draft; apply the shared limit of one fresh replacement per required validator pass. Required validator failure is a completion gap even when the reviewer count was reached.
 
 Recheck HEAD/index before finalizing. A changed staged snapshot requires a fresh run; never silently refresh the packet while retaining old outputs.
 

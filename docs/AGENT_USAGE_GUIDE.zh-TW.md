@@ -157,6 +157,8 @@ flowchart TD
 
 人數與覆蓋必須同時達標。例如 A 只看表單、B 只看翻譯，不代表兩個檔案都被審查兩次。大型 diff 會分組，每組仍須達到該 mode 的獨立審查門檻。重試取代舊 attempt；看過其他 reviewer 結論的仲裁 pass 不補入獨立人數。
 
+三種 mode 共用逐項證據門檻：SKILL checklist 只產生待查候選，不會因為有 assertion、大檔案、重複分支或缺少測試就直接認定有 bug。每個 finding 都要指出預期契約、可達觸發條件、錯誤結果及本次變更造成的前後差異，並檢查呼叫端、上游驗證、guard 與套件版本是否已排除該情境。Validator 會逐項回報 confirmed／rejected／unresolved；所有必要 pass 都確認的問題才會進入最終報告。缺少關鍵證據或仍有爭議時標示 Incomplete；完整檢查後零 findings 是有效結果。具體可達的條件式 bug 仍保留，靜態證據充分時不要求一定執行測試。參考來源與後續誤報評估案例見[review precision references](../skills/frontend-staged-review-workflow/references/review-precision.md)。
+
 ### 升級後的 SKILL 選用
 
 基礎審查固定使用 `code-review-and-quality`；其他 SKILL 需要實際變更與具體風險，不會因為有 TSX 檔案就全部啟用。重疊規則若已被選定 SKILL 涵蓋，會記錄原因並避免重複派工。

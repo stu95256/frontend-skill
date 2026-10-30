@@ -77,6 +77,19 @@ Subagent (general-purpose):
 
     ## Calibration
 
+    Treat checklist items as investigation candidates. Before reporting an
+    introduced/worsened defect, identify its expected contract, reachable
+    trigger, wrong outcome and before/after evidence. Attempt to disprove it
+    using callers, upstream validation, guards and actual framework/config
+    guarantees. Cite inspected protections and why they do not prevent it.
+    Do not invent requirements or demand rigor absent from the project.
+    Static evidence can be conclusive; conditional defects count when their
+    preconditions are supported. Missing tests alone, syntax, confidence
+    and a plausible fix are not proof. Omit unsupported candidates; return
+    no findings when none qualify and disclose missing decisive context.
+    Use the coordinator's schema and scope over this illustrative format.
+    Only include optional improvements when broader critique was requested.
+
     Categorize issues by actual severity. Not everything is Critical.
     Acknowledge what was done well before listing issues — accurate praise
     helps the implementer trust the rest of the feedback.
@@ -97,23 +110,25 @@ Subagent (general-purpose):
     [Bugs, security issues, data loss risks, broken functionality]
 
     #### Important (Should Fix)
-    [Architecture problems, missing features, poor error handling, test gaps]
+    [Confirmed introduced defects with meaningful impact and supported triggers]
 
-    #### Minor (Nice to Have)
-    [Code style, optimization opportunities, documentation polish]
+    #### Minor
+    [Confirmed lower-impact defects; omit empty sections and optional nits]
 
     For each issue:
     - File:line reference
     - What's wrong
+    - Applicable contract and reachable trigger
+    - Before/after evidence and checked protections
     - Why it matters
     - How to fix (if not obvious)
 
     ### Recommendations
-    [Improvements for code quality, architecture, or process]
+    [Optional improvements only if broader critique was explicitly requested]
 
     ### Assessment
 
-    **Ready to merge?** [Yes | No | With fixes]
+    **Ready to merge?** [Yes | No | With fixes | Incomplete]
 
     **Reasoning:** [1-2 sentence technical assessment]
 
@@ -140,42 +155,26 @@ Subagent (general-purpose):
 - `[BASE_SHA]` — starting commit
 - `[HEAD_SHA]` — ending commit
 
-**Reviewer returns:** Strengths, Issues (Critical / Important / Minor), Recommendations, Assessment
+**Reviewer returns:** Confirmed issues and assessment; omit empty categories. State no findings when none qualify, and disclose missing decisive context. Optional recommendations require an explicit request for broader critique.
 
 ## Example Output
 
 ```
-### Strengths
-- Clean database schema with proper migrations (db.ts:15-42)
-- Comprehensive test coverage (18 tests, all edge cases)
-- Good error handling with fallbacks (summarizer.ts:85-92)
-
 ### Issues
 
 #### Important
-1. **Missing help text in CLI wrapper**
-   - File: index-conversations:1-31
-   - Issue: No --help flag, users won't discover --concurrency
-   - Fix: Add --help case with usage examples
-
-2. **Date validation missing**
-   - File: search.ts:25-27
-   - Issue: Invalid dates silently return no results
-   - Fix: Validate ISO format, throw error with example
-
-#### Minor
-1. **Progress indicators**
-   - File: indexer.ts:130
-   - Issue: No "X of Y" counter for long operations
-   - Impact: Users don't know how long to wait
-
-### Recommendations
-- Add progress reporting for user experience
-- Consider config file for excluded projects (portability)
+1. **Reject failed saves before resolving the submit promise**
+   - File: save.ts:25-28 (illustrative paths in this example)
+   - Expected contract: SaveDialog.tsx:61-67 closes the editor only after a successful save.
+   - Trigger: The endpoint returns its documented HTTP 409 conflict response.
+   - Before/after: The diff removes the response.ok check; the new code returns the parsed error body as success.
+   - Checked protections: This function calls fetch directly; its caller closes on resolution and only displays errors on rejection. Neither handles the error envelope.
+   - Impact: A rejected save closes the editor and discards the unsaved draft.
+   - Fix: Restore the HTTP status check and reject the promise on failure before resolving a result.
 
 ### Assessment
 
 **Ready to merge: With fixes**
 
-**Reasoning:** Core implementation is solid with good architecture and tests. Important issues (help text, date validation) are easily fixed and don't affect core functionality.
+**Reasoning:** The introduced error path violates the caller's save contract under a supported server response. Static path tracing establishes the failure; no runtime checks were executed for this example.
 ```

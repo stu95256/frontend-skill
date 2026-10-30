@@ -23,11 +23,13 @@ Across all modes:
 
 - Build one complete immutable packet before dispatch.
 - Read the selected workflow's shared review contract. For staged modes, pin HEAD/index blob evidence and recheck identity before the final verdict; for branch mode, keep the three pinned commits.
+- Include the shared candidate evidence gate and its precedence over assigned Skill checklists in every worker packet. Zero findings is valid; confidence and agreement do not prove a defect.
 - Select Agent Skills from diff evidence rather than loading the entire catalog.
 - Use upgraded design, RHF, i18n and TDD criteria only for concrete matching risks. Implementation instructions inside those Skills never authorize writes during review.
 - Invoke independent **Frontend Reviewer** workers; use **Frontend Security Reviewer** only when security or privacy evidence triggers it.
 - Replace invalid responses with fresh stateless invocations containing the full packet; never resume an old worker.
 - Invoke **Frontend Review Validator** before claiming quorum, scope, and coverage are complete.
+- Supply retained and credibly disputed/dropped candidates with pinned before/after source, callers, contracts and versions. Require per-finding confirmed/rejected/unresolved decisions; publish only findings confirmed by every required validator pass on the corrected draft. Missing decisive evidence or unresolved disagreement means `Incomplete`, not a speculative finding or approval.
 - Count independent completed seats per required file/hunk coverage cell, not just per skill total. Retries replace attempts; consensus passes and validators never fill reviewer quorum.
 - Require one valid aggregation validator pass for staged/branch, two by default for heavy. Missing coverage, snapshot integrity or required validation means `Incomplete`, while retaining confirmed findings.
 - Preserve each selected mode's exact minimum seats, exclusions, report schema, and incomplete/degraded behavior.

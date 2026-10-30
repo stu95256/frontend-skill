@@ -20,7 +20,7 @@ Core requirements:
 4. Use baseline `code-review-and-quality` plus evidence-backed specialist Skills from the shared matrix. Design, RHF, i18n and TDD criteria stay within the read-only review scope.
 5. Dispatch at least two independent completed seats for each selected Skill's required file/hunk cells. Disjoint file assignments do not satisfy redundant coverage.
 6. Require strict JSON tied to the exact snapshot and three SHAs. Retry an invalid output once with a fresh complete packet; unresolved gaps are `Incomplete`.
-7. Invoke **Frontend Review Validator** once on raw outputs, coverage/attempt ledger and the draft report. Follow the shared bounded correction/replacement policy.
+7. Invoke **Frontend Review Validator** once with raw outputs, coverage/attempt ledger, draft report and pinned candidate evidence. Require per-finding confirmed/rejected/unresolved decisions against source, target and merge-base context under the shared gate. Unsupported claims are removed; unresolved decisive evidence prevents a fully validated verdict. Follow the shared bounded correction/replacement policy.
 8. Refs moving later do not change the pinned review. Identify exactly which commits were reviewed.
 
 Use [the reviewer prompt](templates/subagent-prompt.md) and [the Chinese final report](templates/final-report.md). Report confirmed issues and material evidence limits even when incomplete. Keep operational ledgers internal unless requested.

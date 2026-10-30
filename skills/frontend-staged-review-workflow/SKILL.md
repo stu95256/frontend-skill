@@ -27,7 +27,7 @@ Read the [shared review contract](references/review-contract.md) before preparin
 3. Each reviewer remains blind to other findings. A retry is one fresh stateless invocation with the same snapshot/assignment; count only its accepted attempt. Retry an invalid response once, then leave the seat incomplete if unresolved.
 4. Reject schema/snapshot/scope mismatches, missing criteria and incomplete coverage. A syntactically valid `blocked` or `degraded` result does not count.
 5. Aggregate evidence-backed issues, deduplicate root causes and reconcile severity from impact. Remove test-only advice; preserve defects in tests that conceal real behavior errors.
-6. Invoke **Frontend Review Validator** once on raw outputs, coverage/attempt ledger and draft report. Apply the shared bounded retry/correction policy. A failed or missing validator prevents a fully validated verdict.
+6. Invoke **Frontend Review Validator** once with raw outputs, coverage/attempt ledger, draft report and pinned candidate evidence. Require per-finding confirmed/rejected/unresolved decisions under the shared gate; schema/quorum validation alone is insufficient. Apply the shared bounded retry/correction policy. A failed/missing validator or unresolved claim prevents a fully validated verdict.
 7. Recheck HEAD/index identity. A changed snapshot requires `Incomplete` and a fresh run, without mixing outputs.
 
 ## Report

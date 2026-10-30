@@ -14,6 +14,8 @@ Read the [shared contract](../frontend-staged-review-workflow/references/review-
 
 Defaults remain **five completed independent seats per selected Skill/risk scope** and **two aggregation validator passes**. User configuration and bounded replacement rules are in the procedure. Never use consensus/adjudication reviewers to fill independent quorum.
 
+The shared candidate evidence gate overrides assigned Skill checklist demands. Both validator passes verify individual findings against pinned source, including reachable triggers, before/after regressions and checked protections; agreement or confidence alone is insufficient. Publish only candidates confirmed by both required passes on the corrected draft. Unsupported claims are removed; unresolved decisive evidence prevents a fully validated verdict.
+
 Use [the reviewer prompt](templates/subagent-prompt.md) for each stateless invocation and [the final report template](templates/final-report.md) for concise Chinese findings. Snapshot/coverage/quorum/required-validator gaps prevent `Approve`; keep confirmed findings visible with `Incomplete` or explicitly authorized `Degraded`.
 
 This is read-only: no edits, staging, commits, pushes, checkout, merge, rebase, reset, auto-fix or mutating verification commands.
