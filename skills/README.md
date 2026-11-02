@@ -25,6 +25,8 @@ bash scripts/install-vscode-chat.sh
 - `SKILLS_MANIFEST.md`：已下載 skills 的來源、commit、原始路徑與用途。
 - `VALIDATION_REPORT.md`：目錄、格式、參考連結、回歸測試及版本驗證的實際結果與限制。
 
-## 2026-10-29 目錄狀態
+## 2026-11-02 目錄狀態
 
-目前共 59 個 Skills（30 core／29 on demand）。TDD、RHF、i18n 與設計指南已採其他主要來源並保留原名稱。專用無障礙與動畫效能套件不納入目錄；來源、移植限制與驗證請看 [更新報告](../docs/SKILL_REPLACEMENT_RESEARCH.zh-TW.md)。
+目前共 60 個 Skills（30 core／30 on demand）。新增正式工作流 [azure-devops-create-pr](./azure-devops-create-pr/SKILL.md)，透過 Azure DevOps MCP 建立 PR，詢問 SPEC 與 work item ID，不驗證 work item，repository 範本無法取得時自動使用內建範本。
+
+TDD、RHF、i18n 與設計指南已採其他主要來源並保留原名稱。專用無障礙與動畫效能套件不納入目錄；來源、移植限制與驗證請看 [更新報告](../docs/SKILL_REPLACEMENT_RESEARCH.zh-TW.md)。

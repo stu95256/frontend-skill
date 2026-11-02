@@ -142,7 +142,7 @@ find ~/.copilot/instructions -maxdepth 1 -name '*.instructions.md' | wc -l
 本 bundle 應至少安裝：
 
 ```text
-59 skills
+60 skills
 10 custom agents
 2 instruction files
 ```
@@ -162,7 +162,7 @@ python3 -m unittest -v tests/test_vscode_conversion.py
 預期 catalog validator 顯示：
 
 ```text
-VS Code Chat catalog validation passed: 59 skills, 10 custom agents, 2 instruction files, no legacy runtime artifacts
+VS Code Chat catalog validation passed: 60 skills, 10 custom agents, 2 instruction files, no legacy runtime artifacts
 ```
 
 ## 更新與移除

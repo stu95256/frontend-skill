@@ -1,10 +1,11 @@
 # Skills Manifest
 
-Generated: 2026-10-29
+Generated: 2026-11-02
 
-- VS Code Chat personal catalog: **59** skills.
-- Default core: **30** skills; **29** on demand.
+- VS Code Chat personal catalog: **60** skills.
+- Default core: **30** skills; **30** on demand.
 - Four project-curated workflow Skills cover three review modes and staged commit messages; review modes share one coordinator.
+- The project-curated Azure DevOps PR workflow runs independently through the connected MCP server and includes a bundled fallback template.
 - Upstream revisions are fixed commits; local revisions record VS Code portability and catalog scope adaptations.
 - Repository updates do not imply changes to every retained Skill directory.
 
@@ -12,6 +13,7 @@ Generated: 2026-10-29
 
 | Category | Skill | Tier | Canonical source | Pinned revision | Upstream path | License | Purpose / trigger |
 |---|---|---|---|---|---|---|---|
+| workflow | `azure-devops-create-pr` | on-demand | project-curated | `local-2026-11-02` | `skills/azure-devops-create-pr` | MIT | Create Azure Repos PRs through Azure DevOps MCP; ask for SPECs and work item IDs, skip work item correctness checks, and use the bundled template when the repository template is unavailable. |
 | frontend-data-grid | `ag-dev` | on-demand | https://github.com/ag-grid/skills | `ef483f7f9e8cc9e5f359144d11317cd4094d5b8e` | `skills/ag-dev` | MIT | Use BEFORE writing or changing any code that touches AG Grid, AG Charts or AG Studio - including adding or configuring columns, themes, styling, … |
 | frontend-data-grid | `ag-update` | on-demand | https://github.com/ag-grid/skills | `ef483f7f9e8cc9e5f359144d11317cd4094d5b8e` | `skills/ag-update` | MIT | Update AG Grid, AG Charts and AG Studio dependencies to a newer version |
 | antd | `ant-design` | on-demand | https://github.com/ant-design/antd-skill | `e65d2d3da9a2a129885131f5aeffe2c9037f83cb` | `skills/ant-design` | MIT | Decision guide for antd 6.x, Ant Design Pro 5/ProComponents, Ant Design X v2, and the offline `@ant-design/cli`. Use for component selection, the… |

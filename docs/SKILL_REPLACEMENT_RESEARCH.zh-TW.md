@@ -6,7 +6,7 @@
 
 依使用者最新指定，停止評估無障礙實作及動畫效能專項，移除既有兩個無障礙專用套件、專用參考文件與工作流選擇規則。先前已排除的頁面自動化測試套件維持排除。
 
-跨來源更新完成時為 61 個 Skills、14 個 Agents。2026-10-29 依後續指示移除兩個專用工作流及其專用 Agent 後，目前為 **59 個 Skills（30 core／29 on demand）、10 個 Custom Agents、2 份 instructions**。沒有新增 Skill 名稱；四個既有 Skill 已改採其他主要來源，原名稱保留，既有代理可繼續選用。
+跨來源更新完成時為 61 個 Skills、14 個 Agents。2026-10-29 依後續指示移除兩個專用工作流及其專用 Agent 後，當時為 **59 個 Skills（30 core／29 on demand）、10 個 Custom Agents、2 份 instructions**。該輪沒有新增 Skill 名稱；四個既有 Skill 已改採其他主要來源，原名稱保留，既有代理可繼續選用。2026-11-02 新增正式工作流 [azure-devops-create-pr](../skills/azure-devops-create-pr/SKILL.md) 後，目前為 **60 個 Skills（30 core／30 on demand）**，Agents 與 instructions 數量不變。
 
 一般元件的原生控制項、標籤、錯誤訊息與狀態處理仍是前端範例的一部分；它們不會觸發專用無障礙稽核或額外派工。
 

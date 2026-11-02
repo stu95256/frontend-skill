@@ -40,7 +40,7 @@ class VSCodeConversionTests(unittest.TestCase):
 
     def test_catalog_validator(self) -> None:
         result = run(sys.executable, "scripts/validate_skill_catalog.py")
-        self.assertIn("59 skills, 10 custom agents, 2 instruction files", result.stdout)
+        self.assertIn("60 skills, 10 custom agents, 2 instruction files", result.stdout)
 
     @unittest.skipUnless(shutil.which("bash"), "bash is required")
     def test_installer_copies_exact_runtime_counts(self) -> None:
@@ -65,7 +65,12 @@ class VSCodeConversionTests(unittest.TestCase):
             skills = sum((path / "SKILL.md").is_file() for path in (target / "skills").iterdir() if path.is_dir())
             agents = len(list((target / "agents").glob("*.agent.md")))
             instructions = len(list((target / "instructions").glob("*.instructions.md")))
-            self.assertEqual((59, 11, 2), (skills, agents, instructions))
+            self.assertEqual((60, 11, 2), (skills, agents, instructions))
+            pr_template = Path("skills/azure-devops-create-pr/assets/pr-description.md")
+            self.assertEqual(
+                (ROOT / pr_template).read_bytes(),
+                (target / pr_template).read_bytes(),
+            )
             self.assertTrue((custom / "keep.txt").is_file())
             self.assertEqual("personal agent\n", custom_agent.read_text(encoding="utf-8"))
             for name in retired:

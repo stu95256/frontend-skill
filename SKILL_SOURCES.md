@@ -1,6 +1,6 @@
 # Skill Sources and Update Policy
 
-Updated: 2026-10-28
+Updated: 2026-11-02
 
 `skills/SKILLS_MANIFEST.md` is the per-skill source of truth. This file groups actively synchronized upstream families and records the update policy.
 
@@ -42,13 +42,14 @@ Updated: 2026-10-28
 
 ## Project-curated and retained skills
 
+- `azure-devops-create-pr` is project-curated and maintained locally. It was designed using published PR workflows as references, rather than vendored from one upstream Skill. Its bundled PR template travels with the Skill; Azure DevOps tool names and arguments are discovered from the connected MCP schema.
 - The staged-review, heavy-staged-review, branch-review, and staged-commit-message workflows are project-curated because their pinned-SHA, staged-only, real-sub-agent, quorum, findings-only, and commit-output guarantees are more specific than generic upstream workflows.
 - `typescript-code-reviewer` remains project-curated; `secpriv-code-review`, `react-dev`, and `qa-test-planner` remain source-backed specialist skills with local portability adaptations recorded above.
 - `performance-optimization` keeps database/cache/query-plan coverage while frontend workflows also route React/runtime concerns to Vercel and source, build, and unit/integration evidence.
 
-## Current catalog adaptation — 2026-10-29
+## Current catalog adaptation — 2026-11-02
 
-- Retained catalog: 59 Skills, 10 custom agents, 2 instruction files.
+- Retained catalog: 60 Skills, 10 custom agents, 2 instruction files.
 - Shared upstream checklists are vendored inside their owning Skill so installation is self-contained.
 - Superpowers updates preserve stateless VS Code workers and local uncommitted review support; helper scripts adopt plan ownership, range guards, and explicit interpreter invocation.
 - Vitest references cover the installed major and Node/DOM unit/integration scope; beta examples require an explicit version check.

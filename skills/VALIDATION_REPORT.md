@@ -1,8 +1,24 @@
 # VS Code Chat Catalog Validation Report
 
-Generated: 2026-10-29
+Updated: 2026-11-02
 
-## Current result
+## Current adoption — 2026-11-02
+
+The [Azure DevOps PR Skill](./azure-devops-create-pr/SKILL.md) and its [bundled PR template](./azure-devops-create-pr/assets/pr-description.md) were moved from the proposal directory into the canonical catalog. Both files retain their original content. The manifest, routing documentation, source policy, catalog count checks and installation fixture now include the new Skill.
+
+- Catalog validator passed: **60 Skills, 10 custom agents, two instruction files**. The manifest contains 30 core and 30 on-demand entries.
+- All 60 packages passed the official Agent Skills reference validator at commit `69ef37e9424c0a7ea9dd2293b559e43ec8176379`, using the cached offline package and UTF-8 mode. The moved PR Skill also passed the native skill-creator quick validator.
+- All seven conversion/migration regression tests passed, none skipped, in 32.277 seconds. The installer test verifies that the bundled PR template is copied byte-for-byte into an isolated installation target.
+- Relative links in the moved Skill and its research document resolve at the new locations.
+- Installation tests ran with Git Bash outside the host sandbox because Git Bash could not create its isolated temporary target inside the sandbox. The actual personal catalog was not modified.
+
+Existing distribution archives were not rebuilt for this move; rebuild them from the current canonical source before distributing the 60-Skill catalog. This change does not verify live Azure DevOps PR creation or work item association.
+
+## Historical validation record — 2026-10-29
+
+The sections below record the earlier 59-Skill catalog and its checks; their counts and transport results are historical.
+
+### Result
 
 **PASS — catalog, Skill format and migration regression checks.**
 

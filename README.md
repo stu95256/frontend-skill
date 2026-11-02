@@ -4,7 +4,7 @@ A curated VS Code Chat / GitHub Copilot BYOK customization catalog for React and
 
 ## Catalog at a glance
 
-- **59** Agent Skills under `skills/`
+- **60** Agent Skills under `skills/`
 - **10** custom agents under `agents/`: three user-facing agents and seven hidden subagent workers
 - **2** cross-project instruction files under `instructions/`
 - Upstream source, pinned commit, path, and license tracked in [`skills/SKILLS_MANIFEST.md`](./skills/SKILLS_MANIFEST.md)
@@ -27,6 +27,7 @@ The catalog targets React, TypeScript, Tailwind/shadcn, AG Grid React, Ant Desig
 | OpenAPI-generated types | `openapi-typescript` deterministic CLI pipeline |
 | React completion diagnostics | `react-doctor` after root-cause work, never as a debugging substitute |
 | Third-party skill intake | `skill-scanner` before installation or update |
+| Create an Azure Repos PR | [`azure-devops-create-pr`](./skills/azure-devops-create-pr/SKILL.md) — asks for SPECs and work item IDs, uses Azure DevOps MCP, and falls back to its bundled PR template |
 
 ## Project-specific workflows
 
@@ -37,6 +38,8 @@ These workflows combine an Agent Skill for reusable policy with a VS Code custom
 - [`frontend-staged-commit-message`](./skills/frontend-staged-commit-message/) — explains the staged intent and type choice, then returns at least five one-line English subjects ordered from simple to detailed, without staging, editing, committing, or pushing.
 - [`frontend-staged-review-workflow`](./skills/frontend-staged-review-workflow/), [`frontend-heavy-staged-review-workflow`](./skills/frontend-heavy-staged-review-workflow/), and [`frontend-branch-review-workflow`](./skills/frontend-branch-review-workflow/) share the **Frontend Review** coordinator while retaining separate scope and quorum policies.
 - Their [shared review contract](./skills/frontend-staged-review-workflow/references/review-contract.md) pins evidence, routes the upgraded design/form/i18n/TDD Skills and requires independent coverage per changed scope plus aggregation validation.
+
+[`azure-devops-create-pr`](./skills/azure-devops-create-pr/) is a standalone workflow that uses the connected Azure DevOps MCP without a dedicated coordinator. It creates PRs from committed branch changes, asks which SPECs and work item IDs to include, skips work item correctness checks, and automatically uses its bundled template when the repository template cannot be obtained.
 
 All coordinator and worker definitions live in [`agents/`](./agents/). Worker agents are hidden from the picker and explicitly allowlisted by coordinators. Subagent invocations are treated as stateless; retries receive a complete task packet instead of relying on follow-up messages.
 

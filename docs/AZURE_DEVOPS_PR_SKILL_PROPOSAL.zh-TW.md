@@ -4,7 +4,7 @@
 
 建議新增 `azure-devops-create-pr`：讀取已提交的分支差異，詢問要納入 description 的 SPEC 與要關聯的 work item ID，收到回答後透過 Azure DevOps MCP 自動建立 PR，不主動查詢或驗證 work item。
 
-完整可檢閱草案位於 [SKILL.md](./proposals/azure-devops-create-pr/SKILL.md)。本次交付為設計提案，草案放在文件區，尚未加入正式 Skill catalog 或安裝流程，也沒有建立實際 PR。
+2026-11-02 已正式採用，完整內容位於 [SKILL.md](../skills/azure-devops-create-pr/SKILL.md)，已納入正式 Skill catalog 與既有安裝流程。本文件保留原始研究與設計依據；本次採用沒有建立實際 PR。
 
 ## 網路上找到的參考
 
@@ -71,7 +71,7 @@
 
 優先遵循 repository 現有的 Azure Repos template。依 [Azure Repos 官方 template 規則](https://learn.microsoft.com/en-us/azure/devops/repos/git/pull-request-templates)，template 取自 default branch，並區分 target branch 專用與預設 template；草案會依這些規則讀取。
 
-Skill 資料夾內提供 [備用 PR 範本](./proposals/azure-devops-create-pr/assets/pr-description.md)，包含 `Summary`、`Changes`、`SPECs`、`Work Items`、`Validation`。找不到適用的 repository template、讀到空內容，或因權限、網路、逾時、缺少讀檔工具而無法取得時，自動使用這份備用範本，不額外詢問使用者，也不因範本讀取失敗而中止建立 PR。PR 建立本身所需的權限與工具仍須具備。
+Skill 資料夾內提供 [備用 PR 範本](../skills/azure-devops-create-pr/assets/pr-description.md)，包含 `Summary`、`Changes`、`SPECs`、`Work Items`、`Validation`。找不到適用的 repository template、讀到空內容，或因權限、網路、逾時、缺少讀檔工具而無法取得時，自動使用這份備用範本，不額外詢問使用者，也不因範本讀取失敗而中止建立 PR。PR 建立本身所需的權限與工具仍須具備。
 
 建立 description 前會替換所有範本變數，並依 PR 使用語言調整標題與內容。SPEC 可有多個，保留使用者提供的識別資訊，僅摘要已讀取且與 diff 相符的內容。只拿到連結或 SPEC ID 也可以建立；不捏造需求已完成或驗收通過。
 
@@ -108,4 +108,4 @@ Work item 同時列入 description，並透過 API 實際關聯。description �
 
 建議名稱為 `azure-devops-create-pr`，搭配已連接且具有 PR 寫入權限的 Azure DevOps MCP。草案為單一 Skill，不需要客製 Azure SDK script 或另一個 coordinator agent。
 
-正式採用時，再將 [Skill 草案](./proposals/azure-devops-create-pr/SKILL.md) 納入 catalog、來源 manifest 與數量檢查。這些安裝整合不屬於本次「研究並建議新 Skill」的交付範圍。
+2026-11-02 已將 [正式 Skill](../skills/azure-devops-create-pr/SKILL.md) 與內建範本一併移入正式目錄，更新 catalog、來源 manifest 與數量檢查。正式清單目前為 60 個 Skills；既有 installer 會一併安裝此 Skill 與範本。實際安裝到個人環境仍依既有安裝程序執行。
