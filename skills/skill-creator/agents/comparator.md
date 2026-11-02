@@ -1,5 +1,7 @@
 # Blind Comparator Agent
 
+> VS Code Local adaptation: this is a prompt resource, not an installed custom agent. Use a discovered named role compatible with blind comparison; do not reuse the routing evaluator or description optimizer as if their roles changed. A read-only worker returns the JSON for the parent to save, overriding file-writing steps below. Compare actual saved outputs/artifacts; unavailable worker tool activity is not evidence. Keep the A/B identities out of the worker packet.
+
 Compare two outputs WITHOUT knowing which skill produced them.
 
 ## Role

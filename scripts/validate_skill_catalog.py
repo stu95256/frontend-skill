@@ -63,7 +63,6 @@ ALLOWED_AGENT_FRONTMATTER = {
     "target",
     "handoffs",
     "hooks",
-    "mcp-servers",
 }
 
 ALLOWED_AGENT_TOOLS = {"agent", "read", "search", "edit", "execute", "web", "ado/*", "ado-remote-mcp/*"}
@@ -222,7 +221,7 @@ def validate_skills(errors: list[str]) -> set[str]:
                 errors.append(f"{path.relative_to(ROOT)}: {flag} must be a boolean")
         if "argument-hint" in data and not isinstance(data["argument-hint"], str):
             errors.append(f"{path.relative_to(ROOT)}: argument-hint must be a string")
-        if data.get("context") not in (None, "fork"):
+        if "context" in data and data["context"] != "fork":
             errors.append(f"{path.relative_to(ROOT)}: context must be 'fork' when present")
         if data.get("context") == "fork" and "agent/runSubagent" in body:
             errors.append(
@@ -305,12 +304,16 @@ def validate_agents(errors: list[str]) -> set[str]:
         if allowed_agents and "agent" not in tools:
             errors.append(f"{path.relative_to(ROOT)}: agents allowlist requires the agent tool")
         if allowed_agents:
+            if data.get("disable-model-invocation") is not True:
+                errors.append(f"{path.relative_to(ROOT)}: catalog coordinator must guard top-level invocation")
             agent_text = path.read_text(encoding="utf-8-sig")
             if "#tool:agent/runSubagent" not in agent_text:
                 errors.append(
                     f"{path.relative_to(ROOT)}: coordinator must reference #tool:agent/runSubagent"
                 )
         if name in REQUIRED_WORKERS:
+            if data.get("agents") != []:
+                errors.append(f"{path.relative_to(ROOT)}: catalog worker must explicitly set agents: []")
             if data.get("user-invocable") is not False:
                 errors.append(f"{path.relative_to(ROOT)}: worker must be hidden from the agent picker")
             if data.get("disable-model-invocation") is True:

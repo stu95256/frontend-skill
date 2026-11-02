@@ -7,6 +7,7 @@ dry_run=false
 
 usage() {
   printf 'Usage: %s [--target PATH] [--dry-run]\n' "$0"
+  printf 'Copies the Local/BYOK catalog only; custom targets need VS Code discovery configuration.\n'
 }
 
 while (($#)); do
@@ -87,4 +88,7 @@ cp -a "$repo_root/skills/." "$target/skills/"
 cp -a "$repo_root/agents/." "$target/agents/"
 cp -a "$repo_root/instructions/." "$target/instructions/"
 
-printf 'Installed. Open VS Code and run Chat: Open Customizations, then inspect Chat Diagnostics.\n'
+printf 'Installed catalog files; VS Code profile settings and BYOK credentials were not changed.\n'
+printf 'Start a Local session, select your tool-capable BYOK model, then open Chat: Open Customizations and inspect Chat Diagnostics.\n'
+printf 'Confirm agents/instructions are discovered from the installed target; register custom locations in the active profile if needed.\n'
+printf 'Native Copilot requires adapted agent configuration and its task schema; enabling BYOK alone does not convert Local agents.\n'

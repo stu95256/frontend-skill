@@ -5,6 +5,7 @@ description: Update AG Grid, AG Charts and AG Studio dependencies to a newer ver
 
 ## Rules
 
+- Delegation is optional. In VS Code Local, delegate only from a top-level agent with an available, allowed named role compatible with this read-only inventory task. Invoke `agent/runSubagent` with explicit `agentName`, `description`, and the complete task in `prompt`; a `#tool` reference alone does not execute it. Anonymous calls inherit the parent role/tools, and workers must not dispatch again. If no compatible role is available, perform the step in the parent. Native Copilot needs its own supported configuration and `task` schema.
 - Do not make use of the codemod or MCP server, or suggest their use or installation. They are not relevant to the task you are now completing
 - Follow the process documented below exactly
 - If you are instructed "Tell the user X" then show the message to the user and **continue**.

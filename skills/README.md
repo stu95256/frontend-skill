@@ -18,7 +18,7 @@ bash scripts/install-vscode-chat.sh
 
 也可只複製需要的子目錄到 `~/.copilot/skills/`。不要假設 Repository 根目錄的 `skills/` 會被 VS Code 自動載入；它是 canonical source layout。
 
-工作流相關 Skill 與 `../agents/*.agent.md` 搭配：Skill 保存程序和資源，Custom Agent 保存工具限制、handoff、worker allowlist 與 `agent/runSubagent` 編排。
+工作流相關 Skill 與 [custom agents](../agents/) 搭配，目標為 **VS Code Local＋BYOK**：Skill 保存程序和資源，Custom Agent 保存工具限制、handoff、worker allowlist 與 `agent/runSubagent` 編排。原生 Copilot 的 `task` 與設定格式需另外適配；見[相容性核對](./frontend-staged-review-workflow/references/vscode-copilot-compatibility.md)。
 
 ## 索引與驗證
 

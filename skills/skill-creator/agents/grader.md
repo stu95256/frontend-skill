@@ -1,5 +1,7 @@
 # Grader Agent
 
+> VS Code Local adaptation: this is a prompt resource, not an installed custom agent. Use only a discovered named role whose instructions/tools support grading; the catalog's routing evaluator and description optimizer are different roles. Give a read-only worker actual saved final results and output artifacts, then have it return the JSON for the parent to save; this overrides file-writing steps below. Local does not automatically return a full worker transcript. Label unavailable execution details and do not invent them.
+
 Evaluate expectations against an execution transcript and outputs.
 
 ## Role

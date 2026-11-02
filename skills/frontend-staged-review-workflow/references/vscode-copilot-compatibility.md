@@ -1,6 +1,8 @@
-# VS Code review delegation compatibility
+# VS Code Local / BYOK catalog compatibility
 
 Checked against official documentation and upstream implementation on 2026-11-02. This catalog's custom agents use `target: vscode`: their authored configuration targets **VS Code Local**. The selected session harness still determines execution; this frontmatter does not switch a Copilot session to Local. Do not infer the harness from a model/provider name or from the fact that the editor is VS Code.
+
+BYOK selects a model provider, independently of the harness. These Local workflows support BYOK models with tool calling; workers continue with that model unless another is specified. Add/select it through Manage Language Models. `chat.agentHost.byokModels.enabled` instead enables experimental BYOK support in native Copilot Agent Host; it is not a Local prerequisite and does not adapt these agents. Provider context/output limits and built-in utility model selection remain VS Code/Profile concerns; workflow token targets are not provider configuration. See [setup](../../../docs/VS_CODE_CHAT_SETUP.zh-TW.md).
 
 ## Harness boundary
 
@@ -12,7 +14,7 @@ Checked against official documentation and upstream implementation on 2026-11-02
 | Worker no-delegation rule | `agents: []`, no agent tool, and explicit instructions | Verify native controls; do not assume the Local field is enforced |
 | Repeated work | Fresh self-contained invocations; no follow-up to the same Local invocation | Native capabilities may differ; this review still uses fresh independent assignments |
 
-For these installed agents, select Local in a new Chat session and choose Frontend Review at the top level. A user asking for native Copilot support needs both agent configuration and tool-call adaptation; changing `target` or renaming `runSubagent` alone is insufficient. Keep the current Local configuration until an adapted version has been verified in the destination harness.
+For these installed agents, select Local in a new Chat session and choose the requested coordinator at the top level: Frontend Review, Frontend Implementation, or VS Code Skill Creator. A user asking for native Copilot support needs both agent configuration and tool-call adaptation; changing `target` or renaming `runSubagent` alone is insufficient. Keep the current Local configuration until an adapted version has been verified in the destination harness.
 
 ## Actual Local call
 
@@ -57,3 +59,5 @@ Local normally completes the invocation before returning its result. Do not inve
 - [Copilot migration FAQ](https://code.visualstudio.com/docs/agent-customization/migrate-customizations#why-does-my-coordinators-subagent-invocation-stop-working): `runSubagent` and native `task` require different invocation/configuration checks.
 - [Agent Skills](https://code.visualstudio.com/docs/agent-customization/agent-skills): supported discovery locations and experimental forked Skill execution.
 - [Microsoft's Local runSubagent implementation](https://github.com/microsoft/vscode/blob/main/src/vs/workbench/contrib/chat/common/tools/builtinTools/runSubagentTool.ts): `IRunSubagentToolInputParams`, `getToolData`, inherited current-agent configuration, returned text and error handling. This is checked upstream source, not proof of the installed build's implementation; the exposed session schema remains authoritative.
+- [BYOK configuration](https://code.visualstudio.com/docs/agent-customization/language-models): Local versus native Copilot setup, tool-calling requirements, provider limits and utility models.
+- [Custom agent discovery](https://code.visualstudio.com/docs/agent-customization/custom-agents#local-harness-locations-and-migration) and [instruction discovery](https://code.visualstudio.com/docs/agent-customization/custom-instructions#instructions-file-locations): Local Profile storage, supported locations and diagnostics.

@@ -2,6 +2,8 @@
 
 本指南的目標是把整套 frontend catalog 一次放進 Ubuntu VM，讓 VS Code Chat 在所有專案中共用。
 
+本套件的 coordinator 設定適用 **VS Code Local＋BYOK**。請在新 Chat session 選 Local；原生 Copilot 的 `task` 與 agent schema 需要另外適配，不能只靠 BYOK 開關或檔案複製完成移植。
+
 安裝完成後，Custom Agent 的中文使用方式與建議輸入格式請參考 [`AGENT_USAGE_GUIDE.zh-TW.md`](./AGENT_USAGE_GUIDE.zh-TW.md)。
 
 ## 最終位置
@@ -85,7 +87,7 @@ bash scripts/install-vscode-chat.sh --dry-run
 bash scripts/install-vscode-chat.sh
 ```
 
-這四行是離線／共享資料夾移植時唯一需要在 VM 執行的安裝流程。
+這些命令完成檔案安裝；新 Profile 仍須設定 BYOK 模型、確認 Local 的發現位置並完成下面的載入檢查。
 
 ## 方法 C：直接複製三個資料夾
 
@@ -115,17 +117,18 @@ cp -a /path/to/copied-catalog/instructions/. ~/.copilot/instructions/
 
 ```json
 {
-  "chat.agentHost.byokModels.enabled": true,
   "chat.subagents.allowInvocationsFromSubagents": false
 }
 ```
 
-BYOK 模型必須支援 tool calling。Coordinator 需要 `agent/runSubagent` 才能執行 hidden workers。
+用 **Chat: Manage Language Models** 新增模型並在 Local session 選取。模型必須支援 tool calling；coordinator 需要 `agent/runSubagent` 與可發現的 named workers。`chat.agentHost.byokModels.enabled` 只用於原生 Copilot Agent Host 的實驗性 BYOK 支援，不是 Local 安裝條件。
+
+Local 的個人 agents／instructions 也可能位於 VS Code Profile storage。複製到 `~/.copilot` 後，必須用 Diagnostics 核對實際來源；未載入時依[安裝與發現位置說明](./VS_CODE_CHAT_SETUP.zh-TW.md)設定 `chat.agentFilesLocations`／`chat.instructionsFilesLocations` 或從 Local 的 Customizations UI 建立。不要重複安裝同名角色。
 
 ## 安裝後檢查
 
 1. 完全關閉並重新開啟 VS Code，或執行 **Developer: Reload Window**。
-2. 執行 **Chat: Open Customizations**。
+2. 建立 Local session，選 BYOK 模型，再執行 **Chat: Open Customizations**。
 3. 確認看到 Skills、Agents、Instructions。
 4. 在 Chat 的 Tools 選單確認 `agent/runSubagent` 已啟用。
 5. 開啟 Chat **Diagnostics**，確認沒有 invalid frontmatter、missing resource 或 duplicate name。
@@ -173,4 +176,4 @@ VS Code Chat catalog validation passed: 60 skills, 10 custom agents, 2 instructi
 bash scripts/install-vscode-chat.sh
 ```
 
-這是 merge install，不會自動刪除已從新版 catalog 移除的舊檔。若曾安裝舊 Kilo／早期版本，先備份 `~/.copilot`，再手動刪除確認已淘汰的 customization；不要直接清空整個 `~/.copilot`，以免刪除其他個人資產。
+這是 merge install，只清理安裝器明列的退役項目，其他舊檔不會自動移除。若曾安裝更早的版本，先備份 `~/.copilot`，再手動刪除已確認淘汰的 customization；不要清空整個目錄，以免刪除其他個人資產。

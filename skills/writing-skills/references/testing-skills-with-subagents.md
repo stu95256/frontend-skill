@@ -1,5 +1,7 @@
 # Testing Skills With Subagents
 
+For this catalog, use VS Code Local's actual named-worker schema and a compatible role; see [compatibility](../../frontend-staged-review-workflow/references/vscode-copilot-compatibility.md). Anonymous workers inherit parent instructions/tools. Put the scenario in `prompt`; do not invent system-prompt, model-output-limit, or resume parameters. Check whether the worker already knows the tested guidance before treating it as a baseline. Only returned final text and verified saved artifacts are observed evidence.
+
 **Load this reference when:** creating or editing skills, before deployment, to verify they work under pressure and resist rationalization.
 
 ## Overview

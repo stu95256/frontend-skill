@@ -39,6 +39,7 @@ Updated: 2026-11-02
 - `qa-test-planner` moves the upstream explicit trigger under standards-compliant `metadata`; `react-dev` moves the upstream version field under `metadata`. Their content and MIT license remain sourced from the pinned Softaworks revision.
 - `openapi-typescript` is project-curated rather than an upstream Agent Skill. Its CLI behavior is grounded in pinned upstream `docs/cli.md` and `docs/advanced.md`, and its tool-source commit is tracked separately from the local catalog revision.
 - Project workflow frontmatter uses block-style YAML because the Agent Skills reference parser intentionally rejects JSON-like flow sequences.
+- The 2026-11-02 Local/BYOK compatibility pass adapts coordinator guards, explicit named-worker invocation, retained evaluator prompts, host-controlled context management, and Windows-safe Skill validation/packaging. Preserve these local adaptations when updating upstream families; see [the audit](./docs/VS_CODE_BYOK_COMPATIBILITY_AUDIT.zh-TW.md).
 
 ## Project-curated and retained skills
 

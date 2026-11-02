@@ -1,5 +1,7 @@
 # Skill authoring best practices
 
+> Retained upstream Anthropic reference. Use its authoring principles as background; Claude-specific products, model names, code-execution assumptions, and tool APIs are not VS Code Local / BYOK configuration. The catalog's [compatibility rules](../../frontend-staged-review-workflow/references/vscode-copilot-compatibility.md) govern execution here.
+
 > Learn how to write effective Skills that agents can discover and use successfully.
 
 Good Skills are concise, well-structured, and tested with real usage. This guide provides practical authoring decisions to help you write Skills that agents can discover and use effectively.

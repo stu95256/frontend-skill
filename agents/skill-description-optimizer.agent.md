@@ -4,6 +4,7 @@ description: Improve one Agent Skill description from blinded routing failures.
 target: vscode
 user-invocable: false
 tools: [read, search]
+agents: []
 ---
 
 # Skill Description Optimizer

@@ -296,7 +296,7 @@ Agent found new rationalization? Add explicit counter. Re-test until bulletproof
 
 Full pressure-scenario runs are the final gate, but they are slow and expensive per iteration. Verify the wording itself first with micro-tests:
 
-1. **One fresh-context sample per call** — a raw API call, or a single-shot subagent if you don't have API access. System prompt = the realistic context the guidance will live in (the full skill or prompt template, not the guidance in isolation); user message = a task that tempts the failure.
+1. **One fresh-context sample per call** — use the actual host's supported isolation. In VS Code Local, use a compatible named worker with `agentName`, `description`, and a complete `prompt` containing the realistic skill/template context and the task. There is no `system_prompt` argument; worker instructions still apply. Verify that a baseline does not already include the tested guidance through its role or loaded skills, and disclose contamination. A raw API experiment may control system/user messages only if separately authorized; it is a different test environment.
 2. **Always include a no-guidance control.** If the control doesn't exhibit the failure, there is nothing to fix — stop, don't author the guidance.
 3. **5+ reps per variant.** Single samples lie.
 4. **Manually read every flagged match.** Score programmatically if you like, but template echoes and quoted counter-examples masquerade as hits; automated counts alone overstate both failure and success.

@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,6 +42,47 @@ class VSCodeConversionTests(unittest.TestCase):
     def test_catalog_validator(self) -> None:
         result = run(sys.executable, "scripts/validate_skill_catalog.py")
         self.assertIn("60 skills, 10 custom agents, 2 instruction files", result.stdout)
+
+    def test_skill_creator_validates_local_frontmatter_and_packages_from_another_directory(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            working = Path(temp)
+            skill = working / "技能" / "example-skill"
+            skill.mkdir(parents=True)
+            content = (
+                "---\nname: example-skill\ndescription: 檢查繁體中文技能。\n"
+                "argument-hint: '[files]'\nuser-invocable: false\n"
+                "disable-model-invocation: true\ncontext: fork\n---\n\nCheck the supplied files.\n"
+            )
+            (skill / "SKILL.md").write_text(content, encoding="utf-8")
+            result = run(sys.executable, str(SKILL_CREATOR / "quick_validate.py"), str(skill), cwd=working)
+            self.assertIn("Skill is valid!", result.stdout)
+            output = working / "packages"
+            run(sys.executable, str(SKILL_CREATOR / "package_skill.py"), str(skill), str(output), cwd=working)
+            with zipfile.ZipFile(output / "example-skill.skill") as archive:
+                self.assertEqual((skill / "SKILL.md").read_bytes(), archive.read("example-skill/SKILL.md"))
+
+    def test_skill_creator_rejects_invalid_local_frontmatter(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            skill = Path(temp) / "example-skill"
+            skill.mkdir()
+            for fields in (
+                'user-invocable: "false"',
+                'disable-model-invocation: "true"',
+                "argument-hint: [files]",
+                "context: inline",
+                "model: invented-model",
+            ):
+                with self.subTest(fields=fields):
+                    (skill / "SKILL.md").write_text(
+                        f"---\nname: example-skill\ndescription: Check files.\n{fields}\n---\nCheck files.\n",
+                        encoding="utf-8",
+                    )
+                    result = subprocess.run(
+                        [sys.executable, str(SKILL_CREATOR / "quick_validate.py"), str(skill)],
+                        text=True, encoding="utf-8", capture_output=True,
+                    )
+                    self.assertEqual(1, result.returncode, result.stdout + result.stderr)
+                    self.assertNotIn("Traceback", result.stderr)
 
     @unittest.skipUnless(shutil.which("bash"), "bash is required")
     def test_installer_copies_exact_runtime_counts(self) -> None:

@@ -26,8 +26,8 @@ Use Copilot's skill discovery instead of loading the entire catalog. Read only t
 1. Inspect manifests and nearby code before selecting technology-specific skills.
 2. Prefer exact skills such as `react-router`, `ag-dev`, `ant-design`, `react-hook-form-zod`, or `internationalization-i18n` over generic assumptions.
 3. Load process skills before implementation skills because they define sequencing and verification.
-4. Do not cite or depend on a skill unless Copilot diagnostics shows it loaded or `~/.copilot/skills/<name>/SKILL.md` exists.
-5. A skill supplies procedures and resources; it is not itself a custom agent. Use custom agents under `~/.copilot/agents` for tool restrictions, handoffs, and named subagent roles.
+4. Resolve a skill through diagnostics or an actual supported/configured location, then read its real `SKILL.md` and required resources. `~/.copilot/skills` is one personal location; project `.github/skills` and supported plugin contributions can also supply skills. File existence alone is not proof of automatic discovery.
+5. A skill supplies procedures and resources; it is not itself a custom agent and does not grant tools. Use discovered custom agents for tool restrictions, handoffs, and named subagent roles; catalog files are installed under `~/.copilot/agents`, while Local UI-created agents may use Profile storage. Check [using-vscode-chat](../using-vscode-chat/SKILL.md) for discovery and harness boundaries.
 
 ## Verification
 

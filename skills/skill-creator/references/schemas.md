@@ -74,12 +74,14 @@ Holdout observations may be scored into state, but their details must not be inc
 
 ## Procedure/output evaluation
 
-Routing success does not prove the loaded skill executes correctly. Record a separate fresh-subagent result:
+Routing success does not prove the loaded skill executes correctly. Record procedure/output checks separately. A fresh independent invocation requires an actually discovered, allowed role with compatible instructions/tools; the routing evaluator/optimizer cannot substitute for it. Record `evaluation_mode` as `independent_named_worker`, `parent_only`, or `blocked`, and do not convert unavailable independent evaluation into a pass. For example, a parent-only evidence record is:
 
 ```json
 {
   "query": "full task request",
   "skill": "skill-slug",
+  "evaluation_mode": "parent_only",
+  "worker_name": null,
   "requirements": [
     {
       "text": "observable acceptance criterion",

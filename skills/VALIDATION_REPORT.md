@@ -2,6 +2,17 @@
 
 Updated: 2026-11-02
 
+## Local / BYOK compatibility pass — 2026-11-02
+
+The [catalog-wide audit](../docs/VS_CODE_BYOK_COMPATIBILITY_AUDIT.zh-TW.md) records the current Local target, official references, corrected delegation/discovery assumptions, and runtime limits. It covers implementation and Skill Creator as well as the existing review workflows.
+
+- Catalog validation passed for 60 Skills, 10 agents and two instructions. All 60 packages also passed the cached official reference validator (`69ef37e` checkout) and bundled Local quick validator.
+- All **nine** regression tests passed, with no skips, in 55.972 seconds. New cases verify supported Local frontmatter, rejected invalid fields/types, UTF-8 content and packaging from an unrelated working directory; existing installer and SDD cases ran with Git Bash.
+- The installer fixture initially failed to create its isolated target under the host sandbox; the suite passed outside the sandbox, without modifying the real personal catalog. Bash syntax checks passed for installer and bundle builder.
+- An independent read-only tabletop pass checked missing named workers and accidentally delegated coordinators. Real VS Code discovery, BYOK worker execution and Azure MCP were not tested. Existing distribution archives were not rebuilt for this pass.
+
+The adoption and earlier validation records below describe their own runs and retain their original results.
+
 ## Current adoption — 2026-11-02
 
 The [Azure DevOps PR Skill](./azure-devops-create-pr/SKILL.md) and its [bundled PR template](./azure-devops-create-pr/assets/pr-description.md) were moved from the proposal directory into the canonical catalog. Both files retain their original content. The manifest, routing documentation, source policy, catalog count checks and installation fixture now include the new Skill.

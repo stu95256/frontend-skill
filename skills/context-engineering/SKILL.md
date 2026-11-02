@@ -199,9 +199,9 @@ Load only the relevant section when working on a specific area.
 
 The context window is not a filing cabinet — it's a working desk. As a session runs, conversation history, tool output, and exploration accumulate. Most of it becomes deadweight. Budget proactively: waiting until the window is full causes abrupt quality drops; managing regularly keeps the agent coherent through long tasks.
 
-**Start trimming at 75% capacity, not 100%.** By the time the window is genuinely full, the model's attention is already fragmented across too many signals. The 75% threshold gives room to compress gracefully rather than cut desperately mid-task.
+**When the host exposes context usage, use roughly 75% as a planning heuristic.** This is not a VS Code setting or a reliable model estimate of remaining capacity. Keep future tool output focused and persist task state before host compaction becomes necessary. VS Code assembles and compacts the conversation; an agent cannot delete or reorder earlier messages by instruction. Use only an exposed compaction action, or guide the user to `/compact` / the conversation compaction UI when available.
 
-### What to cut first
+### What to omit from future packets and summaries
 
 | Content | When to cut |
 |---|---|
@@ -219,7 +219,7 @@ The context window is not a filing cabinet — it's a working desk. As a session
 
 ### Compress before dropping
 
-Summarizing beats deleting. Before removing a long stretch of exploration, reduce it to one sentence capturing the conclusion:
+Before handing work to a new invocation or host compaction, persist a concise summary of the conclusion and evidence locations:
 
 ```
 Before: [8 messages debugging a failing import — various attempts, error logs, dead ends]
@@ -227,11 +227,11 @@ After:  "Import issue traced to a circular dependency in src/lib/db.ts —
          resolved by moving the shared type to src/types/index.ts."
 ```
 
-The detail is gone; the decision is preserved. If the detail turns out to matter, the summary is a breadcrumb for re-investigation.
+The new packet retains the decision without repeating the detail. This does not remove the old conversation. Evidence locations let a later invocation re-inspect details when needed.
 
 ### Order for recency
 
-Put the most task-critical content **last** in context. Models recall content at the start and end of the window more reliably than the middle (the lost-in-the-middle effect — Liu et al., 2023). Keep stable rules and specs at the start; put the active task material last, closest to the generation point:
+When constructing a new task packet, keep stable rules/specs near the start and active evidence near the task. This is prompt-authoring guidance; the host controls placement of system instructions, tool schemas, existing history, and compaction summaries. Do not claim to rearrange the live conversation:
 
 ```
 ← session start                              generation point →
@@ -336,7 +336,7 @@ This catches wrong directions before you've built on them. It's a 30-second inve
 - Agent output doesn't match project conventions
 - Agent invents APIs or imports that don't exist
 - Agent re-implements utilities that already exist in the codebase
-- Agent quality degrades mid-task as the conversation grows — failed attempts, replaced drafts, and verbose tool output are not being trimmed
+- Agent quality degrades mid-task as the conversation grows, while future packets repeat failed attempts, superseded drafts, and verbose output
 - No rules file exists in the project
 - External data files or config treated as trusted instructions without verification
 
@@ -348,5 +348,5 @@ After setting up context, confirm:
 - [ ] Agent output follows the patterns shown in the rules file
 - [ ] Agent references actual project files and APIs (not hallucinated ones)
 - [ ] Context is refreshed when switching between major tasks
-- [ ] During long sessions, context is actively managed: failed attempts and replaced drafts removed, live error and task definition protected
-- [ ] Task-critical content (current error, active constraint) is positioned last in context, not buried under background material
+- [ ] During long sessions, durable summaries retain the live error, task definition, decisions, and evidence locations without repeating superseded attempts
+- [ ] New task packets keep current evidence easy to locate; host compaction and history placement are not reported as agent-controlled actions

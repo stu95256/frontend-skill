@@ -19,7 +19,7 @@ def validate_skill(skill_path):
         return False, "SKILL.md not found"
 
     # Read and validate frontmatter
-    content = skill_md.read_text()
+    content = skill_md.read_text(encoding='utf-8-sig')
     if not content.startswith('---'):
         return False, "No YAML frontmatter found"
 
@@ -39,7 +39,10 @@ def validate_skill(skill_path):
         return False, f"Invalid YAML in frontmatter: {e}"
 
     # Define allowed properties
-    ALLOWED_PROPERTIES = {'name', 'description', 'license', 'allowed-tools', 'metadata', 'compatibility'}
+    ALLOWED_PROPERTIES = {
+        'name', 'description', 'license', 'allowed-tools', 'metadata', 'compatibility',
+        'argument-hint', 'user-invocable', 'disable-model-invocation', 'context',
+    }
 
     # Check for unexpected properties (excluding nested keys under metadata)
     unexpected_keys = set(frontmatter.keys()) - ALLOWED_PROPERTIES
@@ -55,11 +58,21 @@ def validate_skill(skill_path):
     if 'description' not in frontmatter:
         return False, "Missing 'description' in frontmatter"
 
+    for flag in ('user-invocable', 'disable-model-invocation'):
+        if flag in frontmatter and not isinstance(frontmatter[flag], bool):
+            return False, f"{flag} must be a boolean"
+    if 'argument-hint' in frontmatter and not isinstance(frontmatter['argument-hint'], str):
+        return False, "argument-hint must be a string"
+    if 'context' in frontmatter and frontmatter['context'] != 'fork':
+        return False, "context must be 'fork' when present"
+
     # Extract name for validation
     name = frontmatter.get('name', '')
     if not isinstance(name, str):
         return False, f"Name must be a string, got {type(name).__name__}"
     name = name.strip()
+    if not name or name != skill_path.name:
+        return False, "Name must be non-empty and match the skill directory name"
     if name:
         # Check naming convention (kebab-case: lowercase with hyphens)
         if not re.match(r'^[a-z0-9-]+$', name):
@@ -75,6 +88,8 @@ def validate_skill(skill_path):
     if not isinstance(description, str):
         return False, f"Description must be a string, got {type(description).__name__}"
     description = description.strip()
+    if not description:
+        return False, "Description must not be empty"
     if description:
         # Check for angle brackets
         if '<' in description or '>' in description:

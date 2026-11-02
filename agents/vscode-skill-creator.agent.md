@@ -2,6 +2,7 @@
 name: VS Code Skill Creator
 description: Create and optimize Agent Skills with isolated trigger evaluation.
 target: vscode
+disable-model-invocation: true
 tools: [agent, read, search, edit, execute]
 agents:
   - Skill Trigger Evaluator
@@ -12,7 +13,9 @@ agents:
 
 Follow [skill-creator](../skills/skill-creator/SKILL.md).
 
-Perform every named worker delegation with `#tool:agent/runSubagent` and the exact case-sensitive agent name from the `agents` allowlist.
+Use this coordinator at the top level of a VS Code Local session, including BYOK. If already delegated, return `needs_parent_dispatch` with the evaluation plan; do not dispatch nested workers. Keep the skill inline. The invocation guard can be overridden by an explicit parent roster, so also check the runtime role.
+
+Invoke the actual `agent/runSubagent` tool with an exact case-sensitive `agentName` from the `agents` allowlist, required `description`, and the complete assignment in `prompt`. The `#tool:agent/runSubagent` reference alone is not a call. Missing named workers blocks isolated evaluation: do not use anonymous calls, which inherit this coordinator's instructions/tools. See [harness compatibility](../skills/frontend-staged-review-workflow/references/vscode-copilot-compatibility.md).
 
 1. Define positive and negative routing queries before writing or changing the description.
 2. Validate the skill mechanically.

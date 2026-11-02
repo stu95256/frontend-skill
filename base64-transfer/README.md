@@ -51,7 +51,7 @@ frontend-skill.7z: OK
 7z x frontend-skill.7z
 ```
 
-此傳輸包包含 `frontend-skill-vscode-chat/`，與目前可攜式安裝包使用相同內容。解壓後執行：
+此傳輸包是既有快照，包含 `frontend-skill-vscode-chat/`；不能假設它與目前 Repository 來源相同。需要本次 BYOK 相容性修正時，先依[目前安裝指南](../docs/VM_COPY_GUIDE.zh-TW.md)從最新來源重新建立 bundle。解壓後執行：
 
 ```bash
 cd frontend-skill-vscode-chat
@@ -59,9 +59,9 @@ bash scripts/install-vscode-chat.sh --dry-run
 bash scripts/install-vscode-chat.sh
 ```
 
-2026-10-29 更新後的目錄包含 59 個 Skills、10 個 Agents 與 2 份 instructions，並附有最新版 [Custom Agents 中文使用指南](../docs/AGENT_USAGE_GUIDE.zh-TW.md)。解壓後可在 `docs/AGENT_USAGE_GUIDE.zh-TW.md` 查看使用方式；Agent picker 中的三個入口為 **Frontend Implementation**、**Frontend Review**、**VS Code Skill Creator**，其餘七個為隱藏 workers。安裝器會清理本次退役的目錄項目，並保留其他個人自訂內容。
+2026-10-29 的舊快照記錄為 59 個 Skills、10 個 Agents 與 2 份 instructions；目前 catalog 數量以來源 validator 為準。解壓後應使用包內的使用指南，不能把本 Repository 的新版 [Custom Agents 中文使用指南](../docs/AGENT_USAGE_GUIDE.zh-TW.md)視為舊包已具備的功能。
 
-此壓縮檔從目前 Repository 的來源重新封裝，與 `scripts/build-vscode-chat-bundle.sh` 產生的可攜式安裝包逐檔一致。每次更新壓縮檔後，都必須重新產生 `transfer.txt` 與 `frontend-skill.7z.sha256.txt`，並確認 Base64 還原後的 SHA-256 與原始壓縮檔相同。
+每次更新壓縮檔後，都必須重新產生 `transfer.txt` 與 `frontend-skill.7z.sha256.txt`，並確認 Base64 還原後的 SHA-256 與原始壓縮檔相同。SHA-256 只證明傳輸完整，不證明內容是最新版本或已完成 VS Code session 驗證；本次未重新產生這個封存傳輸檔。
 
 ## 流程摘要
 

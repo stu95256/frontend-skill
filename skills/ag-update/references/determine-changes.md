@@ -95,4 +95,4 @@ Check that the file starts with the content of [./changes-file-preamble.md]
 
 ## Reporting format
 
-Write the result of this process to the file `AG_UPDATE_CHANGES.md`. If this process was invoked as a sub-agent, DO NOT return the text of this file to the parent agent, write the file and return a short message indicating success.
+When executing inline in the parent, write the validated result to `AG_UPDATE_CHANGES.md`. When delegated to a read-only worker, return the full proposed content with supporting evidence and any gaps in the final result; do not write the file or return only a success message. The parent validates the returned content and writes `AG_UPDATE_CHANGES.md`. If the result cannot fit, return a clearly incomplete result so the parent can split the work; do not silently omit changes.

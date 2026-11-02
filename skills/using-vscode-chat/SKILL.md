@@ -13,12 +13,14 @@ This catalog's `target: vscode` agents are configured for VS Code **Local**. Con
 ## Discovery
 
 - Personal Agent Skills: `~/.copilot/skills/<skill-name>/SKILL.md`.
-- Personal custom agents: `~/.copilot/agents/*.agent.md`.
-- Personal instructions: `~/.copilot/instructions/*.instructions.md`.
+- Catalog-installed custom agents: `~/.copilot/agents/*.agent.md`; Local's user-creation UI can use Profile storage instead. Confirm discovery in the active Profile, or configure `chat.agentFilesLocations` for the catalog directory.
+- Catalog-installed instructions: `~/.copilot/instructions/*.instructions.md`; Local UI-created user instructions can use Profile storage. Confirm discovery or configure `chat.instructionsFilesLocations`.
 - Personal hooks: `~/.copilot/hooks/*.json`.
 - BYOK model configuration remains in the active VS Code profile, not in `~/.copilot`.
 
 Use **Chat: Open Customizations** and Chat Diagnostics to confirm that VS Code loaded each artifact. Do not assume the repository's root `skills/` or `agents/` folders are discovered until they are installed into `~/.copilot`.
+
+Use **Chat: Manage Language Models** to configure a BYOK provider/endpoint, then select that model in a Local session. It must support tool calling. `chat.agentHost.byokModels.enabled` enables experimental BYOK support for native Copilot Agent Host; it is not required for Local and does not convert this catalog. Provider context/output limits are real configuration; a Skill's token target does not change them. Built-in utility flows have separate `chat.utilityModel` / `chat.utilitySmallModel` selection, and BYOK does not supply Copilot-backed semantic search or inline completions. Use available text search when needed.
 
 ## Operating Rules
 

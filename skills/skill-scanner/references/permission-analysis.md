@@ -2,6 +2,8 @@
 
 Framework for evaluating tool permissions granted to agent skills.
 
+This cross-runtime risk matrix uses the inspected runtime's tool names. `Task`, `Bash`, and `Write` below are not VS Code Local call identifiers, and a Skill's `allowed-tools` does not itself grant Local permissions. Map the assessment to the selected agent's effective `agent` / `execute` / `edit` tools and host approvals; inspect the named worker's actual tools before inferring its access.
+
 ## Tool Risk Tiers
 
 | Tier | Tools | Risk Level | Notes |

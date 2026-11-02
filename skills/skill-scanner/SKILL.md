@@ -64,6 +64,7 @@ Read the SKILL.md and check:
 - **Required fields**: `name` and `description` must be present
 - **Name consistency**: `name` field should match the directory name
 - **Tool assessment**: Review `allowed-tools` — is Bash justified? Are tools unrestricted (`*`)?
+- **Target runtime**: Distinguish metadata from effective permissions. A Local Skill's `allowed-tools` or `model` text does not grant tools, switch models, or configure workers. Inspect the selected custom agent, effective tool list, and host approvals; cross-runtime findings must name the runtime that actually enforces the setting.
 - **Model override**: Is a specific model forced? Why?
 - **Description quality**: Does the description accurately represent what the skill does?
 

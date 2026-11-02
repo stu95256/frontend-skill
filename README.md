@@ -2,7 +2,7 @@
 
 A curated VS Code Chat / GitHub Copilot BYOK customization catalog for React and TypeScript frontend work. The repository root mirrors the runtime directories installed under `~/.copilot`.
 
-The included custom agents target **VS Code Local** (`target: vscode`). Native Copilot uses a different delegation tool and does not accept the Local `agents` roster unchanged. See the [harness compatibility guide](./skills/frontend-staged-review-workflow/references/vscode-copilot-compatibility.md) before using review across harnesses; setting `target` does not switch the active session.
+The included custom agents target **VS Code Local with a tool-capable BYOK model** (`target: vscode`). Native Copilot uses a different delegation tool and does not accept the Local `agents` roster unchanged. See the [harness compatibility guide](./skills/frontend-staged-review-workflow/references/vscode-copilot-compatibility.md) before using these coordinators across harnesses; setting `target` does not switch the active session. The experimental `chat.agentHost.byokModels.enabled` setting concerns native Copilot Agent Host and is not a Local prerequisite.
 
 ## Catalog at a glance
 
@@ -87,7 +87,7 @@ bash scripts/build-vscode-chat-bundle.sh
 
 Copy `dist/frontend-skill-vscode-chat-bundle.tar.gz` to the Ubuntu VM, extract it, and run the bundled installer. See the [VM copy-and-install guide](./docs/VM_COPY_GUIDE.zh-TW.md) for Git, `scp`, shared-folder, and direct-copy options.
 
-Repository folders are canonical source only; VS Code does not discover this root layout automatically. Install it under `~/.copilot`, reload VS Code, then use **Chat: Open Customizations** and Chat Diagnostics to verify discovery.
+Repository folders are canonical source only; VS Code does not discover this root layout automatically. Install it under `~/.copilot`, reload VS Code, then use **Chat: Open Customizations** and Chat Diagnostics to verify discovery in a Local session. Local UI-created agents/instructions may live in Profile storage; register the installed catalog locations if your version/profile does not discover them. The installer copies files without editing Profile settings, selecting a harness, or configuring credentials.
 
 ## Repository documents
 
@@ -96,6 +96,7 @@ Repository folders are canonical source only; VS Code does not discover this roo
 - [Validation report](./skills/VALIDATION_REPORT.md)
 - [2026-10-28 catalog update report](./docs/SKILL_REPLACEMENT_RESEARCH.zh-TW.md)
 - [Ubuntu VS Code Chat setup](./docs/VS_CODE_CHAT_SETUP.zh-TW.md)
+- [2026-11-02 Local / BYOK compatibility audit](./docs/VS_CODE_BYOK_COMPATIBILITY_AUDIT.zh-TW.md)
 - [Ubuntu VM copy-and-install guide](./docs/VM_COPY_GUIDE.zh-TW.md)
 - [Custom Agents 中文使用與輸入格式](./docs/AGENT_USAGE_GUIDE.zh-TW.md)
 - [Branch review workflow](./skills/frontend-branch-review-workflow/references/FRONTEND_BRANCH_REVIEW_WORKFLOW.md)

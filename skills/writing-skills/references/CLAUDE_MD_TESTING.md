@@ -1,5 +1,7 @@
 # Testing CLAUDE.md Skills Documentation
 
+> Historical Claude-specific experiment, retained as a test-design example. Its paths, discovery instructions, and observed outcomes do not establish VS Code Local / BYOK behavior or a clean baseline in this catalog. Use the current [testing adaptation](./testing-skills-with-subagents.md) for actual invocations.
+
 Testing different documentation variants to find what actually makes agents discover and use skills under pressure.
 
 ## Test Scenarios

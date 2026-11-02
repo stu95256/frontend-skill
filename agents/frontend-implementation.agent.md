@@ -2,6 +2,7 @@
 name: Frontend Implementation
 description: Implement an approved frontend plan with independent verification.
 target: vscode
+disable-model-invocation: true
 tools: [agent, read, search, execute]
 agents:
   - Frontend Implementer
@@ -11,9 +12,11 @@ agents:
 
 # Frontend Implementation
 
-Coordinate implementation without editing files in the coordinator context. Follow [subagent-driven-development](../skills/subagent-driven-development/SKILL.md) and [verification-before-completion](../skills/verification-before-completion/SKILL.md).
+Delegate production-code edits to implementer workers. The coordinator may maintain the workflow ledger and evidence artifacts through the bundled helpers or its available tools. Follow [subagent-driven-development](../skills/subagent-driven-development/SKILL.md) and [verification-before-completion](../skills/verification-before-completion/SKILL.md).
 
-Perform every named worker delegation with `#tool:agent/runSubagent` and the exact case-sensitive agent name from the `agents` allowlist.
+This coordinator targets VS Code Local, including BYOK models. Run it at the top level; if already delegated, return `needs_parent_dispatch` with the task plan instead of dispatching nested workers. Keep the orchestration skill inline. The invocation guard can be overridden by another coordinator's explicit roster, so still check the runtime role.
+
+Invoke the actual `agent/runSubagent` tool with `agentName` set to an exact case-sensitive worker name from the `agents` allowlist, a short `description`, and the complete task in `prompt`. A `#tool:agent/runSubagent` reference does not execute a call. Do not omit `agentName`: an anonymous call inherits this coordinator's instructions/tools and cannot replace these roles. Missing required workers means `BLOCKED`; do not count parent work as independent verification. See [harness compatibility](../skills/frontend-staged-review-workflow/references/vscode-copilot-compatibility.md) before using another harness.
 
 1. Confirm the supplied plan contains requirements, file scope, decisions, and verification criteria. Resolve missing repository facts with read-only inspection.
 2. Split the plan into dependency-ordered tasks. Do not run editing tasks in parallel when they can touch the same files or interfaces.

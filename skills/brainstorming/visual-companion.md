@@ -59,6 +59,8 @@ without repeating it.
 
 **Launching the server by platform:**
 
+**VS Code Local / BYOK (this catalog):** Start the launcher in a persistent VS Code terminal or an actually exposed background-terminal capability, then read the returned server-info file and verify the process is alive. Use the installed Bash path for the `.sh` launcher on Windows. Do not copy another runtime's `run_in_background` or `is_background` tool arguments into Local calls. The platform-specific examples below are references for those other runtimes, not VS Code tool schemas.
+
 **Claude Code:**
 ```bash
 # Default mode works — the script backgrounds the server itself.

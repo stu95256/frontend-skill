@@ -4,6 +4,7 @@ description: Judge whether one query should load one Agent Skill description.
 target: vscode
 user-invocable: false
 tools: [read, search]
+agents: []
 ---
 
 # Skill Trigger Evaluator

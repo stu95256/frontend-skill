@@ -19,7 +19,7 @@ Framework is `react`, `vue`, `angular` if using those frameworks, `javascript` f
 
 ## For package version updates, use the ag-update skill
 
-This skill ships with a sibling skill, "ag-update". Delegate to it when asked to update grid, charts or studio packages.
+This skill ships with a sibling skill, "ag-update". Load that skill in the current context when asked to update grid, charts or studio packages. A skill is not a registered subagent role; use ag-update's own rules for optional worker delegation.
 
 ## Don't guess
 

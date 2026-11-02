@@ -8,6 +8,8 @@ license: Apache-2.0
 
 Create or improve Agent Skills that VS Code Chat can discover from `~/.copilot/skills/<name>/SKILL.md`. Optimize for predictable model behavior, progressive disclosure, and evaluation in fresh subagent contexts.
 
+This workflow targets VS Code Local, including BYOK, and runs in the top-level **VS Code Skill Creator** agent. Keep it inline. If already delegated, return `needs_parent_dispatch` instead of creating nested workers. Native Copilot requires adapted agent configuration and its actual `task` schema; see [harness compatibility](../frontend-staged-review-workflow/references/vscode-copilot-compatibility.md).
+
 ## Required structure
 
 ```text
@@ -41,14 +43,14 @@ The directory name must equal `name`, use lowercase letters, digits, and hyphens
    - near-miss negatives that should not load it;
    - ambiguous prompts that compete with adjacent skills.
 6. Start a resumable evaluation ledger with `scripts/run_loop.py` `init`. It creates a stratified training/holdout split; keep holdout results out of optimizer prompts.
-7. Use `#tool:agent/runSubagent` to invoke `Skill Trigger Evaluator` once per query and repetition. If that named worker is not installed, invoke an anonymous subagent with the same evaluator contract. Give it only the query and candidate names/descriptions—not the expected answer. Each invocation is independent and stateless.
+7. Invoke `agent/runSubagent` with `agentName="Skill Trigger Evaluator"`, a short `description`, and a complete `prompt` once per query and repetition. Give it only the query, candidate names/descriptions, and expected output schema—not the expected answer. Each invocation is independent and stateless. If the named role is missing/disallowed, report evaluation `BLOCKED`; an anonymous call inherits the coordinator and is not a blind routing evaluator.
 8. Record each returned `{query, selected_skill, reason}` object and score the split with `scripts/run_loop.py` `score`.
 9. Build a blinded optimizer packet with `scripts/run_loop.py` `prompt`, invoke `Skill Description Optimizer`, and apply its tagged response with `scripts/run_loop.py` `apply`.
 10. Repeat with fresh evaluator invocations. Stop on full training success, no holdout improvement, or the configured iteration limit; use `scripts/run_loop.py` `best` to select the best holdout result.
-11. Run separate procedure/output evaluations after routing succeeds. If comparing revisions, use blind randomized labels in fresh subagents.
+11. After routing succeeds, evaluate actual procedure/output behavior separately. Independent execution, grading, or blind revision comparison requires discovered, allowed roles with compatible tools/instructions; the current routing-only roster does not provide those roles. Otherwise record that evaluation as blocked or parent-only, with observed evidence and limits; do not claim an independent pass. Use randomized A/B labels when a compatible independent comparison is available.
 12. Present the final skill, evaluation matrix, unresolved limitations, and installation path.
 
-Subagent invocations are stateless. Never instruct the parent to resume a previous evaluator; create a new invocation with the complete task package.
+Use the same explicit invocation arguments with `agentName="Skill Description Optimizer"` for optimization. Local invocations are stateless. Never instruct the parent to resume a previous evaluator; create a new invocation with the complete task package. Only the final returned result and verified shared artifacts are evidence; do not assume the parent receives the worker's intermediate tool outputs. JSON formats are prompt contracts, not runtime-enforced output schemas.
 
 ## Evaluation commands
 
@@ -67,10 +69,10 @@ python3 "$SC/generate_report.py" loop.json --output report.html
 
 - Write procedures in terms of capabilities rather than another agent runtime's tool names.
 - For parallel evaluation, the selected parent agent must have the `agent` tool enabled.
-- `context: fork` runs the entire skill in an isolated subagent. Use it only when the skill returns a self-contained result and does not require iterative user questions.
-- Skill frontmatter cannot grant tools or restrict a subagent roster. Put those controls in `~/.copilot/agents/*.agent.md`.
+- `context: fork` is experimental and requires `github.copilot.chat.skillTool.enabled`. It runs the entire skill in a subagent. Use it only for self-contained work that needs neither user questions nor further delegation; never fork this skill or the implementation/review coordinator skills.
+- Skill frontmatter, including portable `allowed-tools` metadata, does not grant the selected Local agent tools or install workers. Put effective tool/roster controls in discovered custom agents; see [discovery](../using-vscode-chat/SKILL.md).
 - Do not hardcode a model name. BYOK agents inherit the selected Chat model unless an installed custom agent deliberately specifies another available model.
-- Do not use nested subagents unless `chat.subagents.allowInvocationsFromSubagents` is enabled and nesting materially improves the task.
+- This catalog uses one delegation level. Workers do not dispatch workers; keep `chat.subagents.allowInvocationsFromSubagents` disabled.
 
 ## Evaluation record
 
@@ -94,13 +96,13 @@ Keep the main file focused on decisions and the ordered procedure. Link supporti
 Useful retained helpers:
 
 - `scripts/quick_validate.py` — basic package validation.
-- `scripts/package_skill.py` — package a skill directory when a distributable archive is needed.
+- `scripts/package_skill.py` — optional ZIP-based `.skill` export, not a VS Code installer. For VS Code, extract/copy the complete skill folder into a supported discovery location.
 - `scripts/run_eval.py` — deterministically score recorded VS Code evaluator observations.
 - `scripts/improve_description.py` — build optimizer packets and validate tagged responses without calling another provider.
 - `scripts/run_loop.py` — persist train/holdout splits, iteration history, and best-description selection across stateless subagents.
 - `scripts/generate_report.py` — render the resumable loop state as an HTML comparison report.
 - `eval-viewer/generate_review.py` and `assets/eval_review.html` — optional human review UI.
-- `agents/grader.md`, `agents/comparator.md`, and `agents/analyzer.md` — prompts that can be embedded in `agent/runSubagent` tasks.
+- `agents/grader.md`, `agents/comparator.md`, and `agents/analyzer.md` — retained behavioral-evaluation prompt resources, not registered VS Code custom agents. The current evaluator/optimizer roles cannot impersonate them. Use a separately configured, discovered and allowed compatible named role, or perform the optional analysis in the parent and disclose the lack of independent evaluation. A read-only worker returns the JSON; the parent writes it. Supply actual saved final results/artifacts and label any missing transcript; Local does not automatically deliver a full worker transcript.
 - `references/schemas.md` — evaluation data schemas.
 
 ## Verification

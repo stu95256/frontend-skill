@@ -4,7 +4,7 @@
 
 ## 安裝位置
 
-將本 Repository 的三個 runtime 目錄合併到個人 Copilot 目錄：
+本安裝器將三個 runtime 目錄合併到 `~/.copilot` 作為 catalog 儲存位置；安裝不會選擇 session harness，也不會修改 VS Code Profile 的發現位置設定：
 
 ```text
 ~/.copilot/
@@ -23,6 +23,8 @@ bash scripts/install-vscode-chat.sh
 
 安裝器會合併本專案提供的檔案，並清理本 catalog 明列退役的 Skill 目錄與 Agent 檔案；其他個人自訂內容、VS Code 設定與 BYOK credentials 都會保留。
 
+Skills 的 `~/.copilot/skills` 是官方支援位置。Local 在 UI 建立的個人 agents／instructions 則可存於 Profile storage；不能只看到檔案已複製就視為載入成功。現行上游來源也會搜尋 `~/.copilot/agents`、`~/.copilot/instructions`，實際仍以目標版本的 Open Customizations／Diagnostics 為準。若未出現，將安裝位置加入該 Profile 的 `chat.agentFilesLocations`、`chat.instructionsFilesLocations`，或使用 Local 的 Customizations UI／專案 `.github/agents`、`.github/instructions`；使用 `--target` 自訂路徑時尤其需要確認。避免在多處保留同名 agents。
+
 ## VS Code 設定
 
 BYOK Provider 與模型設定仍屬於目前的 VS Code Profile；不要搬入 `~/.copilot`。Ubuntu 預設 Profile 使用：
@@ -37,7 +39,6 @@ BYOK Provider 與模型設定仍屬於目前的 VS Code Profile；不要搬入 `
 
 ```json
 {
-  "chat.agentHost.byokModels.enabled": true,
   "chat.subagents.allowInvocationsFromSubagents": false
 }
 ```
@@ -45,13 +46,16 @@ BYOK Provider 與模型設定仍屬於目前的 VS Code Profile；不要搬入 `
 - 本 catalog 的 Skills 使用標準 inline 載入，不依賴實驗性的 `context: fork`。
 - 本套件的 coordinator 直接建立 worker subagents，不需要 nested subagents，因此預設保持 `false`。
 - BYOK 模型必須支援 tool calling，才能使用檔案、terminal、Skill 與 `agent/runSubagent`。
+- 使用 **Chat: Manage Language Models** 加入 provider／endpoint，再於 Local session 選取模型。自訂 endpoint 的 `toolCalling`、`maxInputTokens`、`maxOutputTokens` 必須符合實際模型；修改 Skill 內的 token 目標不會改變 provider 限制。未另外指定模型時，BYOK workers 延用主模型。
+- `chat.agentHost.byokModels.enabled` 是讓支援的 BYOK 模型出現在原生 Copilot Agent Host 的實驗性開關，**不是 Local 的必要設定**；開啟它也不會讓這套 Local agents 自動相容原生 Copilot。
+- 若未登入 GitHub 且需要標題、SCM commit message 等內建 utility 功能，另外設定 `chat.utilityModel`／`chat.utilitySmallModel`；它們與手動執行本套件的 commit-message Skill 是不同流程。BYOK 不提供需要 Copilot 服務的 semantic search／inline completions，必要時使用可用的文字搜尋工具。
 
 本 catalog 不建立 Prompt files：原本的多步 workflow 已依語意轉成 Agent Skill 與 custom agent，而不是依賴非官方的 `.workflow.md`。也不提供全域 Hook，避免在所有 Repository 無條件執行語言或 package-manager 特定命令。
 
 ## 驗證載入
 
 1. 重新載入 VS Code 視窗。
-2. 執行 **Chat: Open Customizations**，確認 Skills、Agents、Instructions 均出現。
+2. 新建 **Local** session，選取已設定的 BYOK 模型；執行 **Chat: Open Customizations**，確認 Skills、Agents、Instructions 均出現且來源路徑正確。
 3. 在 Chat 視窗開啟 **Diagnostics**，確認沒有 invalid name、frontmatter 或 missing resource 錯誤。
 4. 在 Tools 選單啟用 `agent/runSubagent`。
 5. 確認 Agent picker 只有本 catalog 的 **Frontend Implementation**、**Frontend Review**、**VS Code Skill Creator** 三個入口（其他個人 Agent 不受影響）。
@@ -90,7 +94,7 @@ agents:
 
 Coordinator 的正文以 `#tool:agent/runSubagent` 引用工具，再實際呼叫它。呼叫參數使用 `agentName` 指定 worker、`description` 簡述工作、`prompt` 提供完整任務。`agents` 中的名稱區分大小寫，必須與 worker 的 `name` 完全一致。省略 `agentName` 會繼承目前 agent，不能當成嚴格 review 的匿名備援。每次 Local 呼叫都是 stateless one-shot；重試建立新 invocation，重新提供完整任務、限制和預期輸出。原生 Copilot 的 `task` 不是這個 API 的別名。
 
-本 catalog 的 worker 沒有 `agent` tool，並設定 `agents: []`，禁止進一步委派。`chat.subagents.allowInvocationsFromSubagents` 維持 `false`。
+三個 coordinator 均設定 `disable-model-invocation: true` 並執行頂層檢查；worker 沒有 `agent` tool，且明確設定 `agents: []`。`chat.subagents.allowInvocationsFromSubagents` 維持 `false`。這些是本 catalog 的單層流程限制，並不表示 VS Code 不支援有界的 recursive workflows。
 
 `context: fork` 是另一種「整個 Skill 在隔離 subagent 執行」的 VS Code 功能，不是本 catalog 多 worker workflow 的編排機制。Coordinator workflows 不使用 `context: fork`，避免在 forked skill 裡形成預設禁止的第二層 subagent。
 

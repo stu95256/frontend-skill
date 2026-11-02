@@ -39,6 +39,7 @@ for path in \
   requirements-dev.txt \
   docs/SKILL_REPLACEMENT_RESEARCH.zh-TW.md \
   docs/AGENT_USAGE_GUIDE.zh-TW.md \
+  docs/VS_CODE_BYOK_COMPATIBILITY_AUDIT.zh-TW.md \
   docs/VM_COPY_GUIDE.zh-TW.md \
   docs/VS_CODE_CHAT_SETUP.zh-TW.md; do
   [[ -e "${repo_root}/${path}" ]] || {
@@ -70,6 +71,7 @@ cp "${repo_root}/README.md" "${bundle_root}/"
 cp "${repo_root}/SKILL_SOURCES.md" "${bundle_root}/"
 cp "${repo_root}/docs/SKILL_REPLACEMENT_RESEARCH.zh-TW.md" "${bundle_root}/docs/"
 cp "${repo_root}/docs/AGENT_USAGE_GUIDE.zh-TW.md" "${bundle_root}/docs/"
+cp "${repo_root}/docs/VS_CODE_BYOK_COMPATIBILITY_AUDIT.zh-TW.md" "${bundle_root}/docs/"
 cp "${repo_root}/docs/VM_COPY_GUIDE.zh-TW.md" "${bundle_root}/docs/"
 cp "${repo_root}/docs/VS_CODE_CHAT_SETUP.zh-TW.md" "${bundle_root}/docs/"
 

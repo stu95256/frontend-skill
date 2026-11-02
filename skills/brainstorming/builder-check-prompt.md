@@ -1,7 +1,12 @@
 # Builder Check Prompt
 
-Dispatch a fresh general-purpose subagent with this prompt once the
-written design exists. Fill in the domain and the document path.
+Once the written design exists, dispatch a fresh subagent whose installed
+role supports design clarification. In VS Code Local, use a compatible
+named worker with explicit `agentName`, `description`, and this complete
+prompt. An anonymous call inherits the parent role/tools; it is not a
+neutral general-purpose agent. If no compatible independent role is
+available, disclose that limit and perform the check in the parent.
+Fill in the domain and the document path. Do not let a worker delegate again.
 
 ```
 You are a talented [DOMAIN, e.g. "software engineer", "event planner",
