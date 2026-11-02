@@ -2,6 +2,8 @@
 
 本文件說明何時選擇 user-facing Custom Agent、應附加哪些 Markdown，以及建議的輸入格式。安裝位置與 VM 移植方式請參考 [`VS_CODE_CHAT_SETUP.zh-TW.md`](./VS_CODE_CHAT_SETUP.zh-TW.md) 與 [`VM_COPY_GUIDE.zh-TW.md`](./VM_COPY_GUIDE.zh-TW.md)。
 
+本套件的 agent 使用 `target: vscode`，設定適用於 **VS Code Local harness**。請先確認 Chat session 選的是 Local；`target` 不會替你切換執行環境。新版原生 Copilot harness 使用 `task`，也不直接支援 Local 的 `agents` allowlist，不能只換工具名稱就視為相容。官方來源與差異見[相容性核對](../skills/frontend-staged-review-workflow/references/vscode-copilot-compatibility.md)。
+
 ## 使用原則
 
 本 catalog 只有以下三個 user-facing Agents：
@@ -13,6 +15,8 @@
 | VS Code Skill Creator | 建立或改善 Agent Skill | Skill 目標、正負觸發例、目的位置 |
 
 `Frontend Implementer`、`Frontend Reviewer` 等 worker 設定為 `user-invocable: false`。不要在 Agent picker 直接尋找或選擇它們；coordinator 會透過 `agent/runSubagent` 呼叫。
+
+Local 呼叫必須把 worker 的實際名稱放在 `agentName`、完整任務放進 `prompt`，並提供 `description`。省略 `agentName` 會繼承目前 agent 的設定，不能當成嚴格 review 的匿名 reviewer 備援。Validator 需要的證據摘錄也必須明確傳入；父 agent 不會自動收到 worker 所有中間工具輸出。JSON、token 目標與重試額度是本套件的提示協定，不是 VS Code 原生強制保證。
 
 ## 如何提供 Markdown
 
@@ -130,6 +134,8 @@ docs/tasks/TASK-123.md
 
 使用時必須明確指定一種 mode。
 
+請在最上層 Agent picker 選擇 `Frontend Review`，或由目前最上層 agent 直接使用 review Skill；不要先把 coordinator 派成 subagent，再要求它派 reviewer。這套流程不需要開啟巢狀委派。
+
 ### 這次 SKILL 升級後的流程
 
 三種 mode 共用[審查契約](../skills/frontend-staged-review-workflow/references/review-contract.md)，各自保留 Git 範圍與 reviewer 數量。Agent 會自行讀取契約，使用者不需要額外附加。
@@ -159,12 +165,19 @@ flowchart TD
 
 三種 mode 共用逐項證據門檻：SKILL checklist 只產生待查候選，不會因為有 assertion、大檔案、重複分支或缺少測試就直接認定有 bug。每個 finding 都要指出預期契約、可達觸發條件、錯誤結果及本次變更造成的前後差異，並檢查呼叫端、上游驗證、guard 與套件版本是否已排除該情境。Validator 會逐項回報 confirmed／rejected／unresolved；所有必要 pass 都確認的問題才會進入最終報告。缺少關鍵證據或仍有爭議時標示 Incomplete；完整檢查後零 findings 是有效結果。具體可達的條件式 bug 仍保留，靜態證據充分時不要求一定執行測試。參考來源與後續誤報評估案例見[review precision references](../skills/frontend-staged-review-workflow/references/review-precision.md)。
 
+具體新增的重複 helper／key 或已建立的 repo 慣例違規，可附上既有實作、語意適用性及引入位置，列為 Low／nit（非阻擋），不必虛構 runtime bug。個人風格偏好仍不列入。涉及第三方套件行為時，必須讀取與固定 lockfile 套件實例、patch、export 條件一致的實作原始碼，不能只靠最新版文件或記憶。
+
+呼叫失敗、timeout、截斷、格式或可修復的上下文缺口，會在補齊證據／縮小傳輸後自動重試一次；各種失敗共用同一個 retry 額度，重試不增加 reviewer 人數。固定缺少權限或工具時不原樣重試。Validator 的一次 logical pass 會拆成覆蓋、少量 findings 的證據核對、最終 manifest 三類批次；每批附實際摘錄、完整性標記與精簡回覆，全部完成才算該 pass 有效。詳細規則見[執行與證據傳輸契約](../skills/frontend-staged-review-workflow/references/runtime-and-evidence.md)。
+
+另有一個可容許失敗的 Azure description worker：由 coordinator 透過已啟用的 Azure DevOps MCP 唯讀擷取可辨識的 PR、相關 work item description，再交給 worker 與固定程式碼比對。可在請求中提供 PR／work item 連結或 ID；不需為此開啟 MCP。MCP 未啟用、找不到唯一 PR 或重試後仍失敗時揭露跳過，不會因此讓已完成的 code review 變成 Incomplete。Staged 與遠端 PR 提交不同時只做部分比對，description 觀察與 code findings 分開呈現。自訂 MCP server 名稱需在 coordinator 的工具選擇啟用實際 namespace。
+
 ### 升級後的 SKILL 選用
 
 基礎審查固定使用 `code-review-and-quality`；其他 SKILL 需要實際變更與具體風險，不會因為有 TSX 檔案就全部啟用。重疊規則若已被選定 SKILL 涵蓋，會記錄原因並避免重複派工。
 
 | 變更證據 | 使用 SKILL | 新版審查重點 |
 |---|---|---|
+| TanStack Query／React Query hook、key factory、mutation 或 cache 操作，含專案 wrapper | [react-state-management](../skills/react-state-management/SKILL.md) | key 與輸入一致性、失效／refetch 範圍、mutation 等待與順序、取消／樂觀更新回復、cache 一致性及 lockfile 對應實作 |
 | 表單的 values、reset、subscription、submit 或 Zod schema | [react-hook-form-zod](../skills/react-hook-form-zod/SKILL.md) | dirty 欄位與背景刷新、儲存／取消後的基準、切換資料身分、數字空值與 input/output 型別、非同步送出 |
 | 翻譯 key、locale、格式或初始化 | [internationalization-i18n](../skills/internationalization-i18n/SKILL.md) | 保留現有框架及訊息格式，檢查 namespace、插值、複數、初始化與 server/client 邊界；CLI status 不代表譯文品質 |
 | 頁面層級、密度、版型或明確設計 critique | [frontend-design](../skills/frontend-design/SKILL.md) | 依 Persuade／Operate／Read／Experience 判斷；尊重既有 token、內容與核准設計，不以個人美感要求重做 |

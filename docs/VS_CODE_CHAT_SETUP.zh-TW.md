@@ -1,5 +1,7 @@
 # Ubuntu VS Code Chat / Copilot BYOK 安裝與驗證
 
+這份安裝與驗證流程適用於 **VS Code Local harness**；本套件的 `target: vscode` 只控制 agent 檔案的解讀格式，不會把原生 Copilot session 切換成 Local。請先在新 Chat session 選取 Local。若要使用新版 Copilot harness，需連同 agent 設定與原生 `task` 呼叫方式一起調整；見[相容性核對](../skills/frontend-staged-review-workflow/references/vscode-copilot-compatibility.md)。
+
 ## 安裝位置
 
 將本 Repository 的三個 runtime 目錄合併到個人 Copilot 目錄：
@@ -78,7 +80,7 @@ Worker agents 設定 `user-invocable: false`，這是 VS Code 官方文件中「
 
 ## Subagent 方法核對
 
-本 catalog 使用的是 VS Code Chat 原生 Coordinator/Worker 方法：
+本 catalog 使用的是 VS Code **Local harness** 的 Coordinator/Worker 方法：
 
 ```yaml
 tools: [agent, read, search]
@@ -86,9 +88,9 @@ agents:
   - Frontend Reviewer
 ```
 
-Coordinator 的正文以 `#tool:agent/runSubagent` 明確要求工具呼叫。`agents` 中的名稱區分大小寫，必須與 worker 的 `name` 完全一致。每次呼叫都是 stateless one-shot；重試會建立新的 invocation，並重新提供完整任務、限制和預期輸出。
+Coordinator 的正文以 `#tool:agent/runSubagent` 引用工具，再實際呼叫它。呼叫參數使用 `agentName` 指定 worker、`description` 簡述工作、`prompt` 提供完整任務。`agents` 中的名稱區分大小寫，必須與 worker 的 `name` 完全一致。省略 `agentName` 會繼承目前 agent，不能當成嚴格 review 的匿名備援。每次 Local 呼叫都是 stateless one-shot；重試建立新 invocation，重新提供完整任務、限制和預期輸出。原生 Copilot 的 `task` 不是這個 API 的別名。
 
-本 catalog 的 worker 沒有 `agent` tool，也沒有自己的 `agents` allowlist，因此不會建立 nested subagents。`chat.subagents.allowInvocationsFromSubagents` 維持 `false`。
+本 catalog 的 worker 沒有 `agent` tool，並設定 `agents: []`，禁止進一步委派。`chat.subagents.allowInvocationsFromSubagents` 維持 `false`。
 
 `context: fork` 是另一種「整個 Skill 在隔離 subagent 執行」的 VS Code 功能，不是本 catalog 多 worker workflow 的編排機制。Coordinator workflows 不使用 `context: fork`，避免在 forked skill 裡形成預設禁止的第二層 subagent。
 

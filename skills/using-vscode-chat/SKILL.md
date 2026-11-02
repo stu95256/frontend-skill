@@ -8,6 +8,8 @@ license: MIT
 
 Apply VS Code Chat's native customization model instead of runtime-specific command names.
 
+This catalog's `target: vscode` agents are configured for VS Code **Local**. Confirm the selected harness: this target controls file interpretation and does not switch a session. Native Copilot uses `task` rather than Local's `agent/runSubagent` and does not support the Local `agents` roster unchanged. Read the [review compatibility guide](../frontend-staged-review-workflow/references/vscode-copilot-compatibility.md) before reusing review instructions across harnesses.
+
 ## Discovery
 
 - Personal Agent Skills: `~/.copilot/skills/<skill-name>/SKILL.md`.
@@ -22,8 +24,8 @@ Use **Chat: Open Customizations** and Chat Diagnostics to confirm that VS Code l
 
 1. Let Copilot load relevant skills from their descriptions; do not paste every skill into context.
 2. Use a custom agent when a workflow needs a constrained tool set, a handoff, or named worker roles.
-3. Enable `agent/runSubagent` for coordinators. Every subagent invocation receives a self-contained prompt and returns one final result.
-4. Treat subagent calls as stateless: no follow-up questions, shared todo state, or inherited parent-chat assumptions.
+3. For Local coordinators, enable `agent/runSubagent` and explicitly set `agentName` for a named worker, with `description` and a complete `prompt`. Omitting the name inherits the current agent's configuration. Native harnesses require their actual delegation schema and compatible custom-agent configuration.
+4. Local calls are stateless: no follow-up questions, shared todo state, or inherited parent-chat assumptions. Supply decisive evidence in the final result; intermediate tool outputs are not automatically returned to the parent. Workflow JSON/token budgets are prompt instructions, not extra Local tool arguments.
 5. Run independent read-only workers in parallel. Keep overlapping edits and dependent work sequential.
 6. Leave nested subagents disabled unless a specific bounded recursive workflow requires them.
 7. Do not hard-code a model in shared agents by default; let workers inherit the currently selected BYOK model unless a tested model route is intentional.

@@ -2,6 +2,8 @@
 
 A curated VS Code Chat / GitHub Copilot BYOK customization catalog for React and TypeScript frontend work. The repository root mirrors the runtime directories installed under `~/.copilot`.
 
+The included custom agents target **VS Code Local** (`target: vscode`). Native Copilot uses a different delegation tool and does not accept the Local `agents` roster unchanged. See the [harness compatibility guide](./skills/frontend-staged-review-workflow/references/vscode-copilot-compatibility.md) before using review across harnesses; setting `target` does not switch the active session.
+
 ## Catalog at a glance
 
 - **60** Agent Skills under `skills/`
@@ -21,6 +23,7 @@ The catalog targets React, TypeScript, Tailwind/shadcn, AG Grid React, Ant Desig
 | AG Grid feature work | `ag-dev`; use `ag-update` only for dependency upgrades |
 | shadcn/Tailwind v4 components | `shadcn`; use `tailwind-design-system` for general tokens/utilities |
 | React Hook Form lifecycle | `react-hook-form-zod` — subscription scope, reset and parsed input/output |
+| TanStack Query / React Query state, keys or mutations | `react-state-management` — query identity, invalidation, async mutation flow and cache consistency |
 | Localization automation | `internationalization-i18n` — project-pinned i18next CLI and retained runtime patterns |
 | Design direction and UI polish | `frontend-design` — surface modes adapted from Impeccable |
 | Unit/integration tests | `vitest`, optionally `javascript-testing-patterns` |
@@ -37,7 +40,7 @@ These workflows combine an Agent Skill for reusable policy with a VS Code custom
 - [`frontend-branch-review-workflow`](./skills/frontend-branch-review-workflow/) — pins source, target, and merge-base SHAs and reviews only committed merge-base-to-source changes.
 - [`frontend-staged-commit-message`](./skills/frontend-staged-commit-message/) — explains the staged intent and type choice, then returns at least five one-line English subjects ordered from simple to detailed, without staging, editing, committing, or pushing.
 - [`frontend-staged-review-workflow`](./skills/frontend-staged-review-workflow/), [`frontend-heavy-staged-review-workflow`](./skills/frontend-heavy-staged-review-workflow/), and [`frontend-branch-review-workflow`](./skills/frontend-branch-review-workflow/) share the **Frontend Review** coordinator while retaining separate scope and quorum policies.
-- Their [shared review contract](./skills/frontend-staged-review-workflow/references/review-contract.md) pins evidence, routes the upgraded design/form/i18n/TDD Skills and requires independent coverage per changed scope plus aggregation validation.
+- Their [shared review contract](./skills/frontend-staged-review-workflow/references/review-contract.md) pins evidence, routes specialists including TanStack Query, permits evidenced Low/nit convention findings and requires exact lockfile-matched dependency source for implementation claims. The [runtime/evidence protocol](./skills/frontend-staged-review-workflow/references/runtime-and-evidence.md) keeps orchestration top-level, retries recoverable failures once, adds an optional Azure description worker, and splits self-contained validator evidence into bounded batches.
 
 [`azure-devops-create-pr`](./skills/azure-devops-create-pr/) is a standalone workflow that uses the connected Azure DevOps MCP without a dedicated coordinator. It creates PRs from committed branch changes, asks which SPECs and work item IDs to include, skips work item correctness checks, and automatically uses its bundled template when the repository template cannot be obtained.
 

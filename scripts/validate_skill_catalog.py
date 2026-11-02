@@ -66,7 +66,7 @@ ALLOWED_AGENT_FRONTMATTER = {
     "mcp-servers",
 }
 
-ALLOWED_AGENT_TOOLS = {"agent", "read", "search", "edit", "execute", "web"}
+ALLOWED_AGENT_TOOLS = {"agent", "read", "search", "edit", "execute", "web", "ado/*", "ado-remote-mcp/*"}
 
 FORBIDDEN_RUNTIME_PATTERNS = {
     "removed workflow or agent reference": re.compile(

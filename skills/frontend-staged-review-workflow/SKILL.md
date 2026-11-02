@@ -8,7 +8,7 @@ license: MIT
 
 Use for staged frontend review. For heavy redundancy use [heavy staged](../frontend-heavy-staged-review-workflow/SKILL.md); for committed contributions use [branch review](../frontend-branch-review-workflow/SKILL.md). Do not use this workflow to review its own documentation or implement fixes.
 
-Preferred entrypoint: **Frontend Review**, staged mode. Direct invocation in another top-level agent uses `#tool:agent/runSubagent`, with installed hidden workers or independent anonymous workers receiving the complete bundled prompt. If real delegation is unavailable, return `Incomplete`; do not simulate reviewer personas or count coordinator analysis as review.
+Preferred entrypoint: **Frontend Review**, staged mode, selected as the top-level agent in VS Code Local. Direct invocation in another compatible top-level agent uses installed named workers with complete prompts; in Local explicitly set `agentName` on `#tool:agent/runSubagent`. Do not omit it as an anonymous fallback or delegate this workflow/coordinator to a subagent that would need nested workers. Read the [harness compatibility rules](references/vscode-copilot-compatibility.md); native Copilot requires an adapted configuration and its own `task` schema. If required workers/delegation are unavailable, return `Incomplete`; do not simulate reviewer personas or count coordinator analysis as review.
 
 Read the [shared review contract](references/review-contract.md) before preparing the packet. It defines immutable staged evidence, Skill routing, coverage cells, output validity, severity adjudication and validator gates.
 
@@ -19,15 +19,16 @@ Read the [shared review contract](references/review-contract.md) before preparin
 - Select `code-review-and-quality` once, plus only evidence-backed specialist Skills from the shared matrix. Upgraded RHF, i18n and design guidance applies conditionally. TDD is for inspecting changed behavior tests, never a mandate for new tests.
 - Record exact installed Skill paths, criteria, trigger/risk, snapshot/scope IDs, file/hunk coverage cells, reviewer IDs, angles and waves before dispatch. Budget for two independent completed seats per required cell and one aggregation validator.
 - If a cap prevents required coverage, mark that gap; do not silently lower the standard.
+- Follow the shared [runtime/evidence protocol](references/runtime-and-evidence.md) for the optional Azure description worker, bounded automatic recovery, version-matched dependency source and self-contained schema-v2 packets. Azure unavailability alone is a disclosed skip, not a code-review failure.
 
 ## Review and validate
 
 1. Dispatch **Frontend Reviewer**, or **Frontend Security Reviewer** for selected security/privacy risks. Use [the reviewer prompt](templates/subagent-prompt.md), fully populated with the frozen packet.
 2. Each selected Skill/scope needs at least two independent, completed, valid outputs covering every assigned hunk. Sharding never reduces per-cell quorum.
-3. Each reviewer remains blind to other findings. A retry is one fresh stateless invocation with the same snapshot/assignment; count only its accepted attempt. Retry an invalid response once, then leave the seat incomplete if unresolved.
+3. Each reviewer remains blind to other findings. Automatically retry failed, timed-out, truncated, invalid or repairably incomplete responses once with a fresh complete packet and the same snapshot/assignment; count only the accepted attempt. Apply the shared deterministic-blocker/size rules and leave exhausted seats incomplete.
 4. Reject schema/snapshot/scope mismatches, missing criteria and incomplete coverage. A syntactically valid `blocked` or `degraded` result does not count.
 5. Aggregate evidence-backed issues, deduplicate root causes and reconcile severity from impact. Remove test-only advice; preserve defects in tests that conceal real behavior errors.
-6. Invoke **Frontend Review Validator** once with raw outputs, coverage/attempt ledger, draft report and pinned candidate evidence. Require per-finding confirmed/rejected/unresolved decisions under the shared gate; schema/quorum validation alone is insufficient. Apply the shared bounded retry/correction policy. A failed/missing validator or unresolved claim prevents a fully validated verdict.
+6. Complete one logical **Frontend Review Validator** pass using bounded coverage, claim and final-manifest batches with complete assigned raw records and pinned evidence. Require per-finding confirmed/rejected/unresolved decisions under the shared gate; schema/quorum validation alone is insufficient. Apply the shared bounded retry/correction policy. A failed/missing batch or unresolved claim prevents a fully validated verdict.
 7. Recheck HEAD/index identity. A changed snapshot requires `Incomplete` and a fresh run, without mixing outputs.
 
 ## Report

@@ -29,6 +29,8 @@ Use concise Chinese. Include scope/snapshot, verdict, confirmed findings and mat
 
 Group actual findings by 嚴重／高／中／低 and omit empty sections. No findings after all gates: state `在此審查快照範圍內沒有發現具體問題。` Keep the snapshot even when no findings.
 
+Label nonblocking convention findings **低（nit，非阻擋）**, citing the actual existing helper/key or applicable repo rule and introduced divergence. Nit-only findings yield `Comment`. Report Azure description comparisons separately with matched/mismatch/partial/skipped status and relevant PR/work-item references. A skipped/unavailable optional Azure check alone does not make code review `Incomplete`; a code verdict never implies the remote description was verified.
+
 Missing scope, snapshot, quorum, coverage or required validator means `Incomplete` (or explicitly authorized `Degraded`); state the concrete reason and retain confirmed findings. Never turn zero findings from an incomplete run into `Approve`. Report reduced redundancy or waived validation when applicable. Ordinary read-only review does not imply tests or visual checks were executed; describe only material evidence gaps.
 
 Use clickable absolute path links for actual files and identify reviewed snapshot/base-side line locations so links to a different checkout are not mistaken for pinned evidence. Keep reviewer IDs, Skill provenance, runtime settings and aggregation logs internal unless asked.

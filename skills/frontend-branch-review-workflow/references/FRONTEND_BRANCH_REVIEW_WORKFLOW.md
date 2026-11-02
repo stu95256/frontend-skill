@@ -64,9 +64,11 @@ A later ref movement does not invalidate the pinned objects. Continue against th
 
 Use [the prompt](../templates/subagent-prompt.md). Ledger fields include reviewer/attempt IDs, snapshot/scope, all three SHAs, exact Skill/path, actual loaded/injected criteria/resources, trigger question, distinct angles, assigned hunks and context dependencies.
 
-Each required cell needs two independent completed seats. Retry invalid output once, fresh and stateless; no majority/consensus pass fills missing quorum. Workers use read-only pinned evidence and never see other findings.
+Each required cell needs two independent completed seats. Follow the shared runtime policy for one automatic fresh retry after failed invocation, timeout, truncation, invalid output or repairable coverage/context failure; no majority/consensus pass fills missing quorum. Workers use read-only pinned evidence and never see other findings. The top-level coordinator dispatches every worker directly.
 
-Invoke **Frontend Review Validator** for one completed valid aggregation pass. Give it raw outputs, attempt ledger, required/actual coverage, candidate findings and all drop/merge/severity decisions. Missing coverage, inconsistent snapshot, missing quorum or unresolved validator failure means `Incomplete`.
+Complete one logical **Frontend Review Validator** pass through bounded coverage, claim and final-manifest batches. Across the pass include complete raw outputs, attempt ledger, required/actual coverage, candidate findings, all dispositions and actual frozen evidence excerpts. Apply schema-v2 delivery checks and the shared finite retry/correction budget. Missing coverage, inconsistent snapshot, missing quorum or an unresolved required batch means `Incomplete`.
+
+Plan the shared optional Azure description check separately from primary seats. Capture identifiable PR/linked work-item text through available MCP read tools and compare PR commits with the pinned SHAs. A partial comparison stays partial; unavailable MCP or failed auxiliary work is disclosed without making otherwise complete code review `Incomplete`.
 
 Use [the final report](../templates/final-report.md): source/target/merge-base short SHAs, snapshot ID, verdict, concrete findings and material freshness/integration/visual limits. No findings permits `Approve` only after all gates; unverified target freshness limits the review to the pinned target and must be stated. Operational ledgers remain internal unless requested.
 

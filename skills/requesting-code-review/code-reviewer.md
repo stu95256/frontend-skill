@@ -2,12 +2,11 @@
 
 Use this template when dispatching a code reviewer subagent.
 
+The block below is prompt content, not a callable tool schema. In VS Code Local, pass the populated review instructions in `prompt`, a short `description`, and explicit `agentName="Frontend Reviewer"` to the actual `agent/runSubagent` tool. Do not wrap this text in a fictional `Subagent (general-purpose)` API. Native Copilot requires its own `task` schema and compatible worker configuration; see [compatibility rules](../frontend-staged-review-workflow/references/vscode-copilot-compatibility.md).
+
 **Purpose:** Review completed work against requirements and code quality standards before it cascades into more work.
 
-```
-Subagent (general-purpose):
-  description: "Review code changes"
-  prompt: |
+````text
     You are a Senior Code Reviewer with expertise in software architecture,
     design patterns, and best practices. Your job is to review completed work
     against its plan or requirements and identify issues before they cascade.
@@ -32,7 +31,7 @@ Subagent (general-purpose):
 
     ## Read-Only Review
 
-    Your review is read-only on this checkout. Do not mutate the working tree, the index, HEAD, or branch state in any way. Use tools like `git show`, `git diff`, and `git log` to inspect history. If you need a working copy of a different revision, check it out into a separate temporary directory (e.g. `git worktree add /tmp/review-[SHA] [SHA]`) — never move HEAD on this checkout.
+    Your review is read-only on this checkout. Do not mutate the working tree, the index, HEAD, or branch state in any way. Use tools like `git show`, `git diff`, and `git log` against pinned SHAs. Do not create a worktree or checkout another revision; identify missing frozen context for the coordinator instead.
 
     ## You Do Not Dispatch Subagents
 
@@ -147,7 +146,7 @@ Subagent (general-purpose):
     - Give feedback on code you didn't actually read
     - Be vague ("improve error handling")
     - Avoid giving a clear verdict
-```
+````
 
 **Placeholders:**
 - `[DESCRIPTION]` — brief summary of what was built
