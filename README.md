@@ -40,7 +40,7 @@ These workflows combine an Agent Skill for reusable policy with a VS Code custom
 - [`frontend-branch-review-workflow`](./skills/frontend-branch-review-workflow/) — pins source, target, and merge-base SHAs and reviews only committed merge-base-to-source changes.
 - [`frontend-staged-commit-message`](./skills/frontend-staged-commit-message/) — explains the staged intent and type choice, then returns at least five one-line English subjects ordered from simple to detailed, without staging, editing, committing, or pushing.
 - [`frontend-staged-review-workflow`](./skills/frontend-staged-review-workflow/), [`frontend-heavy-staged-review-workflow`](./skills/frontend-heavy-staged-review-workflow/), and [`frontend-branch-review-workflow`](./skills/frontend-branch-review-workflow/) share the **Frontend Review** coordinator while retaining separate scope and quorum policies.
-- Their [shared review contract](./skills/frontend-staged-review-workflow/references/review-contract.md) pins evidence, routes specialists including TanStack Query, permits evidenced Low/nit convention findings and requires exact lockfile-matched dependency source for implementation claims. The [runtime/evidence protocol](./skills/frontend-staged-review-workflow/references/runtime-and-evidence.md) keeps orchestration top-level, retries recoverable failures once, adds an optional Azure description worker, and splits self-contained validator evidence into bounded batches.
+- Their [shared review contract](./skills/frontend-staged-review-workflow/references/review-contract.md) pins evidence, routes specialists including TanStack Query, permits evidenced Low/nit convention findings and requires exact lockfile-matched dependency source for implementation claims. The [runtime/evidence protocol](./skills/frontend-staged-review-workflow/references/runtime-and-evidence.md) keeps orchestration top-level, preserves exact raw results and frozen evidence in a separate immutable store, applies tiered bounded recovery, adds an optional Azure description worker, and splits validator evidence into bounded batches. Compact JSON is preferred; semantic completeness and evidence establish valid coverage.
 
 [`azure-devops-create-pr`](./skills/azure-devops-create-pr/) is a standalone workflow that uses the connected Azure DevOps MCP without a dedicated coordinator. It creates PRs from committed branch changes, asks which SPECs and work item IDs to include, skips work item correctness checks, and automatically uses its bundled template when the repository template cannot be obtained.
 
@@ -53,7 +53,7 @@ Run from the repository root:
 ```bash
 python3 -m pip install -r requirements-dev.txt
 python3 scripts/validate_skill_catalog.py
-python3 -m unittest -v tests/test_vscode_conversion.py
+python3 -m unittest discover -v -s tests
 ```
 
 Then validate each skill against the official Agent Skills reference implementation:

@@ -1,6 +1,15 @@
 # VS Code Chat Catalog Validation Report
 
-Updated: 2026-11-02
+Updated: 2026-11-03
+
+## Review evidence and recovery pass — 2026-11-03
+
+The three review modes and their agents now use protocol v3: semantic acceptance, lossless presentation normalization, persisted raw/source artifacts outside the checkout, inspected-artifact receipts and class-specific bounded recovery. The [runtime protocol](./frontend-staged-review-workflow/references/runtime-and-evidence.md) defines the handoff and recovery rules; the [evidence helper](./frontend-staged-review-workflow/scripts/review_evidence.py) preserves actual bytes and provenance.
+
+- Catalog validation passed for 60 Skills, 10 agents and two instructions. All 60 Skills passed the official Agent Skills reference validator; the three modified review Skills also passed the system skill-creator quick validator.
+- In UTF-8 mode, unittest discovery ran 26 tests in 47.137 seconds: 23 passed and three existing Bash-dependent tests were skipped because Bash was unavailable. All 17 new evidence tests passed, including raw bytes/NUL/CRLF, Chinese paths, corruption refusal, linked Git directories, junction escapes, clean-filter avoidance and partial-clone reads without object writes.
+- Five independent tabletop scenarios checked normalization, transient failure followed by evidence repair, raw artifact retransmission, inherited split exhaustion and changed-bundle revalidation. Changed Markdown links and whitespace checks passed; editor diagnostics reported no Python errors.
+- Actual VS Code Local worker execution, BYOK discovery and Azure MCP were not exercised. Distribution archives were not rebuilt.
 
 ## Local / BYOK compatibility pass — 2026-11-02
 

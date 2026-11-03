@@ -15,7 +15,7 @@ Key Git semantics used:
 
 Workflow/quality sources:
 
-- Existing local `frontend-staged-review-workflow` for skill selection, real-sub-agent quorum, strict JSON, validation, aggregation, no-unit-test policy, and concise Chinese findings-only output.
+- Existing local `frontend-staged-review-workflow` for skill selection, real-sub-agent quorum, explicit semantic records with retained raw evidence, validation, aggregation, no-unit-test policy, and concise Chinese findings-only output. See the current [runtime protocol](../../frontend-staged-review-workflow/references/runtime-and-evidence.md) for protocol v3 normalization and tiered recovery.
 - Git documentation concepts: revisions, merge-base, diff ranges, diff rename detection, and merge-tree.
 - GitHub code-review conventions for reviewing `base...head` changes before merge.
 - Local `code-review-and-quality`, `typescript-code-reviewer`, `secpriv-code-review`, and stack-specific frontend skills.

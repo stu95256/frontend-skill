@@ -39,8 +39,8 @@ Unit test recommendations are intentionally excluded by user requirement.
    - React, hooks, design, forms, data grid, i18n, routing, Tailwind and Ant Design criteria are selected only for concrete risks in the captured diff. Excluded specialist workflows are not routed.
 
 4. **Structured records**
-   - Each sub-agent returns strict JSON with reviewer id, snapshot/scope, skill, actual coverage, verdict, findings, and notes.
-   - The coordinator builds a reviewer ledger before summarizing findings.
+   - Prefer compact JSON with explicit reviewer identity, snapshot/scope, Skill provenance, actual coverage and findings. Protocol v3 permits lossless presentation normalization; optional counts/markers do not gate coverage.
+   - The coordinator persists exact raw results before parsing, retains separate normalized records/provenance and builds the reviewer ledger before summarizing findings. Current recovery and handoff rules are in the [runtime protocol](runtime-and-evidence.md).
 
 5. **No unit-test-only advice**
    - Reviewers must not recommend adding unit tests or increasing coverage. Actual defects in changed assertions/mocks that conceal a behavior error remain reviewable.

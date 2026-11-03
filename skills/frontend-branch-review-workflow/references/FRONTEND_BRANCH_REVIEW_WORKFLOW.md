@@ -52,7 +52,9 @@ Packet fields:
 - Source commits and target movement; changed paths/name-status; stat and diff-check result.
 - Full patch or assigned complete chunks; indexed/worktree/untracked state marked out of scope.
 - Pinned package/lock/config and caller context, exact Skills/criteria, dispatch rows and file/hunk coverage cells.
-- Optional integration evidence and its limits; strict JSON and no-unit-test-only-advice rule.
+- Optional integration evidence and its limits; schema-v3 semantic requirements, compact JSON preference and no-unit-test-only-advice rule.
+
+Persist source bytes/provenance and every packet/ledger version in the shared [external append-only evidence store](../../frontend-staged-review-workflow/references/runtime-and-evidence.md). Freeze exact Git-object content before workers run; a hash or live path alone is insufficient. Coordinator persistence may write this separate store, never the reviewed checkout.
 
 Use `git show "$SOURCE_SHA:path/to/file"` for source context, `git show "$TARGET_SHA:path/to/file"` for target context and merge-base content for deleted/pre-change lines. Current checked-out files are never branch truth. Renames keep old and new path mappings. A finding requires contribution evidence or an interaction the contribution introduces/worsens.
 
@@ -64,12 +66,12 @@ A later ref movement does not invalidate the pinned objects. Continue against th
 
 Use [the prompt](../templates/subagent-prompt.md). Ledger fields include reviewer/attempt IDs, snapshot/scope, all three SHAs, exact Skill/path, actual loaded/injected criteria/resources, trigger question, distinct angles, assigned hunks and context dependencies.
 
-Each required cell needs two independent completed seats. Follow the shared runtime policy for one automatic fresh retry after failed invocation, timeout, truncation, invalid output or repairable coverage/context failure; no majority/consensus pass fills missing quorum. Workers use read-only pinned evidence and never see other findings. The top-level coordinator dispatches every worker directly.
+Each required cell needs two independent completed seats. Follow the shared [tiered recovery table](../../frontend-staged-review-workflow/references/runtime-and-evidence.md#automatic-bounded-recovery) and finite total cap; class counters follow assignment lineage through shards/replacements. Persist exact returned worker text before parsing. Prefer compact JSON and permit only lossless presentation normalization of explicit complete records. No majority/consensus pass fills missing quorum. Workers use read-only pinned evidence and never see other findings. The top-level coordinator dispatches every worker directly.
 
-Complete one logical **Frontend Review Validator** pass through bounded coverage, claim and final-manifest batches. Across the pass include complete raw outputs, attempt ledger, required/actual coverage, candidate findings, all dispositions and actual frozen evidence excerpts. Apply schema-v2 delivery checks and the shared finite retry/correction budget. Missing coverage, inconsistent snapshot, missing quorum or an unresolved required batch means `Incomplete`.
+Complete one logical **Frontend Review Validator** pass through bounded coverage, claim and final-manifest batches. Across the pass include readable immutable `raw_ref` records, any `normalized_ref` and normalization provenance, versioned attempt ledger, required/actual coverage, candidate findings, all dispositions and frozen evidence. Coverage validators compare normalized content to the exact raw records. Apply schema-v3 semantic checks and the shared recovery/correction budget; counts/end markers are optional diagnostics. Missing coverage, inconsistent snapshot, missing quorum or an unresolved required batch means `Incomplete`.
 
-Plan the shared optional Azure description check separately from primary seats. Capture identifiable PR/linked work-item text through available MCP read tools and compare PR commits with the pinned SHAs. A partial comparison stays partial; unavailable MCP or failed auxiliary work is disclosed without making otherwise complete code review `Incomplete`.
+Plan the shared optional Azure description check separately from primary seats, with at most two auxiliary invocations. Capture identifiable PR/linked work-item text through available MCP read tools and compare PR commits with the pinned SHAs. A partial comparison stays partial; unavailable MCP or failed auxiliary work is disclosed without making otherwise complete code review `Incomplete`.
 
 Use [the final report](../templates/final-report.md): source/target/merge-base short SHAs, snapshot ID, verdict, concrete findings and material freshness/integration/visual limits. No findings permits `Approve` only after all gates; unverified target freshness limits the review to the pinned target and must be stated. Operational ledgers remain internal unless requested.
 
-No edits, checkout, switching, staging, commits, pushes, auto-fixes, mutating tests, nested delegation or external PR comments.
+No edits to the reviewed checkout, checkout, switching, staging, commits, pushes, auto-fixes, mutating tests, nested delegation or external PR comments. Evidence-store persistence is limited to the coordinator and shared protocol.
